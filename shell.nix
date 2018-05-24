@@ -24,7 +24,7 @@ let fhs = pkgs.buildFHSUserEnv {
       unzip
       bison
       nodePackages.react-native-cli
-      nodejs
+      nodejs-8_x
       yarn
       flex
       lzop
