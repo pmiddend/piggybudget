@@ -10,19 +10,26 @@ import {
 import {
     NavigationScreenProps,
 } from "react-navigation";
+import {Decimal} from "decimal.js";
 
 interface State {
     amount: string;
 }
 
-export default class AddScreen extends Component<NavigationScreenProps<{}>> {
+type Callback = (amount: Decimal) => void;
+
+interface NavigationParams {
+    callback: Callback;
+}
+
+export default class AddScreen extends Component<NavigationScreenProps<NavigationParams>> {
     public static navigationOptions = {
         title: "Modify budget",
     };
 
     public state: State;
 
-    constructor(props: NavigationScreenProps<{}>) {
+    constructor(props: NavigationScreenProps<NavigationParams>) {
         super(props);
         this.state = {
             amount: "0",
@@ -31,18 +38,27 @@ export default class AddScreen extends Component<NavigationScreenProps<{}>> {
 
     public render() {
         return (
-            <View style={styles.container}>
+                <View style={styles.container}>
                 <Text style={styles.welcome}>Budget ftw!</Text>
-                <TextInput value={this.state.amount} />
-                <Button title="Go!" onPress={() => this.handlePress.bind(this)} />
-            </View>
+                <TextInput value={this.state.amount.toString()}
+                           keyboardType="numeric"
+                           onChangeText={(text) => this.handleAmountChange(text)}/>
+                <Button title="Go!" onPress={() => this.handlePress()} />
+                </View>
         );
     }
 
     private handlePress() {
-        // const { params } = this.props.navigation.state;
-        // params(this.state.amount);
+        const params: NavigationParams | undefined = this.props.navigation.state.params;
+        if (params !== undefined)
+            params.callback(new Decimal(this.state.amount));
         this.props.navigation.goBack();
+    }
+
+    private handleAmountChange(text: string) {
+        this.setState({
+            amount: text,
+        });
     }
 }
 

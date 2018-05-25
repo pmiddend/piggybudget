@@ -9,25 +9,42 @@ import {
     Text,
     View,
     Button,
+    AsyncStorage,
 } from "react-native";
 
 interface State {
     budget: Decimal;
 }
 
+interface SerializedState {
+    budget: string;
+}
+
 export default class HomeScreen extends Component<NavigationScreenProps<{}>> {
     public static navigationOptions = {
         title: "Home",
     };
+
+    private static serializeState(s: State): string {
+        return JSON.stringify({ budget: s.budget.toString() });
+    }
+
+    private static deserializeState(s: string): State {
+        return {
+            budget: new Decimal((JSON.parse(s) as SerializedState).budget),
+        };
+    }
+
     public state: State;
+
     constructor(props: NavigationScreenProps<{}>) {
         super(props);
         this.state = {
             budget: new Decimal(110),
         };
-    }
-
-    private handleModification(amount: number) {
+        AsyncStorage.getItem("state").then(
+            (priorState: string) => this.setState(HomeScreen.deserializeState(priorState)),
+            (reason: any) => console.log("damn: " + JSON.stringify(reason)));
     }
 
     public render() {
@@ -35,10 +52,25 @@ export default class HomeScreen extends Component<NavigationScreenProps<{}>> {
             <View style={styles.container}>
                 <Text style={styles.welcome}>Todays budget</Text>
                 <Text style={styles.budget}>{this.state.budget.toString()}€</Text>
-                <Button title="Add" onPress={() => this.props.navigation.navigate("Add", this.handleModification.bind(this))}
-        />
+                <Button title="Add" onPress={() => this.props.navigation.navigate("Add", {
+                    callback: (amount: Decimal) => this.handleModification(amount),
+                })} />
+                <Button title="Remove" onPress={() => this.props.navigation.navigate("Add", {
+                    callback: (amount: Decimal) => this.handleModification(amount.negated()),
+                })} />
             </View>
         );
+    }
+
+    private storeState() {
+        AsyncStorage.setItem("state", HomeScreen.serializeState(this.state));
+    }
+
+    private handleModification(amount: Decimal) {
+        this.setState({
+            budget: this.state.budget.add(amount),
+        });
+        this.storeState();
     }
 }
 
