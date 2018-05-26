@@ -11,16 +11,22 @@ import {
     Button,
     AsyncStorage,
 } from "react-native";
+import {
+    storeInit,
+    BudgetStore,
+    storeAddTransaction,
+    storeTotalBudget,
+} from "../BudgetStore";
 
 interface State {
-    budget: Decimal;
+    store: BudgetStore;
 }
 
-interface SerializedState {
-    budget: string;
-}
+interface Props {
+    store: BudgetStore
+};
 
-export default class HomeScreen extends Component<NavigationScreenProps<{}>> {
+export default class HomeScreen extends Component<NavigationScreenProps<Props>> {
     public static navigationOptions = {
         title: "Home",
     };
@@ -37,21 +43,19 @@ export default class HomeScreen extends Component<NavigationScreenProps<{}>> {
 
     public state: State;
 
-    constructor(props: NavigationScreenProps<{}>) {
+    constructor(props: NavigationScreenProps<Props>) {
         super(props);
         this.state = {
-            budget: new Decimal(110),
+            store: this.props.navigation.state.params!.store,
         };
-        AsyncStorage.getItem("state").then(
-            (priorState: string) => this.setState(HomeScreen.deserializeState(priorState)),
-            (reason: any) => console.log("damn: " + JSON.stringify(reason)));
+        console.log('initial store '+JSON.stringify(this.state.store));
     }
 
     public render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Todays budget</Text>
-                <Text style={styles.budget}>{this.state.budget.toString()}€</Text>
+                <Text style={styles.budget}>{storeTotalBudget(this.state.store).toString()}€</Text>
                 <View style={{flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
                 <Button title="Add" onPress={() => this.props.navigation.navigate("Add", {
                     callback: (amount: Decimal) => this.handleModification(amount),
@@ -64,15 +68,14 @@ export default class HomeScreen extends Component<NavigationScreenProps<{}>> {
         );
     }
 
-    private storeState() {
-        AsyncStorage.setItem("state", HomeScreen.serializeState(this.state));
-    }
-
     private handleModification(amount: Decimal) {
         this.setState({
-            budget: this.state.budget.add(amount),
+            store: storeAddTransaction(this.state.store, {
+                amount: amount,
+                comment: "",
+                date: Date.now(),
+            }),
         });
-        this.storeState();
     }
 }
 

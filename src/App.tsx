@@ -13,6 +13,7 @@ import {
 import HomeScreen from "./screens/HomeScreen";
 import AddScreen from "./screens/AddScreen";
 import HistoryScreen from "./screens/History";
+import LoadingScreen from "./screens/Loading";
 
 const HomeStack = StackNavigator({
     Add: { screen: AddScreen },
@@ -26,10 +27,21 @@ const HistoryStack = StackNavigator({
     History: { screen: HistoryScreen },
   });
 
-export default TabNavigator({
+const Tabs = TabNavigator({
     Home: { screen: HomeStack },
     History: { screen: HistoryStack },
 },
  {
     tabBarPosition: 'bottom',
 });
+
+export default StackNavigator(
+    {
+        Loading: LoadingScreen,
+        Main: Tabs,
+    },
+    {
+        mode: 'modal',
+        headerMode: 'none',
+    }
+);
