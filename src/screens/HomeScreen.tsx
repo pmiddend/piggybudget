@@ -68,11 +68,11 @@ export default class HomeScreen extends Component<NavigationScreenProps<Props>> 
         );
     }
 
-    private handleModification(amount: Decimal) {
+    private handleModification(amount: Decimal, comment: string) {
         this.setState({
             store: storeAddTransaction(this.state.store, {
                 amount: amount,
-                comment: "",
+                comment: comment,
                 date: Date.now(),
             }),
         });

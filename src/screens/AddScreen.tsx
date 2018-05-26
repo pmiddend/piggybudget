@@ -14,9 +14,10 @@ import {Decimal} from "decimal.js";
 
 interface State {
     amount: string;
+    comment: string;
 }
 
-type Callback = (amount: Decimal) => void;
+type Callback = (amount: Decimal, comment: string) => void;
 
 interface NavigationParams {
     callback: Callback;
@@ -33,6 +34,7 @@ export default class AddScreen extends Component<NavigationScreenProps<Navigatio
         super(props);
         this.state = {
             amount: "0",
+            comment: "",
         };
     }
 
@@ -43,6 +45,8 @@ export default class AddScreen extends Component<NavigationScreenProps<Navigatio
                 <TextInput value={this.state.amount.toString()}
                            keyboardType="numeric"
                            onChangeText={(text) => this.handleAmountChange(text)}/>
+                <TextInput value={this.state.comment}
+                           onChangeText={(text) => this.handleCommentChange(text)}/>
                 <Button title="Go!" onPress={() => this.handlePress()} />
                 </View>
         );
@@ -51,13 +55,21 @@ export default class AddScreen extends Component<NavigationScreenProps<Navigatio
     private handlePress() {
         const params: NavigationParams | undefined = this.props.navigation.state.params;
         if (params !== undefined)
-            params.callback(new Decimal(this.state.amount));
+            params.callback(new Decimal(this.state.amount), this.state.comment);
         this.props.navigation.goBack();
     }
 
     private handleAmountChange(text: string) {
         this.setState({
             amount: text,
+            comment: this.state.comment,
+        });
+    }
+
+    private handleCommentChange(text: string) {
+        this.setState({
+            amount: this.state.amount,
+            comment: text,
         });
     }
 }
