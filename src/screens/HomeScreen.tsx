@@ -52,12 +52,14 @@ export default class HomeScreen extends Component<NavigationScreenProps<{}>> {
             <View style={styles.container}>
                 <Text style={styles.welcome}>Todays budget</Text>
                 <Text style={styles.budget}>{this.state.budget.toString()}€</Text>
+                <View style={{flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
                 <Button title="Add" onPress={() => this.props.navigation.navigate("Add", {
                     callback: (amount: Decimal) => this.handleModification(amount),
                 })} />
                 <Button title="Remove" onPress={() => this.props.navigation.navigate("Add", {
                     callback: (amount: Decimal) => this.handleModification(amount.negated()),
                 })} />
+                </View>
             </View>
         );
     }
@@ -84,6 +86,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     backgroundColor: "#F5FCFF",
+    flexDirection: "column",
     flex: 1,
     justifyContent: "center",
   },
