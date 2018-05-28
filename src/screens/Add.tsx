@@ -41,9 +41,10 @@ export default class AddScreen extends Component<NavigationScreenProps<Navigatio
     public render() {
         return (
                 <View style={styles.container}>
-                <Text style={styles.welcome}>Budget ftw!</Text>
+                <Text style={styles.welcome}>Modify budget</Text>
                 <TextInput value={this.state.amount.toString()}
                            keyboardType="numeric"
+                           style={{fontSize: 40}}
                            onChangeText={(text) => this.handleAmountChange(text)}/>
                 <TextInput value={this.state.comment}
                            onChangeText={(text) => this.handleCommentChange(text)}/>

@@ -10,8 +10,8 @@ import {
     TabNavigator,
     TabBarBottom,
 } from "react-navigation";
-import HomeScreen from "./screens/HomeScreen";
-import AddScreen from "./screens/AddScreen";
+import HomeScreen from "./screens/Home";
+import AddScreen from "./screens/Add";
 import HistoryScreen from "./screens/History";
 import LoadingScreen from "./screens/Loading";
 
