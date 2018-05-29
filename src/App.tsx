@@ -14,7 +14,7 @@ import {
 } from "react-navigation";
 import Home from "./screens/Home";
 import Add from "./screens/Add";
-import HistoryScreen from "./screens/History";
+import History from "./screens/History";
 import LoadingScreen from "./screens/Loading";
 import appReducer from "./Reducer";
 import storage from "redux-persist/lib/storage";
@@ -31,7 +31,7 @@ const HomeStack = StackNavigator({
   });
 
 const HistoryStack = StackNavigator({
-    History: { screen: HistoryScreen },
+    History: { screen: History },
   });
 
 const DailyBudgetRoot = TabNavigator({
