@@ -17,6 +17,9 @@ import Add from "./screens/Add";
 import HistoryScreen from "./screens/History";
 import LoadingScreen from "./screens/Loading";
 import appReducer from "./Reducer";
+import storage from "redux-persist/lib/storage";
+import { persistStore, persistReducer } from "redux-persist";
+import { PersistGate } from "redux-persist/integration/react";
 
 const HomeStack = StackNavigator({
     Add: { screen: Add },
@@ -38,22 +41,20 @@ const DailyBudgetRoot = TabNavigator({
     tabBarPosition: "bottom",
 });
 
-const store = createStore(appReducer);
+const persistConfig = {
+    key: "v3",
+    storage,
+};
 
-// Re-enable when loading is back
-// const DailyBudgetRoot = StackNavigator(
-//     {
-//         Loading: LoadingScreen,
-//         Main: Tabs,
-//     },
-//     {
-//         mode: "modal",
-//         headerMode: "none",
-//     },
-// );
+const persistedReducer = persistReducer(persistConfig, appReducer);
+
+const store = createStore(persistedReducer);
+const persistor = persistStore(store);
 
 export default () => (
         <Provider store={store}>
-          <DailyBudgetRoot />
+          <PersistGate loading={null} persistor={persistor}>
+            <DailyBudgetRoot />
+          </PersistGate>
         </Provider>
 );
