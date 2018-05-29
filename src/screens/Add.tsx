@@ -58,8 +58,10 @@ class Add extends Component<Props> {
     }
 
     private handlePress() {
+        const realAmount = this.state.amount.replace(/,/g,".");
+        console.log("real amount: "+realAmount);
         this.props.onNewTransaction({
-            amount: this.props.amountModifier(new Decimal(this.state.amount)),
+            amount: this.props.amountModifier(new Decimal(realAmount)),
             comment: this.state.comment,
             date: Date.now(),
         });

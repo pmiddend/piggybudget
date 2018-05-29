@@ -20,6 +20,7 @@ import appReducer from "./Reducer";
 import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
+import immutableTransform from "redux-persist-transform-immutable";
 
 const HomeStack = StackNavigator({
     Add: { screen: Add },
@@ -42,7 +43,8 @@ const DailyBudgetRoot = TabNavigator({
 });
 
 const persistConfig = {
-    key: "v3",
+    transforms: [immutableTransform()],
+    key: "v5",
     storage,
 };
 
