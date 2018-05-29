@@ -22,6 +22,7 @@
     "decimal.js": "^10.0.0",
     "immutable": "4.0.0-rc.9",
     "jest": "22.4.4",
+    "moment": "^2.22.1",
     "react-native-typescript-transformer": "^1.2.6",
     "react-navigation": "^2.0.1",
     "react-redux": "^5.0.7",
