@@ -3,6 +3,7 @@ import {
 } from "react-navigation";
 import {Decimal} from "decimal.js";
 import React from "react";
+import { connect } from "react-redux";
 import {Component} from "react";
 import {
     StyleSheet,
@@ -14,6 +15,7 @@ import {
 import {
     storeInit,
     BudgetStore,
+    emptyStore,
     storeAddTransaction,
     storeTotalBudget,
 } from "../BudgetStore";
@@ -23,30 +25,21 @@ interface State {
 }
 
 interface Props {
-    store: BudgetStore
-};
+    readonly navigation: any;
+    readonly store: any;
+}
 
-export default class HomeScreen extends Component<NavigationScreenProps<Props>> {
+class HomeScreen extends Component<NavigationScreenProps<any>> {
     public static navigationOptions = {
         title: "Home",
     };
 
-    private static serializeState(s: State): string {
-        return JSON.stringify({ budget: s.budget.toString() });
-    }
-
-    private static deserializeState(s: string): State {
-        return {
-            budget: new Decimal((JSON.parse(s) as SerializedState).budget),
-        };
-    }
-
     public state: State;
 
-    constructor(props: NavigationScreenProps<Props>) {
+    constructor(props: NavigationScreenProps<any>) {
         super(props);
         this.state = {
-            store: this.props.navigation.state.params!.store,
+            store: emptyStore(),
         };
         console.log('initial store '+JSON.stringify(this.state.store));
     }
@@ -58,10 +51,10 @@ export default class HomeScreen extends Component<NavigationScreenProps<Props>> 
                 <Text style={styles.budget}>{storeTotalBudget(this.state.store).toString()}€</Text>
                 <View style={{flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
                 <Button title="Add" onPress={() => this.props.navigation.navigate("Add", {
-                    callback: (amount: Decimal) => this.handleModification(amount),
+                    callback: (amount: Decimal) => this.handleModification(amount, ""),
                 })} />
                 <Button title="Remove" onPress={() => this.props.navigation.navigate("Add", {
-                    callback: (amount: Decimal) => this.handleModification(amount.negated()),
+                    callback: (amount: Decimal) => this.handleModification(amount.negated(), ""),
                 })} />
                 </View>
             </View>
@@ -99,3 +92,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+
+const mapStateToProps = (state, ownProps) => {
+    console.log('mSTP, navigation? '+ownProps.navigation);
+    return state;
+};
+
+export default connect(mapStateToProps)(HomeScreen);
