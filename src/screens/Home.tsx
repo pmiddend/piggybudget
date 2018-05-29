@@ -3,6 +3,8 @@ import {
 } from "react-navigation";
 import {Decimal} from "decimal.js";
 import React from "react";
+import AppState from "../AppState";
+import Transaction from "../Transaction";
 import { connect } from "react-redux";
 import {Component} from "react";
 import {
@@ -13,48 +15,35 @@ import {
     AsyncStorage,
 } from "react-native";
 import {
-    storeInit,
-    BudgetStore,
-    emptyStore,
-    storeAddTransaction,
     storeTotalBudget,
+    TransactionList,
 } from "../BudgetStore";
-
-interface State {
-    store: BudgetStore;
-}
 
 interface Props {
     readonly navigation: any;
-    readonly store: any;
+    readonly transactions: TransactionList;
 }
 
-class HomeScreen extends Component<NavigationScreenProps<any>> {
+class Home extends Component<Props> {
     public static navigationOptions = {
         title: "Home",
     };
 
-    public state: State;
-
-    constructor(props: NavigationScreenProps<any>) {
+    constructor(props: Props) {
         super(props);
-        this.state = {
-            store: emptyStore(),
-        };
-        console.log('initial store '+JSON.stringify(this.state.store));
     }
 
     public render() {
         return (
             <View style={styles.container}>
                 <Text style={styles.welcome}>Todays budget</Text>
-                <Text style={styles.budget}>{storeTotalBudget(this.state.store).toString()}€</Text>
+                <Text style={styles.budget}>{storeTotalBudget(this.props.transactions).toString()}€</Text>
                 <View style={{flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
                 <Button title="Add" onPress={() => this.props.navigation.navigate("Add", {
-                    callback: (amount: Decimal) => this.handleModification(amount, ""),
+                    amountModifier: (d: Decimal) => d,
                 })} />
                 <Button title="Remove" onPress={() => this.props.navigation.navigate("Add", {
-                    callback: (amount: Decimal) => this.handleModification(amount.negated(), ""),
+                    amountModifier: (d: Decimal) => d.negated(),
                 })} />
                 </View>
             </View>
@@ -93,9 +82,11 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state, ownProps) => {
-    console.log('mSTP, navigation? '+ownProps.navigation);
-    return state;
+const mapStateToProps = (state: AppState, ownProps: any) => {
+    return {
+        navigation: ownProps.navigation,
+        transactions: state.transactions,
+    };
 };
 
-export default connect(mapStateToProps)(HomeScreen);
+export default connect(mapStateToProps)(Home);

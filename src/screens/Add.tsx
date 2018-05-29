@@ -11,26 +11,30 @@ import {
     NavigationScreenProps,
 } from "react-navigation";
 import {Decimal} from "decimal.js";
+import { connect } from "react-redux";
+import Transaction from "../Transaction";
+import { actionAddTransaction } from "../Actions";
+import AppState from "../AppState";
 
 interface State {
     amount: string;
     comment: string;
 }
 
-type Callback = (amount: Decimal, comment: string) => void;
-
-interface NavigationParams {
-    callback: Callback;
+interface Props {
+    onNewTransaction: (t: Transaction) => void;
+    amountModifier: (d: Decimal) => Decimal;
+    navigation: any;
 }
 
-export default class AddScreen extends Component<NavigationScreenProps<NavigationParams>> {
+class Add extends Component<Props> {
     public static navigationOptions = {
         title: "Modify budget",
     };
 
     public state: State;
 
-    constructor(props: NavigationScreenProps<NavigationParams>) {
+    constructor(props: Props) {
         super(props);
         this.state = {
             amount: "0",
@@ -54,9 +58,11 @@ export default class AddScreen extends Component<NavigationScreenProps<Navigatio
     }
 
     private handlePress() {
-        const params: NavigationParams | undefined = this.props.navigation.state.params;
-        if (params !== undefined)
-            params.callback(new Decimal(this.state.amount), this.state.comment);
+        this.props.onNewTransaction({
+            amount: this.props.amountModifier(new Decimal(this.state.amount)),
+            comment: this.state.comment,
+            date: Date.now(),
+        });
         this.props.navigation.goBack();
     }
 
@@ -94,3 +100,20 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+
+const mapStateToProps = (state: AppState, ownProps: any) => {
+    console.log('mSTP, amount modifier: '+ownProps.navigation.state.params.amountModifier);
+    return {
+        amountModifier: ownProps.navigation.state.params.amountModifier,
+        navigation: ownProps.navigation,
+    };
+};
+
+const mapDispatchToProps = (dispatch: any) => {
+    console.log('mDTP: dispatch: '+dispatch);
+    return {
+        onNewTransaction: (t: Transaction) => dispatch(actionAddTransaction(t)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Add);

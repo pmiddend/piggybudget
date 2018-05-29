@@ -15,7 +15,7 @@ import {
     storeInit,
 } from "../BudgetStore";
 
-export default class LoadingScreen extends Component<NavigationScreenProps<{}>> {
+export default class Loading extends Component<NavigationScreenProps<{}>> {
     constructor(props: NavigationScreenProps<{}>) {
         super(props);
 
