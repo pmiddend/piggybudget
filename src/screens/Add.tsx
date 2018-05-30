@@ -22,9 +22,9 @@ interface State {
 }
 
 interface Props {
-    onNewTransaction: (t: Transaction) => void;
-    amountModifier: (d: Decimal) => Decimal;
-    navigation: any;
+    readonly onNewTransaction: (t: Transaction) => void;
+    readonly amountModifier: (d: Decimal) => Decimal;
+    readonly navigation: any;
 }
 
 class Add extends Component<Props> {
@@ -104,7 +104,6 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: AppState, ownProps: any) => {
-    console.log('mSTP, amount modifier: '+ownProps.navigation.state.params.amountModifier);
     return {
         amountModifier: ownProps.navigation.state.params.amountModifier,
         navigation: ownProps.navigation,
@@ -112,7 +111,6 @@ const mapStateToProps = (state: AppState, ownProps: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => {
-    console.log('mDTP: dispatch: '+dispatch);
     return {
         onNewTransaction: (t: Transaction) => dispatch(actionAddTransaction(t)),
     };

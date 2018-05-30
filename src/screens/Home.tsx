@@ -3,7 +3,7 @@ import {
 } from "react-navigation";
 import {Decimal} from "decimal.js";
 import React from "react";
-import AppState from "../AppState";
+import MyAppState from "../AppState";
 import Transaction from "../Transaction";
 import { connect } from "react-redux";
 import {Component} from "react";
@@ -13,24 +13,40 @@ import {
     View,
     Button,
     AsyncStorage,
+    AppState,
+    AppStateStatus,
 } from "react-native";
 import {
     storeTotalBudget,
     TransactionList,
 } from "../BudgetStore";
+import { actionStateChange } from "../Actions";
 
 interface Props {
     readonly navigation: any;
     readonly transactions: TransactionList;
+    readonly onStateChange: (newState: string) => void;
 }
 
-class Home extends Component<Props> {
+class Home extends Component<Props, State> {
     public static navigationOptions = {
         title: "Home",
     };
 
+    private stateChangeBind: any;
+
     constructor(props: Props) {
         super(props);
+        this.stateChangeBind = this.handleAppStateChange.bind(this);
+    }
+
+    public componentDidMount() {
+        console.log("mount");
+        AppState.addEventListener("change", this.stateChangeBind);
+    }
+
+    public componentWillUnmount() {
+        AppState.removeEventListener("change", this.stateChangeBind);
     }
 
     public render() {
@@ -50,14 +66,8 @@ class Home extends Component<Props> {
         );
     }
 
-    private handleModification(amount: Decimal, comment: string) {
-        this.setState({
-            store: storeAddTransaction(this.state.store, {
-                amount: amount,
-                comment: comment,
-                date: Date.now(),
-            }),
-        });
+    private handleAppStateChange(newState: AppStateStatus) {
+        this.props.onStateChange(newState);
     }
 }
 
@@ -71,8 +81,8 @@ const styles = StyleSheet.create({
   container: {
     alignItems: "center",
     backgroundColor: "#F5FCFF",
-    flexDirection: "column",
     flex: 1,
+    flexDirection: "column",
     justifyContent: "center",
   },
   welcome: {
@@ -82,11 +92,17 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state: AppState, ownProps: any) => {
+const mapStateToProps = (state: MyAppState, ownProps: any) => {
     return {
         navigation: ownProps.navigation,
         transactions: state.transactions,
     };
 };
 
-export default connect(mapStateToProps)(Home);
+const mapDispatchToProps = (dispatch: any) => {
+    return {
+        onStateChange: (newState: AppStateStatus) => dispatch(actionStateChange(newState)),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

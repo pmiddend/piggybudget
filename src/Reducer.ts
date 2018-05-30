@@ -13,6 +13,9 @@ export default (state: AppState | undefined, action: Action) => {
                 ...state,
                 transactions: state.transactions.push(action.t),
             };
+        case "STATE_CHANGE":
+            console.log("state change to: " + action.newState);
+            return state;
         default:
             console.log("Unknown action: " + action.type);
             break;
