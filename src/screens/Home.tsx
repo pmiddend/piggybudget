@@ -9,13 +9,12 @@ import { connect } from "react-redux";
 import {Component} from "react";
 import {
     StyleSheet,
-    Text,
     View,
-    Button,
     AsyncStorage,
     AppState,
     AppStateStatus,
 } from "react-native";
+import { Text, Button } from "react-native-elements";
 import {
     storeTotalBudget,
     TransactionList,
@@ -41,7 +40,6 @@ class Home extends Component<Props, State> {
     }
 
     public componentDidMount() {
-        console.log("mount");
         AppState.addEventListener("change", this.stateChangeBind);
     }
 
@@ -52,13 +50,13 @@ class Home extends Component<Props, State> {
     public render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.welcome}>Todays budget</Text>
-                <Text style={styles.budget}>{storeTotalBudget(this.props.transactions).toString()}€</Text>
+                <Text h3>Todays budget</Text>
+                <Text h1>{storeTotalBudget(this.props.transactions).toString()}€</Text>
                 <View style={{flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
-                <Button title="Add" onPress={() => this.props.navigation.navigate("Add", {
+                <Button large title="Add" onPress={() => this.props.navigation.navigate("Add", {
                     amountModifier: (d: Decimal) => d,
                 })} />
-                <Button title="Remove" onPress={() => this.props.navigation.navigate("Add", {
+                <Button large title="Remove" onPress={() => this.props.navigation.navigate("Add", {
                     amountModifier: (d: Decimal) => d.negated(),
                 })} />
                 </View>
@@ -72,23 +70,12 @@ class Home extends Component<Props, State> {
 }
 
 const styles = StyleSheet.create({
-  budget: {
-    color: "#333333",
-    fontSize: 30,
-    marginBottom: 5,
-    textAlign: "center",
-  },
   container: {
     alignItems: "center",
     backgroundColor: "#F5FCFF",
     flex: 1,
     flexDirection: "column",
     justifyContent: "center",
-  },
-  welcome: {
-    fontSize: 20,
-    margin: 10,
-    textAlign: "center",
   },
 });
 

@@ -14,6 +14,7 @@ import {
 } from "react-navigation";
 import Home from "./screens/Home";
 import Add from "./screens/Add";
+import Settings from "./screens/Settings";
 import History from "./screens/History";
 import LoadingScreen from "./screens/Loading";
 import appReducer from "./Reducer";
@@ -34,9 +35,14 @@ const HistoryStack = StackNavigator({
     History: { screen: History },
   });
 
+const SettingsStack = StackNavigator({
+    Settings: { screen: Settings },
+  });
+
 const DailyBudgetRoot = TabNavigator({
     Home: { screen: HomeStack },
     History: { screen: HistoryStack },
+    Settings: { screen: SettingsStack },
 },
  {
     tabBarPosition: "bottom",
@@ -44,7 +50,7 @@ const DailyBudgetRoot = TabNavigator({
 
 const persistConfig = {
     transforms: [immutableTransform()],
-    key: "v5",
+    key: "v6",
     storage,
 };
 

@@ -2,11 +2,13 @@ import React from "react";
 import {Component} from "react";
 import {
     StyleSheet,
-    Text,
     View,
     TextInput,
-    Button,
 } from "react-native";
+import {
+    Text,
+    Button,
+} from "react-native-elements";
 import {
     NavigationScreenProps,
 } from "react-navigation";
@@ -45,7 +47,7 @@ class Add extends Component<Props> {
     public render() {
         return (
                 <View style={styles.container}>
-                <Text style={styles.welcome}>Modify budget</Text>
+                <Text h2>Modify budget</Text>
                 <TextInput value={this.state.amount.toString()}
                            keyboardType="numeric"
                            style={{fontSize: 40}}
@@ -59,7 +61,6 @@ class Add extends Component<Props> {
 
     private handlePress() {
         const realAmount = this.state.amount.replace(/,/g,".");
-        console.log("real amount: "+realAmount);
         this.props.onNewTransaction({
             amount: this.props.amountModifier(new Decimal(realAmount)),
             comment: this.state.comment,
@@ -69,8 +70,9 @@ class Add extends Component<Props> {
     }
 
     private handleAmountChange(text: string) {
+        const newText = text !== "0" && text[0] === "0" ? text.slice(1) : text;
         this.setState({
-            amount: text,
+            amount: newText,
             comment: this.state.comment,
         });
     }
@@ -84,22 +86,11 @@ class Add extends Component<Props> {
 }
 
 const styles = StyleSheet.create({
-  budget: {
-    color: "#333333",
-    fontSize: 30,
-    marginBottom: 5,
-    textAlign: "center",
-  },
   container: {
     alignItems: "center",
     backgroundColor: "#F5FCFF",
     flex: 1,
     justifyContent: "center",
-  },
-  welcome: {
-    fontSize: 20,
-    margin: 10,
-    textAlign: "center",
   },
 });
 
