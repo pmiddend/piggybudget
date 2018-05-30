@@ -44,7 +44,7 @@ class Settings extends Component<Props, State> {
     constructor(props: Props) {
         super(props);
         this.state = {
-            income: this.props.settings.income.toString(),
+            income: this.props.settings.income,
         };
         this.handlePress = this.handlePress.bind(this);
         this.handleIncomeChange = this.handleIncomeChange.bind(this);

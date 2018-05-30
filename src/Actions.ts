@@ -22,6 +22,10 @@ export interface ActionIncomeChange {
     readonly newIncome: Decimal;
 }
 
+export interface ActionClear {
+    readonly type: "CLEAR";
+}
+
 export function actionAddTransaction(t: Transaction): ActionAddTransaction {
     return {
         t,
@@ -33,6 +37,12 @@ export function actionStateChange(newState: AppStateStatus): ActionStateChange {
     return {
         newState,
         type: "STATE_CHANGE",
+    };
+}
+
+export function actionClear(): ActionClear {
+    return {
+        type: "CLEAR",
     };
 }
 
@@ -52,5 +62,6 @@ export function actionIncomeTypeChange(newIncomeType: string): ActionIncomeTypeC
 
 export type Action = ActionAddTransaction
     | ActionStateChange
+    | ActionClear
     | ActionIncomeTypeChange
     | ActionIncomeChange;

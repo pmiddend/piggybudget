@@ -19,32 +19,35 @@ import {
     storeTotalBudget,
     TransactionList,
 } from "../BudgetStore";
-import { actionStateChange } from "../Actions";
+import {
+    actionStateChange,
+    actionClear,
+} from "../Actions";
 
 interface Props {
     readonly navigation: any;
     readonly transactions: TransactionList;
-    readonly onStateChange: (newState: string) => void;
+    readonly onStateChange: (newState: AppStateStatus) => void;
+    readonly onClear: () => void;
 }
 
-class Home extends Component<Props, State> {
+class Home extends Component<Props> {
     public static navigationOptions = {
         title: "Home",
     };
 
-    private stateChangeBind: any;
-
     constructor(props: Props) {
         super(props);
-        this.stateChangeBind = this.handleAppStateChange.bind(this);
+        this.handleAppStateChange = this.handleAppStateChange.bind(this);
     }
 
     public componentDidMount() {
-        AppState.addEventListener("change", this.stateChangeBind);
+        this.props.onStateChange("background");
+        AppState.addEventListener("change", this.handleAppStateChange);
     }
 
     public componentWillUnmount() {
-        AppState.removeEventListener("change", this.stateChangeBind);
+        AppState.removeEventListener("change", this.handleAppStateChange);
     }
 
     public render() {
@@ -60,6 +63,7 @@ class Home extends Component<Props, State> {
                     amountModifier: (d: Decimal) => d.negated(),
                 })} />
                 </View>
+                <Button large title="Clear" onPress={() => this.props.onClear()} />
             </View>
         );
     }
@@ -89,6 +93,7 @@ const mapStateToProps = (state: MyAppState, ownProps: any) => {
 const mapDispatchToProps = (dispatch: any) => {
     return {
         onStateChange: (newState: AppStateStatus) => dispatch(actionStateChange(newState)),
+        onClear: () => dispatch(actionClear()),
     };
 };
 
