@@ -22,6 +22,8 @@ import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import immutableTransform from "redux-persist-transform-immutable";
+import { YellowBox } from "react-native";
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated']);
 
 const HomeStack = StackNavigator({
     Add: { screen: Add },
