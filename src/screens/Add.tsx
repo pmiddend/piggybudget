@@ -8,6 +8,8 @@ import {
 import {
     Text,
     Button,
+    ButtonGroup,
+    Icon,
 } from "react-native-elements";
 import {
     NavigationScreenProps,
@@ -17,6 +19,7 @@ import { connect } from "react-redux";
 import Transaction from "../Transaction";
 import { actionAddTransaction } from "../Actions";
 import AppState from "../AppState";
+import {categories} from "../Categories";
 
 interface State {
     amount: string;
@@ -45,6 +48,10 @@ class Add extends Component<Props> {
     }
 
     public render() {
+        const buttons = categories
+            .map((c) => (<Icon name={c.icon} />))
+            .map((c) => ({ element: () => c }))
+            .toArray();
         return (
                 <View style={styles.container}>
                 <Text h2>Modify budget</Text>
@@ -52,6 +59,7 @@ class Add extends Component<Props> {
                            keyboardType="numeric"
                            style={{fontSize: 40}}
                            onChangeText={(text) => this.handleAmountChange(text)}/>
+                <ButtonGroup buttons={buttons} selectedIndex={0} onPress={() => {}} />
                 <TextInput value={this.state.comment}
                            onChangeText={(text) => this.handleCommentChange(text)}/>
                 <Button title="Go!" onPress={() => this.handlePress()} />
