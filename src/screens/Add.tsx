@@ -10,6 +10,7 @@ import {
     Button,
     ButtonGroup,
     Icon,
+    FormLabel,
 } from "react-native-elements";
 import {
     NavigationScreenProps,
@@ -56,10 +57,12 @@ class Add extends Component<Props> {
         return (
                 <View style={styles.container}>
                 <Text h2>Modify budget</Text>
+                <FormLabel>Amount</FormLabel>
                 <TextInput value={this.state.amount.toString()}
                            keyboardType="numeric"
                            style={{fontSize: 40}}
                            onChangeText={(text) => this.handleAmountChange(text)}/>
+                <FormLabel>Category</FormLabel>
                 <ButtonGroup buttons={buttons}
                              selectedIndex={this.state.commentIndex}
                              onPress={this.handleCommentChange} />
