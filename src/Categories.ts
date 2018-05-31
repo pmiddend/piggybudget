@@ -13,3 +13,11 @@ export const categories: List<Category> = List([
     {icon: "ios-shirt", name: "CLOTHING", iconType: "ionicon"},
     {icon: "dots-three-horizontal", name: "OTHER", iconType: "entypo"},
 ]);
+
+export function otherCategory(): Category {
+    return categories.last() as Category;
+}
+
+export function findCategory(name: string): Category | undefined {
+    return categories.find((c) => c.name === name);
+}

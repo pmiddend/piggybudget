@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import {
     NavigationScreenProps,
 } from "react-navigation";
+import { findCategory, otherCategory } from "../Categories";
+import { Icon } from "react-native-elements";
 import {
     View,
     SectionList,
@@ -30,7 +32,21 @@ interface HistoryItemProps {
 }
 
 const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
-    return (<Text key={props.transaction.date.toString()}>{props.transaction.amount.toString()}€</Text>);
+    const catOpt = findCategory(props.transaction.comment);
+    const cat = catOpt === undefined ? otherCategory() : catOpt;
+    const viewStyle = {
+        flex: 1,
+        flexDirection: "row",
+        
+    };
+    return (
+            <View
+        key={props.transaction.date.toString()}
+        style={viewStyle}>
+            <Text>{moment(props.transaction.date).format("LT")}</Text>
+            <Icon name={cat.icon} type={cat.iconType} />
+            <Text>{props.transaction.amount.toString()}€</Text>
+        </View>);
 };
 
 interface Section {
