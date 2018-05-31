@@ -19,11 +19,11 @@ import { connect } from "react-redux";
 import Transaction from "../Transaction";
 import { actionAddTransaction } from "../Actions";
 import AppState from "../AppState";
-import {categories} from "../Categories";
+import {categories, Category} from "../Categories";
 
 interface State {
     amount: string;
-    comment: string;
+    commentIndex: 0;
 }
 
 interface Props {
@@ -43,13 +43,14 @@ class Add extends Component<Props> {
         super(props);
         this.state = {
             amount: "0",
-            comment: "",
+            commentIndex: 0,
         };
+        this.handleCommentChange = this.handleCommentChange.bind(this);
     }
 
     public render() {
         const buttons = categories
-            .map((c) => (<Icon name={c.icon} />))
+            .map((c) => (<Icon name={c.icon} type={c.iconType} />))
             .map((c) => ({ element: () => c }))
             .toArray();
         return (
@@ -59,19 +60,19 @@ class Add extends Component<Props> {
                            keyboardType="numeric"
                            style={{fontSize: 40}}
                            onChangeText={(text) => this.handleAmountChange(text)}/>
-                <ButtonGroup buttons={buttons} selectedIndex={0} onPress={() => {}} />
-                <TextInput value={this.state.comment}
-                           onChangeText={(text) => this.handleCommentChange(text)}/>
+                <ButtonGroup buttons={buttons}
+                             selectedIndex={this.state.commentIndex}
+                             onPress={this.handleCommentChange} />
                 <Button title="Go!" onPress={() => this.handlePress()} />
                 </View>
         );
     }
 
     private handlePress() {
-        const realAmount = this.state.amount.replace(/,/g,".");
+        const realAmount = this.state.amount.replace(/,/g, ".");
         this.props.onNewTransaction({
             amount: this.props.amountModifier(new Decimal(realAmount)),
-            comment: this.state.comment,
+            comment: (categories.get(this.state.commentIndex) as Category).name,
             date: Date.now(),
         });
         this.props.navigation.goBack();
@@ -80,15 +81,15 @@ class Add extends Component<Props> {
     private handleAmountChange(text: string) {
         const newText = text !== "0" && text[0] === "0" ? text.slice(1) : text;
         this.setState({
+            ...this.state,
             amount: newText,
-            comment: this.state.comment,
         });
     }
 
-    private handleCommentChange(text: string) {
+    private handleCommentChange(commentIndex: number) {
         this.setState({
-            amount: this.state.amount,
-            comment: text,
+            ...this.state,
+            commentIndex,
         });
     }
 }
