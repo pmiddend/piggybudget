@@ -15,7 +15,11 @@ import {
     AppStateStatus,
 } from "react-native";
 import { Currency, currencies } from "../Currencies";
-import { Text, Button } from "react-native-elements";
+import {
+    Text,
+    Button,
+    Icon,
+} from "react-native-elements";
 import {
     storeTotalBudget,
     TransactionList,
@@ -53,19 +57,19 @@ class Home extends Component<Props> {
     }
 
     public render() {
+        const iconSize = 40;
         return (
             <View style={styles.container}>
-                <Text h3>Todays budget</Text>
-                <Text h1>{storeTotalBudget(this.props.transactions).toString()}{this.props.currency.symbol}</Text>
+                <Text h3>Total Budget</Text>
+                <Text h1 style={{fontWeight: "bold"}}>{storeTotalBudget(this.props.transactions).toString()}{this.props.currency.symbol}</Text>
                 <View style={{flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
-                <Button large title="Add" onPress={() => this.props.navigation.navigate("Add", {
+                <Icon raised size={iconSize} color="#89c440" reverse name="plus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
                     amountModifier: (d: Decimal) => d,
                 })} />
-                <Button large title="Remove" onPress={() => this.props.navigation.navigate("Add", {
+                <Icon raised size={iconSize} color="#ff5606" reverse name="minus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
                     amountModifier: (d: Decimal) => d.negated(),
                 })} />
                 </View>
-                <Button large title="Clear" onPress={() => this.props.onClear()} />
             </View>
         );
     }

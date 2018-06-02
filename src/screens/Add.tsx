@@ -35,7 +35,7 @@ interface Props {
 
 class Add extends Component<Props> {
     public static navigationOptions = {
-        title: "Modify budget",
+        title: "Modify",
     };
 
     public state: State;
@@ -66,7 +66,7 @@ class Add extends Component<Props> {
                 <ButtonGroup buttons={buttons}
                              selectedIndex={this.state.commentIndex}
                              onPress={this.handleCommentChange} />
-                <Button title="Go!" onPress={() => this.handlePress()} />
+                <Button raised title="Go!" onPress={() => this.handlePress()} buttonStyle={{backgroundColor: "#00a7f7"}}/>
                 </View>
         );
     }

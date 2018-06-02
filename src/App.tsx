@@ -48,6 +48,7 @@ const DailyBudgetRoot = TabNavigator({
 },
  {
     tabBarPosition: "bottom",
+    lazy: false,
 });
 
 const persistConfig = {
