@@ -14,6 +14,7 @@ import {
     AppState,
     AppStateStatus,
 } from "react-native";
+import { Currency, currencies } from "../Currencies";
 import { Text, Button } from "react-native-elements";
 import {
     storeTotalBudget,
@@ -27,6 +28,7 @@ import {
 interface Props {
     readonly navigation: any;
     readonly transactions: TransactionList;
+    readonly currency: Currency;
     readonly onStateChange: (newState: AppStateStatus) => void;
     readonly onClear: () => void;
 }
@@ -54,7 +56,7 @@ class Home extends Component<Props> {
         return (
             <View style={styles.container}>
                 <Text h3>Todays budget</Text>
-                <Text h1>{storeTotalBudget(this.props.transactions).toString()}€</Text>
+                <Text h1>{storeTotalBudget(this.props.transactions).toString()}{this.props.currency.symbol}</Text>
                 <View style={{flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly"}}>
                 <Button large title="Add" onPress={() => this.props.navigation.navigate("Add", {
                     amountModifier: (d: Decimal) => d,
@@ -85,6 +87,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: MyAppState, ownProps: any) => {
     return {
+        currency: currencies.get(state.settings.currency) as Currency,
         navigation: ownProps.navigation,
         transactions: state.transactions,
     };
@@ -92,8 +95,8 @@ const mapStateToProps = (state: MyAppState, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
-        onStateChange: (newState: AppStateStatus) => dispatch(actionStateChange(newState)),
         onClear: () => dispatch(actionClear()),
+        onStateChange: (newState: AppStateStatus) => dispatch(actionStateChange(newState)),
     };
 };
 

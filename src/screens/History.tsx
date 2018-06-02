@@ -21,14 +21,17 @@ import AppState from "../AppState";
 import Transaction from "../Transaction";
 import moment from "moment";
 import { Collection } from "immutable";
+import { currencies, Currency } from "../Currencies";
 
 interface Props {
     readonly navigation: any;
     readonly transactions: TransactionList;
+    readonly currency: Currency;
 }
 
 interface HistoryItemProps {
     transaction: Transaction;
+    currency: Currency;
 }
 
 const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
@@ -45,7 +48,7 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
         style={viewStyle}>
             <Text>{moment(props.transaction.date).format("LT")}</Text>
             <Icon name={cat.icon} type={cat.iconType} />
-            <Text>{props.transaction.amount.toString()}€</Text>
+            <Text>{props.transaction.amount.toString()}{props.currency.symbol}</Text>
         </View>);
 };
 
@@ -67,7 +70,7 @@ class History extends PureComponent<Props> {
         return (<View>
                 <SectionList
                           sections={this.createSections()}
-                          renderItem={(item: ListRenderItemInfo<Transaction>) => <HistoryItem transaction={item.item} />}
+                renderItem={(item: ListRenderItemInfo<Transaction>) => <HistoryItem transaction={item.item} currency={this.props.currency} />}
                           keyExtractor={(item: Transaction, index: number) => item.date.toString() + index}
                 renderSectionHeader={this.renderHeader}
                 />
@@ -82,8 +85,8 @@ class History extends PureComponent<Props> {
     private createSections(): Array<SectionListData<Transaction>> {
         return this.props.transactions
             .groupBy((value: Transaction) => getDayHeadline(value.date))
-            .sortBy((values: Collection<number, Transaction>) => (values.first() as Transaction).date)
-            .map((values: Collection<number, Transaction>, header: string) => ({ data: values.toList().toArray(), header }))
+            .sortBy((values: Collection<number, Transaction>) => -(values.first() as Transaction).date)
+            .map((values: Collection<number, Transaction>, header: string) => ({ data: values.toList().sortBy((t: Transaction) => -t.date).toArray(), header }))
             .toList()
             .toArray();
     }
@@ -93,6 +96,7 @@ const mapStateToProps = (state: AppState, ownProps: any) => {
     return {
         navigation: ownProps.navigation,
         transactions: state.transactions,
+        currency: currencies.get(state.settings.currency) as Currency
     };
 };
 

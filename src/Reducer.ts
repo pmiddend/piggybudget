@@ -1,10 +1,13 @@
 import AppState from "./AppState";
 import { List } from "immutable";
+import { AsyncStorage, ToastAndroid } from "react-native";
 import { ActionAddTransaction, Action } from "./Actions";
 import { Decimal } from "decimal.js";
 import { TransactionList } from "./BudgetStore";
 import Transaction from "./Transaction";
 import moment from "moment";
+import Settings from "./Settings";
+import { Currency, currencies } from "./Currencies";
 
 function dayRange(from: moment.Moment, to: moment.Moment): List<moment.Moment> {
     const result = [];
@@ -43,8 +46,9 @@ function createDailyTransaction(
 
 export default (state: AppState | undefined, action: Action) => {
     if (state === undefined) {
-        const initialSettings = {
-            income: new Decimal(0),
+        const initialSettings: Settings = {
+            currency: "EUR",
+            income: "0",
             incomeType: "daily",
         };
         return {
@@ -60,6 +64,8 @@ export default (state: AppState | undefined, action: Action) => {
                 transactions: state.transactions.push(action.t),
             };
         case "CLEAR":
+            AsyncStorage.clear();
+            ToastAndroid.show("Cleared all caches", ToastAndroid.SHORT);
             return {
                 ...state,
                 transactions: List(),
@@ -75,13 +81,14 @@ export default (state: AppState | undefined, action: Action) => {
                 moment(),
             );
 
-            console.log("Missing days: " + missingDays);
-
             const missingTransactions = missingDays.map(
                 (d) => createDailyTransaction(
                     d,
                     state.settings.incomeType,
                     income));
+
+            const symbol: string = (currencies.get(state.settings.currency) as Currency).symbol;
+            ToastAndroid.show("Added " + income + symbol + " for " + missingTransactions.size + " day(s)", ToastAndroid.LONG);
 
             return {
                 ...state,

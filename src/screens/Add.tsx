@@ -44,7 +44,7 @@ class Add extends Component<Props> {
         super(props);
         this.state = {
             amount: "0",
-            commentIndex: 0,
+            commentIndex: 4,
         };
         this.handleCommentChange = this.handleCommentChange.bind(this);
     }
