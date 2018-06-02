@@ -88,7 +88,8 @@ export default (state: AppState | undefined, action: Action) => {
                     income));
 
             const symbol: string = (currencies.get(state.settings.currency) as Currency).symbol;
-            ToastAndroid.show("Added " + income + symbol + " for " + missingTransactions.size + " day(s)", ToastAndroid.LONG);
+            if (missingTransactions.size > 0)
+                ToastAndroid.show("Added " + income + symbol + " for " + missingTransactions.size + " day(s)", ToastAndroid.LONG);
 
             return {
                 ...state,
