@@ -5,7 +5,7 @@ import {
     NavigationScreenProps,
 } from "react-navigation";
 import { findCategory, otherCategory } from "../Categories";
-import { Icon } from "react-native-elements";
+import { Icon, ListItem } from "react-native-elements";
 import {
     View,
     SectionList,
@@ -42,14 +42,14 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
         flexDirection: "row",
         
     };
-    return (
-            <View
-        key={props.transaction.date.toString()}
-        style={viewStyle}>
-            <Text>{moment(props.transaction.date).format("LT")}</Text>
-            <Icon name={cat.icon} type={cat.iconType} />
-            <Text>{props.transaction.amount.toString()}{props.currency.symbol}</Text>
-        </View>);
+    return (<ListItem
+            key={props.transaction.date.toString()}
+            leftIcon={{name: cat.icon, type: cat.iconType, color: "#20613c"}}
+            title={props.transaction.amount.toString() + props.currency.symbol}
+            hideChevron={true}
+            titleStyle={{fontWeight: "bold", fontSize: 24}}
+            subtitleStyle={{fontSize: 16}}
+            subtitle={moment(props.transaction.date).format("LT")}/>);
 };
 
 interface Section {
@@ -79,7 +79,7 @@ class History extends PureComponent<Props> {
     }
 
     private renderHeader(section: any) {
-        return <Text style={{fontWeight: "bold"}}>{section.section.header}</Text>;
+        return <View style={{padding: 5}}><Text style={{fontWeight: "bold", fontSize: 26}}>{section.section.header}</Text></View>;
     }
 
     private createSections(): Array<SectionListData<Transaction>> {
