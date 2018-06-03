@@ -46,8 +46,8 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
             leftIcon={{name: cat.icon, type: cat.iconType, color: "#20613c"}}
             title={props.transaction.amount.toString() + props.currency.symbol}
             hideChevron={true}
-            titleStyle={{fontWeight: "bold", fontSize: 24}}
-            subtitleStyle={{fontSize: 16}}
+            titleStyle={{fontWeight: "bold", fontSize: 22}}
+            subtitleStyle={{fontSize: 14}}
             subtitle={moment(props.transaction.date).format("LT")}/>);
 };
 
@@ -79,7 +79,7 @@ class History extends PureComponent<Props> {
     }
 
     private renderHeader(section: any) {
-        return <View style={{padding: 5}}><Text style={{fontWeight: "bold", fontSize: 26}}>{section.section.header}</Text></View>;
+        return <View style={{padding: 5}}><Text style={{fontWeight: "bold", fontSize: 20}}>{section.section.header}</Text></View>;
     }
 
     private createSections(): Array<SectionListData<Transaction>> {
@@ -94,9 +94,9 @@ class History extends PureComponent<Props> {
 
 const mapStateToProps = (state: AppState, ownProps: any) => {
     return {
+        currency: currencies.get(state.settings.currency) as Currency,
         navigation: ownProps.navigation,
         transactions: state.transactions,
-        currency: currencies.get(state.settings.currency) as Currency
     };
 };
 

@@ -24,7 +24,7 @@ import {categories, Category} from "../Categories";
 
 interface State {
     amount: string;
-    commentIndex: 0;
+    commentIndex: number;
 }
 
 interface Props {
@@ -51,6 +51,7 @@ class Add extends Component<Props> {
 
     public render() {
         const buttons = categories
+            .filter((c) => c.name !== "AUTOMATIC")
             .map((c) => (<Icon name={c.icon} type={c.iconType} />))
             .map((c) => ({ element: () => c }))
             .toArray();
@@ -66,7 +67,11 @@ class Add extends Component<Props> {
                 <ButtonGroup buttons={buttons}
                              selectedIndex={this.state.commentIndex}
                              onPress={this.handleCommentChange} />
-                <Button raised title="Go!" onPress={() => this.handlePress()} buttonStyle={{backgroundColor: "#00a7f7"}}/>
+                <Button
+            raised
+            title="Go!"
+            onPress={() => this.handlePress()}
+            buttonStyle={{backgroundColor: "#00a7f7"}}/>
                 </View>
         );
     }
