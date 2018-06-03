@@ -16,7 +16,6 @@ import Home from "./screens/Home";
 import Add from "./screens/Add";
 import Settings from "./screens/Settings";
 import History from "./screens/History";
-import LoadingScreen from "./screens/Loading";
 import appReducer from "./Reducer";
 import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
