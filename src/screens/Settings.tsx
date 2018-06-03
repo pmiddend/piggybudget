@@ -8,6 +8,7 @@ import {
     Button,
     Picker,
 } from "react-native";
+import moment from "moment";
 import {
     NavigationScreenProps,
 } from "react-navigation";
@@ -22,6 +23,7 @@ import {
 import AppState from "../AppState";
 import AppSettings from "../Settings";
 import { FormLabel, FormInput, ButtonGroup } from "react-native-elements";
+import { currencies, Currency } from "../Currencies";
 
 interface Props {
     readonly navigation: any;
@@ -51,21 +53,6 @@ class Settings extends Component<Props, State> {
         this.buttons = ["daily", "monthly"];
     }
 
-    private handlePress(selectedIndex: number) {
-        this.props.onIncomeTypeChange(this.buttons[selectedIndex]);
-    }
-
-    private handleIncomeChange(newIncome: string) {
-        this.setState({
-            income: newIncome,
-        });
-        try {
-            this.props.onIncomeChange(new Decimal(newIncome));
-        } catch (e) {
-            console.log("Couldn't convert "+newIncome+" to decimal");
-        }
-    }
-
     public render() {
         const selectedIndex = this.buttons.indexOf(this.props.settings.incomeType);
         return (
@@ -79,9 +66,35 @@ class Settings extends Component<Props, State> {
                 <FormInput value={this.state.income}
             keyboardType="numeric"
             onChangeText={this.handleIncomeChange}/>
+                <FormLabel>Daily income: {this.dailyIncome().toPrecision(2)}{(currencies.get(this.props.settings.currency) as Currency).symbol}</FormLabel>
            </View>
         );
     }
+
+    private dailyIncome(): Decimal {
+        if (this.props.settings.income === "")
+            return new Decimal(0);
+        if (this.props.settings.incomeType === "daily")
+            return new Decimal(this.props.settings.income);
+        const daysThisMonth: number = moment().daysInMonth();
+        return new Decimal(this.props.settings.income).div(new Decimal(daysThisMonth));
+    }
+
+    private handlePress(selectedIndex: number) {
+        this.props.onIncomeTypeChange(this.buttons[selectedIndex]);
+    }
+
+    private handleIncomeChange(newIncome: string) {
+        this.setState({
+            income: newIncome,
+        });
+        try {
+            this.props.onIncomeChange(new Decimal(newIncome));
+        } catch (e) {
+            console.log("Couldn't convert " + newIncome + " to decimal");
+        }
+    }
+
 }
 
 const styles = StyleSheet.create({

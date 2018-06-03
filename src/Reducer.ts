@@ -38,7 +38,7 @@ function createDailyTransaction(
     incomeType: string,
     income: Decimal): Transaction {
     return {
-        amount: incomeType === "daily" ? income : income.div(day.daysInMonth()),
+        amount: incomeType === "daily" ? income : income.div(day.daysInMonth()).toSignificantDigits(2),
         comment: "AUTOMATIC",
         date: day.toDate().getTime(),
     };
