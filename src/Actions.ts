@@ -22,6 +22,11 @@ export interface ActionIncomeChange {
     readonly newIncome: Decimal;
 }
 
+export interface ActionCurrencyChange {
+    readonly type: "CURRENCY_CHANGE";
+    readonly newCurrency: string;
+}
+
 export interface ActionClear {
     readonly type: "CLEAR";
 }
@@ -37,6 +42,13 @@ export function actionStateChange(newState: AppStateStatus): ActionStateChange {
     return {
         newState,
         type: "STATE_CHANGE",
+    };
+}
+
+export function actionCurrencyChange(newCurrency: string): ActionCurrencyChange {
+    return {
+        newCurrency,
+        type: "CURRENCY_CHANGE",
     };
 }
 
@@ -64,4 +76,5 @@ export type Action = ActionAddTransaction
     | ActionStateChange
     | ActionClear
     | ActionIncomeTypeChange
+    | ActionCurrencyChange
     | ActionIncomeChange;

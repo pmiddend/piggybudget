@@ -18,6 +18,7 @@ import Transaction from "../Transaction";
 import {
     actionAddTransaction,
     actionStateChange,
+    actionCurrencyChange,
     actionIncomeTypeChange,
     actionIncomeChange } from "../Actions";
 import AppState from "../AppState";
@@ -30,6 +31,7 @@ interface Props {
     readonly settings: AppSettings;
     readonly onIncomeTypeChange: (newIncomeType: string) => void;
     readonly onIncomeChange: (newIncomeType: Decimal) => void;
+    readonly onChangeCurrency: (newCurrency: string) => void;
 }
 
 interface State {
@@ -51,12 +53,17 @@ class Settings extends Component<Props, State> {
         this.handlePress = this.handlePress.bind(this);
         this.handleIncomeChange = this.handleIncomeChange.bind(this);
         this.buttons = ["daily", "monthly"];
+
     }
 
     public render() {
         const selectedIndex = this.buttons.indexOf(this.props.settings.incomeType);
         return (
             <View>
+              <FormLabel>Currency</FormLabel>
+                <Picker selectedValue={this.props.settings.currency} onValueChange={this.props.onChangeCurrency}>
+                {currencies.valueSeq().map((c) => <Picker.Item key={c.code} label={c.name} value={c.code} />).toArray()}
+                </Picker>
               <FormLabel>Income type</FormLabel>
               <ButtonGroup
                 buttons={this.buttons}
@@ -66,7 +73,11 @@ class Settings extends Component<Props, State> {
                 <FormInput value={this.state.income}
             keyboardType="numeric"
             onChangeText={this.handleIncomeChange}/>
-                <FormLabel>Daily income: {this.dailyIncome().toPrecision(2)}{(currencies.get(this.props.settings.currency) as Currency).symbol}</FormLabel>
+                <FormLabel>
+                Daily income:
+                {this.dailyIncome().toPrecision(2)}
+            {(currencies.get(this.props.settings.currency) as Currency).symbol}
+            </FormLabel>
            </View>
         );
     }
@@ -118,6 +129,7 @@ const mapDispatchToProps = (dispatch: any) => {
     return {
         onIncomeChange: (t: Decimal) => dispatch(actionIncomeChange(t)),
         onIncomeTypeChange: (t: string) => dispatch(actionIncomeTypeChange(t)),
+        onChangeCurrency: (t: string) => dispatch(actionCurrencyChange(t)),
     };
 };
 

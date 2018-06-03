@@ -89,7 +89,14 @@ export default (state: AppState | undefined, action: Action) => {
 
             const symbol: string = (currencies.get(state.settings.currency) as Currency).symbol;
             if (missingTransactions.size > 0)
-                ToastAndroid.show("Added " + income + symbol + " for " + missingTransactions.size + " day(s)", ToastAndroid.LONG);
+                ToastAndroid.show(
+                    "Added " +
+                        income +
+                        symbol +
+                        " for " +
+                        missingTransactions.size +
+                        " day(s)",
+                    ToastAndroid.LONG);
 
             return {
                 ...state,
@@ -100,18 +107,25 @@ export default (state: AppState | undefined, action: Action) => {
                 ...state,
                 settings: {
                     ...state.settings,
-                    income: action.newIncome.toString()
-                }
+                    income: action.newIncome.toString(),
+                },
             };
         case "INCOME_TYPE_CHANGE":
             return {
                 ...state,
                 settings: {
                     ...state.settings,
-                    incomeType: action.newIncomeType
-                }
+                    incomeType: action.newIncomeType,
+                },
+            };
+        case "CURRENCY_CHANGE":
+            return {
+                ...state,
+                settings: {
+                    ...state.settings,
+                    currency: action.newCurrency,
+                },
             };
     }
     return state;
 };
-
