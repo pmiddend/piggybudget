@@ -40,7 +40,6 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
     const viewStyle = {
         flex: 1,
         flexDirection: "row",
-        
     };
     return (<ListItem
             key={props.transaction.date.toString()}
@@ -63,6 +62,7 @@ function getDayHeadline(date: number): string {
 
 class History extends PureComponent<Props> {
     public static navigationOptions = {
+        tabBarIcon: <Icon name="history" type="font-awesome" />,
         title: "History",
     };
 

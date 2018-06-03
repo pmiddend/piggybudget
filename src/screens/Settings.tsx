@@ -23,7 +23,12 @@ import {
     actionIncomeChange } from "../Actions";
 import AppState from "../AppState";
 import AppSettings from "../Settings";
-import { FormLabel, FormInput, ButtonGroup } from "react-native-elements";
+import {
+    FormLabel,
+    FormInput,
+    ButtonGroup,
+    Icon,
+} from "react-native-elements";
 import { currencies, Currency } from "../Currencies";
 
 interface Props {
@@ -40,6 +45,7 @@ interface State {
 
 class Settings extends Component<Props, State> {
     public static navigationOptions = {
+        tabBarIcon: <Icon name="md-settings" type="ionicon" />,
         title: "Settings",
     };
 

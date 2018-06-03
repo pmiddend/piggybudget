@@ -48,6 +48,15 @@ const DailyBudgetRoot = TabNavigator({
  {
     tabBarPosition: "bottom",
     lazy: false,
+    tabBarOptions: {
+        activeTintColor: "#666666",
+        pressColor: "#ff0000",
+        inactiveTintColor: "#999999",
+        showIcon: true,
+        style: {
+            backgroundColor: "#f6f7f8",
+        }
+    }
 });
 
 const persistConfig = {
