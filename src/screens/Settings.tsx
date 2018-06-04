@@ -81,11 +81,19 @@ class Settings extends Component<Props, State> {
             onChangeText={this.handleIncomeChange}/>
                 <FormLabel>
                 Daily income:
-                {this.dailyIncome().toPrecision(2)}
+                {this.dailyIncomeString()}
             {(currencies.get(this.props.settings.currency) as Currency).symbol}
             </FormLabel>
            </View>
         );
+    }
+
+    private dailyIncomeString(): string {
+        const result = this.dailyIncome().toString();
+        if (result.indexOf(".") === -1)
+            return result;
+        const splitResult = result.split(".");
+        return splitResult[0] + "." + splitResult[1].substring(0, 2);
     }
 
     private dailyIncome(): Decimal {
@@ -126,16 +134,16 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: AppState, ownProps: any) => {
     return {
-        settings: state.settings,
         navigation: ownProps.navigation,
+        settings: state.settings,
     };
 };
 
 const mapDispatchToProps = (dispatch: any) => {
     return {
+        onChangeCurrency: (t: string) => dispatch(actionCurrencyChange(t)),
         onIncomeChange: (t: Decimal) => dispatch(actionIncomeChange(t)),
         onIncomeTypeChange: (t: string) => dispatch(actionIncomeTypeChange(t)),
-        onChangeCurrency: (t: string) => dispatch(actionCurrencyChange(t)),
     };
 };
 

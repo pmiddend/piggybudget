@@ -11,6 +11,7 @@ export const categories: List<Category> = List([
     {icon: "tram", name: "TRAFFIC", iconType: "material-community"},
     {icon: "gift", name: "GIFT", iconType: "octicon"},
     {icon: "ios-shirt", name: "CLOTHING", iconType: "ionicon"},
+    {icon: "dots-three-horizontal", name: "OTHER", iconType: "entypo"},
     {icon: "bell", name: "AUTOMATIC", iconType: "entypo"},
 ]);
 
