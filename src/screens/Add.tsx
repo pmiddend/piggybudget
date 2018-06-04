@@ -60,7 +60,7 @@ class Add extends Component<Props> {
 
     public render() {
         const nonAutomatic = categories.filter((c) => c.name !== "AUTOMATIC");
-        const buttonRows = groupRows(nonAutomatic, 5).map(this.renderButtonRow).toArray();
+        const buttonRows = groupRows(nonAutomatic, 4).map(this.renderButtonRow).toArray();
         return (
                 <View style={styles.container}>
                 <Text h2>Modify budget</Text>
@@ -74,7 +74,8 @@ class Add extends Component<Props> {
                 <Button
             raised
             title="Go!"
-            onPress={() => this.handlePress()} buttonStyle={{backgroundColor: "#00a7f7"}}/> </View>
+            onPress={() => this.handlePress()} buttonStyle={{backgroundColor: "#00a7f7"}}/>
+                </View>
         );
     }
 
@@ -99,7 +100,7 @@ class Add extends Component<Props> {
                  (<Icon
                   key={c.name}
                   reverse
-                  size={20}
+                  size={26}
                   onPress={() => this.handleCommentChange(c.name)}
                   color={this.buttonBackgroundColor(c.name)}
                   reverseColor={this.buttonIconColor(c.name)}
