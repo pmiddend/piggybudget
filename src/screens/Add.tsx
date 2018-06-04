@@ -5,6 +5,7 @@ import {
     View,
     TextInput,
 } from "react-native";
+import { List, Range } from "immutable";
 import {
     Text,
     Button,
@@ -20,17 +21,23 @@ import { connect } from "react-redux";
 import Transaction from "../Transaction";
 import { actionAddTransaction } from "../Actions";
 import AppState from "../AppState";
-import {categories, Category} from "../Categories";
+import {findCategory, categories, Category} from "../Categories";
 
 interface State {
     amount: string;
-    commentIndex: number;
+    commentName: string;
 }
 
 interface Props {
     readonly onNewTransaction: (t: Transaction) => void;
     readonly amountModifier: (d: Decimal) => Decimal;
     readonly navigation: any;
+}
+
+function groupRows<T>(list: List<T>, groupSize: number): List<List<T>> {
+    return Range(0, Math.ceil(list.size / groupSize))
+        .map((idx) => list.slice(idx * groupSize, Math.min(list.size, (idx + 1) * groupSize)))
+        .toList();
 }
 
 class Add extends Component<Props> {
@@ -45,17 +52,15 @@ class Add extends Component<Props> {
         super(props);
         this.state = {
             amount: "0",
-            commentIndex: 4,
+            commentName: "OTHER",
         };
         this.handleCommentChange = this.handleCommentChange.bind(this);
+        this.renderButtonRow = this.renderButtonRow.bind(this);
     }
 
     public render() {
-        const buttons = categories
-            .filter((c) => c.name !== "AUTOMATIC")
-            .map((c) => (<Icon name={c.icon} type={c.iconType} />))
-            .map((c) => ({ element: () => c }))
-            .toArray();
+        const nonAutomatic = categories.filter((c) => c.name !== "AUTOMATIC");
+        const buttonRows = groupRows(nonAutomatic, 5).map(this.renderButtonRow).toArray();
         return (
                 <View style={styles.container}>
                 <Text h2>Modify budget</Text>
@@ -65,23 +70,49 @@ class Add extends Component<Props> {
                            style={{fontSize: 40}}
                            onChangeText={(text) => this.handleAmountChange(text)}/>
                 <FormLabel>Category</FormLabel>
-                <ButtonGroup buttons={buttons}
-                             selectedIndex={this.state.commentIndex}
-                             onPress={this.handleCommentChange} />
+                {buttonRows}
                 <Button
             raised
             title="Go!"
-            onPress={() => this.handlePress()}
-            buttonStyle={{backgroundColor: "#00a7f7"}}/>
-                </View>
+            onPress={() => this.handlePress()} buttonStyle={{backgroundColor: "#00a7f7"}}/> </View>
         );
+    }
+
+    private buttonBackgroundColor(name: string): string {
+        if (name === this.state.commentName) {
+            return "#666666";
+        } else {
+            return "#eeeeee";
+        }
+    }
+
+    private buttonIconColor(name: string): string {
+        if (name === this.state.commentName) {
+            return "#eeeeee";
+        } else {
+            return "#666666";
+        }
+    }
+
+    private renderButtonRow(buttonRow: List<Category>, key: number) {
+        return (<View key={key} style={{flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center"}}>{buttonRow.map((c) =>
+                 (<Icon
+                  key={c.name}
+                  reverse
+                  size={20}
+                  onPress={() => this.handleCommentChange(c.name)}
+                  color={this.buttonBackgroundColor(c.name)}
+                  reverseColor={this.buttonIconColor(c.name)}
+                  name={c.icon}
+                  type={c.iconType} />))
+                 .toArray()}</View>);
     }
 
     private handlePress() {
         const realAmount = this.state.amount.replace(/,/g, ".");
         this.props.onNewTransaction({
             amount: this.props.amountModifier(new Decimal(realAmount)),
-            comment: (categories.get(this.state.commentIndex) as Category).name,
+            comment: (findCategory(this.state.commentName) as Category).name,
             date: Date.now(),
         });
         this.props.navigation.goBack();
@@ -95,10 +126,10 @@ class Add extends Component<Props> {
         });
     }
 
-    private handleCommentChange(commentIndex: number) {
+    private handleCommentChange(commentName: string) {
         this.setState({
             ...this.state,
-            commentIndex,
+            commentName,
         });
     }
 }
