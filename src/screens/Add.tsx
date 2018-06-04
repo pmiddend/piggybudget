@@ -35,6 +35,7 @@ interface Props {
 
 class Add extends Component<Props> {
     public static navigationOptions = {
+        tabBarIcon: <Icon name="check" type="entypo" />,
         title: "Modify",
     };
 
