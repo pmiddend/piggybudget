@@ -41,10 +41,19 @@ function groupRows<T>(list: List<T>, groupSize: number): List<List<T>> {
 }
 
 class Add extends Component<Props> {
-    public static navigationOptions = {
-        tabBarIcon: <Icon name="check" type="entypo" />,
-        title: "Modify",
-    };
+    public static navigationOptions = ({ navigation }) => {
+        const { params } = navigation.state;
+
+        const submitIcon = (<View style={{paddingRight: 15}}><Icon
+                            name="check-square"
+                            type="feather"
+                            onPress={() => {params.handlePress()}} /></View>);
+
+        return {
+            tabBarIcon: <Icon name="check" type="entypo" />,
+            title: "Modify",
+            headerRight: submitIcon,
+        }};
 
     public state: State;
 
@@ -56,6 +65,12 @@ class Add extends Component<Props> {
         };
         this.handleCommentChange = this.handleCommentChange.bind(this);
         this.renderButtonRow = this.renderButtonRow.bind(this);
+        this.handlePress = this.handlePress.bind(this);
+    }
+
+
+    public componentDidMount() {
+      this.props.navigation.setParams({ handlePress: this.handlePress });
     }
 
     public render() {
@@ -71,10 +86,6 @@ class Add extends Component<Props> {
                            onChangeText={(text) => this.handleAmountChange(text)}/>
                 <FormLabel>Category</FormLabel>
                 {buttonRows}
-                <Button
-            raised
-            title="Go!"
-            onPress={() => this.handlePress()} buttonStyle={{backgroundColor: "#00a7f7"}}/>
                 </View>
         );
     }
