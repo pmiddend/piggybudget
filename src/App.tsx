@@ -61,7 +61,7 @@ const DailyBudgetRoot = TabNavigator({
 
 const persistConfig = {
     transforms: [immutableTransform()],
-    key: "v10",
+    key: "v11",
     storage,
 };
 

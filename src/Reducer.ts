@@ -91,11 +91,13 @@ export default (state: AppState | undefined, action: Action) => {
             if (missingTransactions.size > 0)
                 ToastAndroid.show(
                     "Added " +
-                        income +
-                        symbol +
-                        " for " +
-                        missingTransactions.size +
-                        " day(s)",
+                    missingTransactions
+                        .map((t) => t.amount)
+                        .reduce((sum, x) => sum.add(x), new Decimal(0)) +
+                    symbol +
+                    " for " +
+                    missingTransactions.size +
+                    " day(s)",
                     ToastAndroid.LONG);
 
             return {
