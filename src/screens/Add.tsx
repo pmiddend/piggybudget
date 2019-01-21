@@ -81,6 +81,7 @@ class Add extends Component<Props> {
 				<FormLabel>Amount</FormLabel>
 				<TextInput value={this.state.amount.toString()}
 					keyboardType="numeric"
+					autoFocus={true}
 					style={{ fontSize: 40 }}
 					onChangeText={(text) => this.handleAmountChange(text)} />
 				<FormLabel>Category</FormLabel>
