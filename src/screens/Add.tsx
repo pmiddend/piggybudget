@@ -77,15 +77,14 @@ class Add extends Component<Props> {
 		const buttonRows = groupRows(nonAutomatic, 4).map(this.renderButtonRow).toArray();
 		return (
 			<View style={styles.container}>
-				<Text h2>Modify budget</Text>
+				<FormLabel>Category</FormLabel>
+				{buttonRows}
 				<FormLabel>Amount</FormLabel>
 				<TextInput value={this.state.amount.toString()}
 					keyboardType="numeric"
 					autoFocus={true}
 					style={{ fontSize: 40 }}
 					onChangeText={(text) => this.handleAmountChange(text)} />
-				<FormLabel>Category</FormLabel>
-				{buttonRows}
 			</View>
 		);
 	}
@@ -111,7 +110,7 @@ class Add extends Component<Props> {
 			(<Icon
 				key={c.name}
 				reverse
-				size={26}
+				size={24}
 				onPress={() => this.handleCommentChange(c.name)}
 				color={this.buttonBackgroundColor(c.name)}
 				reverseColor={this.buttonIconColor(c.name)}
