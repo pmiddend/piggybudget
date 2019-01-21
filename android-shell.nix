@@ -45,6 +45,7 @@ let
         gperf
         perl
         libxml2
+        yarn
         zip
         unzip
         bison

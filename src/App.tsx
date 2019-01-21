@@ -1,16 +1,10 @@
 import React from "react";
-import {Component} from "react";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
 import {
-    StyleSheet,
-    Text,
-    View,
-} from "react-native";
-import {
-    StackNavigator,
-    TabNavigator,
-    TabBarBottom,
+	createStackNavigator,
+	createBottomTabNavigator,
+	createAppContainer,
 } from "react-navigation";
 import Home from "./screens/Home";
 import Add from "./screens/Add";
@@ -22,47 +16,46 @@ import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import immutableTransform from "redux-persist-transform-immutable";
 import { YellowBox } from "react-native";
-YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated']);
+YellowBox.ignoreWarnings(["Warning: isMounted(...) is deprecated"]);
 
-const HomeStack = StackNavigator({
-    Add: { screen: Add },
-    Home: { screen: Home },
-  },
-  {
-    initialRouteName: "Home",
-  });
-
-const HistoryStack = StackNavigator({
-    History: { screen: History },
-  });
-
-const SettingsStack = StackNavigator({
-    Settings: { screen: Settings },
-  });
-
-const DailyBudgetRoot = TabNavigator({
-    Home: { screen: HomeStack },
-    History: { screen: HistoryStack },
-    Settings: { screen: SettingsStack },
+const HomeStack = createStackNavigator({
+	Add: { screen: Add },
+	Home: { screen: Home },
 },
- {
-    tabBarPosition: "bottom",
-    lazy: true,
-    tabBarOptions: {
-        activeTintColor: "#666666",
-        pressColor: "#ff0000",
-        inactiveTintColor: "#999999",
-        showIcon: true,
-        style: {
-            backgroundColor: "#f6f7f8",
-        }
-    }
+	{
+		initialRouteName: "Home",
+	});
+
+const HistoryStack = createStackNavigator({
+	History: { screen: History },
 });
 
+const SettingsStack = createStackNavigator({
+	Settings: { screen: Settings },
+});
+
+const DailyBudgetRoot = createBottomTabNavigator({
+	History: { screen: HistoryStack },
+	Home: { screen: HomeStack },
+	Settings: { screen: SettingsStack },
+},
+	{
+		tabBarOptions: {
+			activeTintColor: "#666666",
+			inactiveTintColor: "#999999",
+			pressColor: "#ff0000",
+			style: {
+				backgroundColor: "#f6f7f8",
+			},
+		},
+	});
+
+const DailyBudgetAppContainer = createAppContainer(DailyBudgetRoot);
+
 const persistConfig = {
-    transforms: [immutableTransform()],
-    key: "v11",
-    storage,
+	key: "v11",
+	storage,
+	transforms: [immutableTransform()],
 };
 
 const persistedReducer = persistReducer(persistConfig, appReducer);
@@ -71,9 +64,9 @@ const store = createStore(persistedReducer);
 const persistor = persistStore(store);
 
 export default () => (
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <DailyBudgetRoot />
-          </PersistGate>
-        </Provider>
+	<Provider store={store}>
+		<PersistGate loading={null} persistor={persistor}>
+			<DailyBudgetAppContainer />
+		</PersistGate>
+	</Provider>
 );
