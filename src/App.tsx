@@ -8,6 +8,7 @@ import {
 } from "react-navigation";
 import Home from "./screens/Home";
 import Add from "./screens/Add";
+import Stats from "./screens/Stats";
 import Settings from "./screens/Settings";
 import History from "./screens/History";
 import appReducer from "./Reducer";
@@ -51,9 +52,19 @@ const SettingsStack = createStackNavigator({
 		},
 	});
 
+const StatsStack = createStackNavigator({
+	Stats: { screen: Stats },
+}, {
+		navigationOptions: {
+			tabBarIcon: <Icon name="chart-bar" type="material-community" />,
+			title: "Stats",
+		},
+	});
+
 const DailyBudgetRoot = createBottomTabNavigator({
 	Home: { screen: HomeStack },
 	History: { screen: HistoryStack },
+	Stats: { screen: StatsStack },
 	Settings: { screen: SettingsStack },
 },
 	{

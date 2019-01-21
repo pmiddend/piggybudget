@@ -1112,10 +1112,45 @@
     react-native-safe-area-view "^0.11.0"
     react-native-screens "^1.0.0 || ^1.0.0-alpha"
 
+"@types/d3-path@*":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@types/d3-path/-/d3-path-1.0.7.tgz#a0736fceed688a695f48265a82ff7a3369414b81"
+  integrity sha512-U8dFRG+8WhkLJr2sxZ9Cw/5WeRgBnNqMxGdA1+Z0+ZG6tK0s75OQ4OXnxeyfKuh6E4wQPY8OAKr1+iNDx01BEQ==
+
+"@types/d3-scale@*":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@types/d3-scale/-/d3-scale-2.1.0.tgz#da085c551aa4c4ae4845a0111447dea6e04f3d23"
+  integrity sha512-vLzRDF5lRxZdCLUOvmw90pkiuSsZdgroBQaat0Ov7Z7OnO9iJsPSm/TZw3wW6m2z/NhIn1E4N0RLNfEi1k4kAA==
+  dependencies:
+    "@types/d3-time" "*"
+
+"@types/d3-shape@*", "@types/d3-shape@^1.2.8":
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/@types/d3-shape/-/d3-shape-1.2.8.tgz#7750d34b8f817d543d62eaeb8d38b77886211b5c"
+  integrity sha512-eHAi4Nuw1/69hjBFNXNWYifcNTFhwy360PI969ssMX22Si9henYiNKLeJoBhNfyXFajeFjI1HGsYzyCWKOozdA==
+  dependencies:
+    "@types/d3-path" "*"
+
+"@types/d3-time@*":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@types/d3-time/-/d3-time-1.0.9.tgz#c2cf05a3cd51f810b8d8a9bbca0c74030d4e535e"
+  integrity sha512-m+D4NbQdDlTVaO7QgXAnatR3IDxQYDMBtRhgSCi5rs9R1LPq1y7/2aqa1FJ2IWjFm1mOV63swDxonnCDlHgHMA==
+
 "@types/prop-types@*":
   version "15.5.8"
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.5.8.tgz#8ae4e0ea205fe95c3901a5a1df7f66495e3a56ce"
   integrity sha512-3AQoUxQcQtLHsK25wtTWIoIpgYjH3vSDroZOUr7PpCHw/jLY1RB9z9E8dBT/OSmwStVgkRNvdh+ZHNiomRieaw==
+
+"@types/react-native-svg-charts@^5.0.1":
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-native-svg-charts/-/react-native-svg-charts-5.0.1.tgz#75beda15b69a8db33c626fb356282f3d5ef058d4"
+  integrity sha512-dyUqPZMsW/hPMDkEGjmdHiQdyaDcUJ+Var6Avy+0BjN2yCFhJSIiUEd/c/fqroIeFVNKkKuEh83epzi9DXqoSA==
+  dependencies:
+    "@types/d3-scale" "*"
+    "@types/d3-shape" "*"
+    "@types/react" "*"
+    "@types/react-native" "*"
+    react-native-svg "^6.2.1"
 
 "@types/react-native@*", "@types/react-native@^0.57.8":
   version "0.57.29"
@@ -1979,7 +2014,7 @@ collection-visit@^1.0.0:
     map-visit "^1.0.0"
     object-visit "^1.0.0"
 
-color-convert@^1.9.0:
+color-convert@^1.9.0, color-convert@^1.9.1:
   version "1.9.3"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-1.9.3.tgz#bb71850690e1f136567de629d2d5471deda4c1e8"
   integrity sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==
@@ -1991,10 +2026,31 @@ color-name@1.1.3:
   resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.3.tgz#a7d0558bd89c42f795dd42328f740831ca53bc25"
   integrity sha1-p9BVi9icQveV3UIyj3QIMcpTvCU=
 
+color-name@^1.0.0:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/color-name/-/color-name-1.1.4.tgz#c2a09a87acbde69543de6f63fa3995c826c536a2"
+  integrity sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==
+
+color-string@^1.5.2:
+  version "1.5.3"
+  resolved "https://registry.yarnpkg.com/color-string/-/color-string-1.5.3.tgz#c9bbc5f01b58b5492f3d6857459cb6590ce204cc"
+  integrity sha512-dC2C5qeWoYkxki5UAXapdjqO672AM4vZuPGRQfO8b5HKuKGBbKWpITyDYN7TOFKvRW7kOgAn3746clDBMDJyQw==
+  dependencies:
+    color-name "^1.0.0"
+    simple-swizzle "^0.2.2"
+
 color-support@^1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/color-support/-/color-support-1.1.3.tgz#93834379a1cc9a0c61f82f52f0d04322251bd5a2"
   integrity sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==
+
+color@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/color/-/color-2.0.1.tgz#e4ed78a3c4603d0891eba5430b04b86314f4c839"
+  integrity sha512-ubUCVVKfT7r2w2D3qtHakj8mbmKms+tThR8gI8zEYCbUBl8/voqFGt3kgBqGwXAopgXybnkuOq+qMYCRrp4cXw==
+  dependencies:
+    color-convert "^1.9.1"
+    color-string "^1.5.2"
 
 combined-stream@^1.0.6, combined-stream@~1.0.6:
   version "1.0.7"
@@ -2157,6 +2213,77 @@ csstype@^2.2.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/csstype/-/csstype-2.6.1.tgz#4cfbf637a577497036ebcd7e32647ef19a0b8076"
   integrity sha512-wv7IRqCGsL7WGKB8gPvrl+++HlFM9kxAM6jL1EXNPNTshEJYilMkbfS2SnuHha77uosp/YVK0wAp2jmlBzn1tg==
+
+d3-array@^1.2.0:
+  version "1.2.4"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-1.2.4.tgz#635ce4d5eea759f6f605863dbcfc30edc737f71f"
+  integrity sha512-KHW6M86R+FUPYGb3R5XiYjXPq7VzwxZ22buHhAEVG5ztoEcZZMLov530mmccaqA1GghZArjQV46fuc8kUqhhHw==
+
+d3-collection@1:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.7.tgz#349bd2aa9977db071091c13144d5e4f16b5b310e"
+  integrity sha512-ii0/r5f4sjKNTfh84Di+DpztYwqKhEyUlKoPrzUFfeSkWxjW49xU2QzO9qrPrNkpdI0XJkfzvmTu8V2Zylln6A==
+
+d3-color@1:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.2.3.tgz#6c67bb2af6df3cc8d79efcc4d3a3e83e28c8048f"
+  integrity sha512-x37qq3ChOTLd26hnps36lexMRhNXEtVxZ4B25rL0DVdDsGQIJGB18S7y9XDwlDD6MD/ZBzITCf4JjGMM10TZkw==
+
+d3-format@1:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/d3-format/-/d3-format-1.3.2.tgz#6a96b5e31bcb98122a30863f7d92365c00603562"
+  integrity sha512-Z18Dprj96ExragQ0DeGi+SYPQ7pPfRMtUXtsg/ChVIKNBCzjO8XYJvRTC1usblx52lqge56V5ect+frYTQc8WQ==
+
+d3-interpolate-path@2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/d3-interpolate-path/-/d3-interpolate-path-2.0.0.tgz#cb0327314fedb14e6ea1789ab7e095a16c2f8ab2"
+  integrity sha1-ywMnMU/tsU5uoXiat+CVoWwvirI=
+  dependencies:
+    d3-interpolate "^1.1.1"
+
+d3-interpolate@1, d3-interpolate@^1.1.1:
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/d3-interpolate/-/d3-interpolate-1.3.2.tgz#417d3ebdeb4bc4efcc8fd4361c55e4040211fd68"
+  integrity sha512-NlNKGopqaz9qM1PXh9gBF1KSCVh+jSFErrSlD/4hybwoNX/gt1d8CDbDW+3i+5UOHhjC6s6nMvRxcuoMVNgL2w==
+  dependencies:
+    d3-color "1"
+
+d3-path@1:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/d3-path/-/d3-path-1.0.7.tgz#8de7cd693a75ac0b5480d3abaccd94793e58aae8"
+  integrity sha512-q0cW1RpvA5c5ma2rch62mX8AYaiLX0+bdaSM2wxSU9tXjU4DNvkx9qiUvjkuWCj3p22UO/hlPivujqMiR9PDzA==
+
+d3-scale@^1.0.6:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/d3-scale/-/d3-scale-1.0.7.tgz#fa90324b3ea8a776422bd0472afab0b252a0945d"
+  integrity sha512-KvU92czp2/qse5tUfGms6Kjig0AhHOwkzXG0+PqIJB3ke0WUv088AHMZI0OssO9NCkXt4RP8yju9rpH8aGB7Lw==
+  dependencies:
+    d3-array "^1.2.0"
+    d3-collection "1"
+    d3-color "1"
+    d3-format "1"
+    d3-interpolate "1"
+    d3-time "1"
+    d3-time-format "2"
+
+d3-shape@^1.0.6:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.2.2.tgz#f9dba3777a5825f9a8ce8bc928da08c17679e9a7"
+  integrity sha512-hUGEozlKecFZ2bOSNt7ENex+4Tk9uc/m0TtTEHBvitCBxUNjhzm5hS2GrrVRD/ae4IylSmxGeqX5tWC2rASMlQ==
+  dependencies:
+    d3-path "1"
+
+d3-time-format@2:
+  version "2.1.3"
+  resolved "https://registry.yarnpkg.com/d3-time-format/-/d3-time-format-2.1.3.tgz#ae06f8e0126a9d60d6364eac5b1533ae1bac826b"
+  integrity sha512-6k0a2rZryzGm5Ihx+aFMuO1GgelgIz+7HhB4PH4OEndD5q2zGn1mDfRdNrulspOfR6JXkb2sThhDK41CSK85QA==
+  dependencies:
+    d3-time "1"
+
+d3-time@1:
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.10.tgz#8259dd71288d72eeacfd8de281c4bf5c7393053c"
+  integrity sha512-hF+NTLCaJHF/JqHN5hE8HVGAXPStEq6/omumPE/SxyHVrR7/qQxusFDo0t0c/44+sCGHthC7yNGFZIEgju0P8g==
 
 dashdash@^1.12.0:
   version "1.14.1"
@@ -3202,6 +3329,11 @@ is-arrayish@^0.2.1:
   resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.2.1.tgz#77c99840527aa8ecb1a8ba697b80645a7a926a9d"
   integrity sha1-d8mYQFJ6qOyxqLppe4BkWnqSap0=
 
+is-arrayish@^0.3.1:
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/is-arrayish/-/is-arrayish-0.3.2.tgz#4574a2ae56f7ab206896fb431eaeed066fdf8f03"
+  integrity sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==
+
 is-buffer@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
@@ -4115,7 +4247,7 @@ lodash.times@^4.3.2:
   resolved "https://registry.yarnpkg.com/lodash.times/-/lodash.times-4.3.2.tgz#3e1f2565c431754d54ab57f2ed1741939285ca1d"
   integrity sha1-Ph8lZcQxdU1Uq1fy7RdBk5KFyh0=
 
-lodash@^4.0.0, lodash@^4.13.1, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
+lodash@^4.0.0, lodash@^4.13.1, lodash@^4.16.6, lodash@^4.17.10, lodash@^4.17.4, lodash@^4.17.5, lodash@^4.3.0, lodash@^4.6.1:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"
   integrity sha512-cQKh8igo5QUhZ7lg38DYWAxMvjSAKG0A8wGSVimP07SIUEK2UO+arSRKbRZWtelMtN5V0Hkwh5ryOto/SshYIg==
@@ -5003,6 +5135,11 @@ path-type@^2.0.0:
   dependencies:
     pify "^2.0.0"
 
+pegjs@^0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/pegjs/-/pegjs-0.10.0.tgz#cf8bafae6eddff4b5a7efb185269eaaf4610ddbd"
+  integrity sha1-z4uvrm7d/0tafvsYUmnqr0YQ3b0=
+
 performance-now@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/performance-now/-/performance-now-2.1.0.tgz#6309f4e0e5fa913ec1c69307ae364b4b377c9e7b"
@@ -5136,7 +5273,7 @@ prompts@^0.1.9:
     kleur "^2.0.1"
     sisteransi "^0.1.1"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   integrity sha512-3pboPvLiWD7dkI3qf3KbUe6hKFKa52w+AE0VCqECtf+QHAKgOL37tTaNCnuX1nAAQ4ZhyP+kYVKf8rLmJ/feDQ==
@@ -5266,6 +5403,33 @@ react-native-safe-area-view@^0.11.0:
   version "1.0.0-alpha.22"
   resolved "https://registry.yarnpkg.com/react-native-screens/-/react-native-screens-1.0.0-alpha.22.tgz#7a120377b52aa9bbb94d0b8541a014026be9289b"
   integrity sha512-kSyAt0AeVU6N7ZonfV6dP6iZF8B7Bce+tk3eujXhzBGsLg0VSLnU7uE9VqJF0xdQrHR91ZjGgVMieo/8df9KTA==
+
+react-native-svg-charts@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg-charts/-/react-native-svg-charts-5.2.0.tgz#eda090136250d02f9d1d8c971663afaee4ed2f4f"
+  integrity sha512-2cV9/QDqXdq9ve1NbTAKVO9BQrYqC69R5Tlo+LgGAIdl6BEVQbushO20vJkN4+d680KKUemyode0yJ7gNwdZNQ==
+  dependencies:
+    d3-array "^1.2.0"
+    d3-interpolate-path "2.0.0"
+    d3-scale "^1.0.6"
+    d3-shape "^1.0.6"
+    prop-types "^15.6.0"
+
+react-native-svg@^6.2.1:
+  version "6.5.2"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-6.5.2.tgz#1105896b8873b0856821b18daa0c6898cea6c00c"
+  integrity sha512-r9SXx/AOzlo/jkahAo9WjNTRJ+A2lDHE3yS3WtgZ4Gzqqyxb3L6LpuAG02x1TaKEowdTEG3r6u7vhnCZON8N/A==
+  dependencies:
+    color "^2.0.1"
+    lodash "^4.16.6"
+    pegjs "^0.10.0"
+
+react-native-svg@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-9.0.0.tgz#40096a0ce3b499e3227f3d6f1d5106795a9d3dfe"
+  integrity sha512-HOmQ94XNdvo19SQp60MgEmF4scyhtR/78Oqr5vsMxNgnVRt9oaEfJygtfdhiUslYs4zHbCvKvPo4k+BJhh0pfA==
+  dependencies:
+    color "^2.0.1"
 
 react-native-tab-view@^1.0.0, react-native-tab-view@^1.2.0:
   version "1.3.1"
@@ -5922,6 +6086,13 @@ simple-plist@^0.2.1:
     bplist-creator "0.0.7"
     bplist-parser "0.1.1"
     plist "2.0.1"
+
+simple-swizzle@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/simple-swizzle/-/simple-swizzle-0.2.2.tgz#a4da6b635ffcccca33f70d17cb92592de95e557a"
+  integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
+  dependencies:
+    is-arrayish "^0.3.1"
 
 simple-websocket@^5.0.0:
   version "5.1.1"
