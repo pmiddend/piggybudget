@@ -35,11 +35,6 @@ interface Props {
 }
 
 class Home extends Component<Props> {
-	public static navigationOptions = {
-		tabBarIcon: <Icon name="home" type="entypo" />,
-		title: "Home",
-	};
-
 	constructor(props: Props) {
 		super(props);
 		this.handleAppStateChange = this.handleAppStateChange.bind(this);

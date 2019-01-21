@@ -15,6 +15,9 @@ import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import immutableTransform from "redux-persist-transform-immutable";
+import {
+	Icon,
+} from "react-native-elements";
 import { YellowBox } from "react-native";
 YellowBox.ignoreWarnings(["Warning: isMounted(...) is deprecated"]);
 
@@ -24,19 +27,33 @@ const HomeStack = createStackNavigator({
 },
 	{
 		initialRouteName: "Home",
+		navigationOptions: {
+			tabBarIcon: <Icon name="home" type="entypo" />,
+			title: "Home",
+		},
 	});
 
 const HistoryStack = createStackNavigator({
 	History: { screen: History },
-});
+}, {
+		navigationOptions: {
+			tabBarIcon: <Icon name="history" type="font-awesome" />,
+			title: "History",
+		},
+	});
 
 const SettingsStack = createStackNavigator({
 	Settings: { screen: Settings },
-});
+}, {
+		navigationOptions: {
+			tabBarIcon: <Icon name="md-settings" type="ionicon" />,
+			title: "Settings",
+		},
+	});
 
 const DailyBudgetRoot = createBottomTabNavigator({
-	History: { screen: HistoryStack },
 	Home: { screen: HomeStack },
+	History: { screen: HistoryStack },
 	Settings: { screen: SettingsStack },
 },
 	{

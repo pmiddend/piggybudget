@@ -21,7 +21,6 @@ import {
 	FormLabel,
 	FormInput,
 	ButtonGroup,
-	Icon,
 } from "react-native-elements";
 import { currencies, Currency } from "../Currencies";
 
@@ -38,11 +37,6 @@ interface State {
 }
 
 class Settings extends Component<Props, State> {
-	public static navigationOptions = {
-		tabBarIcon: <Icon name="md-settings" type="ionicon" />,
-		title: "Settings",
-	};
-
 	private buttons: string[];
 
 	constructor(props: Props) {

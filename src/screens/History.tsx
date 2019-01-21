@@ -5,7 +5,7 @@ import {
 	NavigationScreenProps,
 } from "react-navigation";
 import { findCategory, otherCategory } from "../Categories";
-import { Icon, ListItem } from "react-native-elements";
+import { ListItem } from "react-native-elements";
 import {
 	View,
 	SectionList,
@@ -51,11 +51,6 @@ function getDayHeadline(date: number): string {
 }
 
 class History extends PureComponent<Props> {
-	public static navigationOptions = {
-		tabBarIcon: <Icon name="history" type="font-awesome" />,
-		title: "History",
-	};
-
 	public render() {
 		return (<View>
 			<SectionList
