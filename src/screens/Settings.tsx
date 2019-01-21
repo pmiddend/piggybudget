@@ -37,6 +37,10 @@ interface State {
 }
 
 class Settings extends Component<Props, State> {
+	public static navigationOptions = {
+		title: "Settings",
+	};
+
 	private buttons: string[];
 
 	constructor(props: Props) {

@@ -51,6 +51,10 @@ function getDayHeadline(date: number): string {
 }
 
 class History extends PureComponent<Props> {
+	public static navigationOptions = {
+		title: "History",
+	};
+
 	public render() {
 		return (<View>
 			<SectionList

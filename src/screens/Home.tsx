@@ -36,6 +36,10 @@ interface Props {
 }
 
 class Home extends Component<Props> {
+	public static navigationOptions = {
+		title: "Home",
+	};
+
 	constructor(props: Props) {
 		super(props);
 		this.handleAppStateChange = this.handleAppStateChange.bind(this);
