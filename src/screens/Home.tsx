@@ -19,6 +19,7 @@ import {
 } from "react-native-elements";
 import {
 	storeTotalBudget,
+	storeTodaysExpenses,
 	TransactionList,
 } from "../BudgetStore";
 import {
@@ -66,6 +67,9 @@ class Home extends Component<Props> {
 						name="minus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
 							amountModifier: (d: Decimal) => d.negated(),
 						})} />
+				</View>
+				<View>
+					<Text h4>Today's expenses: {storeTodaysExpenses(this.props.transactions).toString()}{this.props.currency.symbol}</Text>
 				</View>
 			</View>
 		);
