@@ -21,9 +21,13 @@ export function storeTodaysExpenses(s: TransactionList): Decimal {
 		.reduce((sum: Decimal, x: Decimal) => sum.add(x), new Decimal(0));
 }
 
-export function lastNDays(s: TransactionList, n: number): List<number> {
+export function filterLastDays(s: TransactionList, n: number): TransactionList {
 	const refDate = moment().subtract(n, "days");
-	return s.filter((t) => moment(t.date).isAfter(refDate))
+	return s.filter((t) => moment(t.date).isAfter(refDate));
+}
+
+export function lastNDays(s: TransactionList, n: number): List<number> {
+	return filterLastDays(s, n)
 		.groupBy((t) => moment(t.date).startOf("day"))
 		.map((ts) => ts.map((t) => t.amount).reduce((sum: Decimal, x: Decimal) => sum.add(x), new Decimal(0)).toNumber())
 		.toOrderedMap()

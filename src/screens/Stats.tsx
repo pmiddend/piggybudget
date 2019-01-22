@@ -1,33 +1,26 @@
 import React from "react";
+import { Decimal } from "decimal.js";
+import moment from "moment";
 import { Component } from "react";
 import {
 	ScrollView,
 	View,
 } from "react-native";
-import {
-	NavigationScreenProps,
-} from "react-navigation";
 import { connect } from "react-redux";
-import { Category, findCategory, categories } from "../Categories";
-import { groupRows } from "../Util";
+import { categories } from "../Categories";
 import AppState from "../AppState";
 import {
 	TransactionList,
 	lastNDays,
+	filterLastDays,
 	groupedCats,
 } from "../BudgetStore";
 import {
 	Text,
-	Icon,
+	ButtonGroup,
 } from "react-native-elements";
-import Transaction from "../Transaction";
 import { Map } from "immutable";
 import { BarChart, Grid, YAxis, PieChart } from "react-native-svg-charts";
-import * as shape from "d3-shape";
-import * as scale from "d3-scale";
-import { List } from "immutable";
-import { Decimal } from "decimal.js";
-import moment from "moment";
 import { G, Circle, Image, Line } from "react-native-svg";
 
 interface Props {
@@ -37,6 +30,8 @@ interface Props {
 
 interface State {
 	icons: Map<string, any>;
+	distributionIndex: number;
+	sumIndex: number;
 }
 
 class Stats extends Component<Props, State> {
@@ -47,8 +42,20 @@ class Stats extends Component<Props, State> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			icons: Map()
+			icons: Map(),
+			distributionIndex: 0,
+			sumIndex: 0
 		};
+		this.updateDistribution = this.updateDistribution.bind(this);
+		this.updateSum = this.updateSum.bind(this);
+	}
+
+	private updateDistribution(newIndex: number) {
+		this.setState({ ...this.state, distributionIndex: newIndex, });
+	}
+
+	private updateSum(newIndex: number) {
+		this.setState({ ...this.state, sumIndex: newIndex, });
 	}
 
 	public componentDidMount() {
@@ -62,12 +69,27 @@ class Stats extends Component<Props, State> {
 		return this.state.icons.get(s);
 	}
 
+	private indexToDays(n: number): number {
+		if (n == 0) {
+			return 7;
+		}
+		if (n == 1) {
+			return 30;
+		}
+		return 365;
+	}
+
 	public render() {
 		const axesSvg = { fontSize: 10, fill: "grey" };
 		const verticalContentInset = { top: 10, bottom: 10 };
-		const ts = this.props.transactions
-		const listData = lastNDays(ts, 7).toJS();
-		const pieData = groupedCats(this.props.transactions);
+		/* const ts = this.props.transactions.push({
+			 amount: new Decimal(20),
+			 comment: "INSURANCE",
+			 date: moment().subtract(9, "days"),
+		   });*/
+		const ts = this.props.transactions;
+		const listData = lastNDays(ts, this.indexToDays(this.state.sumIndex)).toJS();
+		const pieData = groupedCats(filterLastDays(ts, this.indexToDays(this.state.distributionIndex)));
 		const CoolLabels = ({ slices }) => {
 			return slices.map((slice, index) => {
 				const { labelCentroid, pieCentroid, data } = slice;
@@ -97,10 +119,12 @@ class Stats extends Component<Props, State> {
 				)
 			})
 		};
+		const timeButtons = ["Week", "Month", "Year"];
 		return (
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
-					<Text h3>Last 7 days</Text>
+					<Text h3>Day Sum</Text>
+					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtons} />
 				</View>
 				<View style={{ height: 300, padding: 20, flexDirection: "row" }}>
 					<YAxis
@@ -118,7 +142,8 @@ class Stats extends Component<Props, State> {
 					</BarChart>
 				</View>
 				<View style={{ paddingLeft: 10 }}>
-					<Text h3>Distribution</Text>
+					<Text h4>Distribution</Text>
+					<ButtonGroup onPress={this.updateDistribution} selectedIndex={this.state.distributionIndex} buttons={timeButtons} />
 				</View>
 				<PieChart
 					style={{ height: 400 }}
