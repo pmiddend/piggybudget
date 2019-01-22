@@ -8,7 +8,7 @@ import {
 	NavigationScreenProps,
 } from "react-navigation";
 import { connect } from "react-redux";
-import { categories } from "../Categories";
+import { Category, findCategory, categories } from "../Categories";
 import { groupRows } from "../Util";
 import AppState from "../AppState";
 import {
@@ -21,23 +21,47 @@ import {
 	Icon,
 } from "react-native-elements";
 import Transaction from "../Transaction";
+import { Map } from "immutable";
 import { BarChart, Grid, YAxis, PieChart } from "react-native-svg-charts";
 import * as shape from "d3-shape";
 import * as scale from "d3-scale";
 import { List } from "immutable";
 import { Decimal } from "decimal.js";
 import moment from "moment";
-import { G, Circle } from "react-native-svg";
+import { G, Circle, Image, Line } from "react-native-svg";
 
 interface Props {
 	readonly navigation: any;
 	readonly transactions: TransactionList;
 }
 
-class Stats extends Component<Props> {
+interface State {
+	icons: Map<string, any>;
+}
+
+class Stats extends Component<Props, State> {
 	public static navigationOptions = {
 		title: "Stats",
 	};
+
+	constructor(props: Props) {
+		super(props);
+		this.state = {
+			icons: Map()
+		};
+	}
+
+	public componentDidMount() {
+		categories.forEach((c) => c.iconClass.getImageSource(c.icon, 6, "white").then((source: any) => {
+			this.setState({ icons: this.state.icons.set(c.name, source) });
+		}
+		));
+	}
+
+	private getIcon(s: string): any {
+		//const category: Category = findCategory(s) as Category;
+		return this.state.icons.get(s);
+	}
 
 	public render() {
 		const axesSvg = { fontSize: 10, fill: "grey" };
@@ -51,6 +75,35 @@ class Stats extends Component<Props> {
 			color={"#" + c.color}
 			name={c.icon}
 			type={c.iconType} />))}</View>)).toArray();
+		const CoolLabels = ({ slices }) => {
+			return slices.map((slice, index) => {
+				const { labelCentroid, pieCentroid, data } = slice;
+				return (
+					<G key={index}>
+						<Line
+							x1={labelCentroid[0]}
+							y1={labelCentroid[1]}
+							x2={pieCentroid[0]}
+							y2={pieCentroid[1]}
+							stroke={data.svg.fill}
+						/>
+						<Circle
+							cx={labelCentroid[0]}
+							cy={labelCentroid[1]}
+							r={15}
+							fill={data.svg.fill}
+						/>
+						<Image
+							x={labelCentroid[0] - 9}
+							y={labelCentroid[1] - 9}
+							preserveAspectRatio="xMidYMid slice"
+							opacity="1"
+							href={this.getIcon(data.key)}
+						/>
+					</G>
+				)
+			})
+		};
 		return (
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
@@ -78,9 +131,12 @@ class Stats extends Component<Props> {
 					style={{ height: 200 }}
 					valueAccessor={({ item }) => item.amount}
 					data={pieData}
-					outerRadius={"95%"}
-				/>
-				{legendRows}
+					innerRadius={20}
+					outerRadius={55}
+					labelRadius={80}
+				>
+					<CoolLabels />
+				</PieChart>
 
 			</ScrollView >
 		);
