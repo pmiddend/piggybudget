@@ -1,9 +1,9 @@
 import { Decimal } from "decimal.js";
 import Transaction from "./Transaction";
-import { List } from "immutable";
+import { Map, List, Range } from "immutable";
 import moment from "moment";
 import { PieChartData } from "react-native-svg-charts";
-import { Category, findCategory } from "./Categories";
+import { categories, Category, findCategory } from "./Categories";
 
 export type TransactionList = List<Transaction>;
 
@@ -26,12 +26,19 @@ export function filterLastDays(s: TransactionList, n: number): TransactionList {
 	return s.filter((t) => moment(t.date).isAfter(refDate));
 }
 
-export function lastNDays(s: TransactionList, n: number): List<number> {
-	return filterLastDays(s, n)
-		.groupBy((t) => moment(t.date).startOf("day"))
-		.map((ts) => ts.map((t) => t.amount).reduce((sum: Decimal, x: Decimal) => sum.add(x), new Decimal(0)).toNumber())
-		.toOrderedMap()
-		.toList();
+export function lastNDaysAsMoments(n: number): List<moment.Moment> {
+	const startOfDay = moment().startOf("day");
+	return Range(0, n).map((d: number) => startOfDay.clone().subtract(d, "days")).toList().reverse();
+}
+
+export function lastNDays(s: TransactionList, n: number): List<any> {
+	return lastNDaysAsMoments(n)
+		.map((d: moment.Moment) => s.filter((t) => moment(t.date).startOf("day").isSame(d)))
+		.map((ts: List<Transaction>) =>
+			categories.reduce((priorMap: Map<string, number>, c: Category) => priorMap.set(c.name, 0), Map()).merge(
+				ts.groupBy((t) => t.comment)
+					.map((tsi) => tsi.reduce((sum: Decimal, x: Transaction) => sum.add(x.amount), new Decimal(0)).toNumber())
+					.toObject()));
 }
 
 export function groupedCats(s: TransactionList): PieChartData[] {

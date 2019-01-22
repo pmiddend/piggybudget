@@ -20,7 +20,7 @@ import {
 	ButtonGroup,
 } from "react-native-elements";
 import { Map } from "immutable";
-import { BarChart, Grid, YAxis, PieChart } from "react-native-svg-charts";
+import { StackedBarChart, Grid, YAxis, PieChart } from "react-native-svg-charts";
 import { G, Circle, Image, Line } from "react-native-svg";
 
 interface Props {
@@ -85,10 +85,16 @@ class Stats extends Component<Props, State> {
 		/* const ts = this.props.transactions.push({
 			 amount: new Decimal(20),
 			 comment: "INSURANCE",
-			 date: moment().subtract(9, "days"),
+			 date: moment().subtract(4, "days"),
+		   }).push({
+			 amount: new Decimal(20),
+			 comment: "PARTY",
+			 date: moment().subtract(4, "days"),
 		   });*/
 		const ts = this.props.transactions;
-		const listData = lastNDays(ts, this.indexToDays(this.state.sumIndex)).toJS();
+		const sumListData = lastNDays(ts, this.indexToDays(this.state.sumIndex)).toJS();
+		const sumKeys = categories.map((c) => c.name).toArray();
+		const sumColors = categories.map((c) => "#" + c.color).toArray();
 		const pieData = groupedCats(filterLastDays(ts, this.indexToDays(this.state.distributionIndex)));
 		const CoolLabels = ({ slices }) => {
 			return slices.map((slice, index) => {
@@ -123,23 +129,24 @@ class Stats extends Component<Props, State> {
 		return (
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
-					<Text h3>Day Sum</Text>
+					<Text h4>Total of the day</Text>
 					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtons} />
 				</View>
 				<View style={{ height: 300, padding: 20, flexDirection: "row" }}>
 					<YAxis
-						data={listData}
+						data={StackedBarChart.extractDataPoints(sumListData, sumKeys)}
 						svg={axesSvg}
 						contentInset={verticalContentInset}
 					/>
-					<BarChart
+					<StackedBarChart
 						style={{ flex: 1 }}
-						data={listData}
-						svg={{ fill: "rgba(134, 65, 244, 0.8)" }}
+						data={sumListData}
+						keys={sumKeys}
+						colors={sumColors}
 						contentInset={verticalContentInset}
 					>
 						<Grid />
-					</BarChart>
+					</StackedBarChart>
 				</View>
 				<View style={{ paddingLeft: 10 }}>
 					<Text h4>Distribution</Text>
