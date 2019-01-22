@@ -52,14 +52,13 @@ class Stats extends Component<Props, State> {
 	}
 
 	public componentDidMount() {
-		categories.forEach((c) => c.iconClass.getImageSource(c.icon, 6, "white").then((source: any) => {
+		categories.forEach((c) => c.iconClass.getImageSource(c.icon, 7, "white").then((source: any) => {
 			this.setState({ icons: this.state.icons.set(c.name, source) });
 		}
 		));
 	}
 
 	private getIcon(s: string): any {
-		//const category: Category = findCategory(s) as Category;
 		return this.state.icons.get(s);
 	}
 
@@ -69,12 +68,6 @@ class Stats extends Component<Props, State> {
 		const ts = this.props.transactions
 		const listData = lastNDays(ts, 7).toJS();
 		const pieData = groupedCats(this.props.transactions);
-		const legendRows = groupRows(categories, 2).map((r, idx) => (<View key={idx} style={{ flex: 1, flexDirection: "row" }}>{r.map((c) => (<Icon
-			key={c.name}
-			size={24}
-			color={"#" + c.color}
-			name={c.icon}
-			type={c.iconType} />))}</View>)).toArray();
 		const CoolLabels = ({ slices }) => {
 			return slices.map((slice, index) => {
 				const { labelCentroid, pieCentroid, data } = slice;
@@ -90,13 +83,13 @@ class Stats extends Component<Props, State> {
 						<Circle
 							cx={labelCentroid[0]}
 							cy={labelCentroid[1]}
-							r={15}
+							r={18}
 							fill={data.svg.fill}
 						/>
 						<Image
-							x={labelCentroid[0] - 9}
+							x={labelCentroid[0] - 8}
 							y={labelCentroid[1] - 9}
-							preserveAspectRatio="xMidYMid slice"
+							preserveAspectRatio="xMinYMin meet"
 							opacity="1"
 							href={this.getIcon(data.key)}
 						/>
@@ -128,12 +121,12 @@ class Stats extends Component<Props, State> {
 					<Text h3>Distribution</Text>
 				</View>
 				<PieChart
-					style={{ height: 200 }}
+					style={{ height: 400 }}
 					valueAccessor={({ item }) => item.amount}
 					data={pieData}
-					innerRadius={20}
-					outerRadius={55}
-					labelRadius={80}
+					innerRadius={40}
+					outerRadius={110}
+					labelRadius={160}
 				>
 					<CoolLabels />
 				</PieChart>
