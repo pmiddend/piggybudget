@@ -3,6 +3,7 @@ import Transaction from "./Transaction";
 import { List } from "immutable";
 import moment from "moment";
 import { PieChartData } from "react-native-svg-charts";
+import { Category, findCategory } from "./Categories";
 
 export type TransactionList = List<Transaction>;
 
@@ -34,5 +35,5 @@ export function groupedCats(s: TransactionList): PieChartData[] {
 		.map((vs) => vs.map((t) => new Decimal(t.amount).abs())
 			.reduce((sum: Decimal, x: Decimal) => sum.add(x), new Decimal(0)).toNumber())
 		.toArray()
-		.map((t) => ({ key: t[0], amount: t[1] }));
+		.map((t) => ({ key: t[0], amount: t[1], svg: { fill: "#" + (findCategory(t[0]) as Category).color } }));
 }

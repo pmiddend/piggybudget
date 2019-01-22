@@ -8,6 +8,8 @@ import {
 	NavigationScreenProps,
 } from "react-navigation";
 import { connect } from "react-redux";
+import { categories } from "../Categories";
+import { groupRows } from "../Util";
 import AppState from "../AppState";
 import {
 	TransactionList,
@@ -16,6 +18,7 @@ import {
 } from "../BudgetStore";
 import {
 	Text,
+	Icon,
 } from "react-native-elements";
 import Transaction from "../Transaction";
 import { BarChart, Grid, YAxis, PieChart } from "react-native-svg-charts";
@@ -37,43 +40,17 @@ class Stats extends Component<Props> {
 	};
 
 	public render() {
-		const ts: List<Transaction> = List([{
-			amount: new Decimal(1),
-			date: moment().toDate(),
-		}, {
-			amount: new Decimal(2),
-			date: moment().toDate(),
-		},
-		{
-			amount: new Decimal(4),
-			date: moment().subtract(1, "days").toDate(),
-		}]);
 		const axesSvg = { fontSize: 10, fill: "grey" };
 		const verticalContentInset = { top: 10, bottom: 10 };
-
-
-		// const ts = this.props.transactions
-		// const data = lastNDays(ts, 7).toJS();
-		const listData = [4, 3, 2, 1];
-		//const pieData = [{ key: "foo", amount: 4 }, { key: "bar", amount: 2 }];
+		const ts = this.props.transactions
+		const listData = lastNDays(ts, 7).toJS();
 		const pieData = groupedCats(this.props.transactions);
-		const Labels = ({ slices, height, width }) => {
-			return slices.map((slice, index) => {
-				const { labelCentroid, pieCentroid, data } = slice;
-				return (
-					<G
-						key={index}
-						x={labelCentroid[0]}
-						y={labelCentroid[1]}
-					>
-						<Circle
-							r={18}
-							fill={'white'}
-						/>
-					</G>
-				)
-			})
-		}
+		const legendRows = groupRows(categories, 2).map((r, idx) => (<View key={idx} style={{ flex: 1, flexDirection: "row" }}>{r.map((c) => (<Icon
+			key={c.name}
+			size={24}
+			color={"#" + c.color}
+			name={c.icon}
+			type={c.iconType} />))}</View>)).toArray();
 		return (
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
@@ -102,9 +79,9 @@ class Stats extends Component<Props> {
 					valueAccessor={({ item }) => item.amount}
 					data={pieData}
 					outerRadius={"95%"}
-				>
-					<Labels />
-				</PieChart>
+				/>
+				{legendRows}
+
 			</ScrollView >
 		);
 	}

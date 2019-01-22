@@ -5,11 +5,10 @@ import {
 	View,
 	TextInput,
 } from "react-native";
-import { List, Range } from "immutable";
+import { List } from "immutable";
+import { groupRows } from "../Util";
 import {
-	Text,
 	Icon,
-	FormLabel,
 } from "react-native-elements";
 import {
 	NavigationScreenProps,
@@ -32,11 +31,6 @@ interface Props {
 	readonly navigation: any;
 }
 
-function groupRows<T>(list: List<T>, groupSize: number): List<List<T>> {
-	return Range(0, Math.ceil(list.size / groupSize))
-		.map((idx) => list.slice(idx * groupSize, Math.min(list.size, (idx + 1) * groupSize)))
-		.toList();
-}
 
 class Add extends Component<Props> {
 	public static navigationOptions = ({ navigation }) => {
