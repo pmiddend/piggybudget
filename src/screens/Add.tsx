@@ -77,23 +77,23 @@ class Add extends Component<Props> {
 		const buttonRows = groupRows(nonAutomatic, 4).map(this.renderButtonRow).toArray();
 		return (
 			<View style={styles.container}>
-				<FormLabel>Category</FormLabel>
 				{buttonRows}
-				<FormLabel>Amount</FormLabel>
-				<TextInput value={this.state.amount.toString()}
-					keyboardType="numeric"
-					autoFocus={true}
-					style={{ fontSize: 40 }}
-					onChangeText={(text) => this.handleAmountChange(text)} />
+				<View style={{ flex: 1, flexDirection: "row" }}>
+					<TextInput value={this.state.amount.toString()}
+						keyboardType="numeric"
+						autoFocus={true}
+						style={{ fontSize: 40 }}
+						onChangeText={(text) => this.handleAmountChange(text)} />
+				</View>
 			</View>
 		);
 	}
 
-	private buttonBackgroundColor(name: string): string {
+	private buttonBackgroundColor(name: string, originalColor: string): string {
 		if (name === this.state.commentName) {
 			return "#666666";
 		} else {
-			return "#eeeeee";
+			return "#" + originalColor;
 		}
 	}
 
@@ -101,18 +101,18 @@ class Add extends Component<Props> {
 		if (name === this.state.commentName) {
 			return "#eeeeee";
 		} else {
-			return "#666666";
+			return "#ffffff";
 		}
 	}
 
 	private renderButtonRow(buttonRow: List<Category>, key: number) {
 		return (<View key={key} style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>{buttonRow.map((c) =>
 			(<Icon
-				key={c.name}
 				reverse
+				key={c.name}
 				size={24}
 				onPress={() => this.handleCommentChange(c.name)}
-				color={this.buttonBackgroundColor(c.name)}
+				color={this.buttonBackgroundColor(c.name, c.color)}
 				reverseColor={this.buttonIconColor(c.name)}
 				name={c.icon}
 				type={c.iconType} />))

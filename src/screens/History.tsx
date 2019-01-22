@@ -38,7 +38,7 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 	const cat = catOpt === undefined ? otherCategory() : catOpt;
 	return (<ListItem
 		key={props.transaction.date.toString()}
-		leftIcon={{ name: cat.icon, type: cat.iconType, color: "#20613c" }}
+		leftIcon={{ name: cat.icon, type: cat.iconType, color: "#" + cat.color }}
 		title={props.transaction.amount.toString() + props.currency.symbol}
 		hideChevron={true}
 		titleStyle={{ fontWeight: "bold", fontSize: 22 }}
