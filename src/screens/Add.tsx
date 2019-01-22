@@ -4,11 +4,13 @@ import {
 	StyleSheet,
 	View,
 	TextInput,
+	KeyboardAvoidingView,
 } from "react-native";
 import { List } from "immutable";
 import { groupRows } from "../Util";
 import {
 	Icon,
+	Text,
 } from "react-native-elements";
 import {
 	NavigationScreenProps,
@@ -16,6 +18,7 @@ import {
 import { Decimal } from "decimal.js";
 import { connect } from "react-redux";
 import Transaction from "../Transaction";
+import { Currency, currencies } from "../Currencies";
 import { actionAddTransaction } from "../Actions";
 import AppState from "../AppState";
 import { findCategory, categories, Category } from "../Categories";
@@ -29,22 +32,15 @@ interface Props {
 	readonly onNewTransaction: (t: Transaction) => void;
 	readonly amountModifier: (d: Decimal) => Decimal;
 	readonly navigation: any;
+	readonly currency: Currency;
 }
 
 
 class Add extends Component<Props> {
 	public static navigationOptions = ({ navigation }) => {
 		const { params } = navigation.state;
-
-		const submitIcon = (<View style={{ paddingRight: 15 }}><Icon
-			name="check-square"
-			type="feather"
-			onPress={() => { params.handlePress() }} /></View>);
-
 		return {
-			tabBarIcon: <Icon name="check" type="entypo" />,
 			title: "Modify",
-			headerRight: submitIcon,
 		}
 	};
 
@@ -70,16 +66,18 @@ class Add extends Component<Props> {
 		const nonAutomatic = categories.filter((c) => c.name !== "AUTOMATIC");
 		const buttonRows = groupRows(nonAutomatic, 4).map(this.renderButtonRow).toArray();
 		return (
-			<View style={styles.container}>
+			<KeyboardAvoidingView style={styles.container}>
 				{buttonRows}
-				<View style={{ flex: 1, flexDirection: "row" }}>
+				<View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
 					<TextInput value={this.state.amount.toString()}
 						keyboardType="numeric"
 						autoFocus={true}
 						style={{ fontSize: 40 }}
+						onSubmitEditing={(e) => this.handlePress()}
 						onChangeText={(text) => this.handleAmountChange(text)} />
+					<Text style={{ fontSize: 40 }}>{this.props.currency.symbol}</Text>
 				</View>
-			</View>
+			</KeyboardAvoidingView>
 		);
 	}
 
@@ -150,6 +148,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: AppState, ownProps: any) => {
 	return {
+		currency: currencies.get(state.settings.currency) as Currency,
 		amountModifier: ownProps.navigation.state.params.amountModifier,
 		navigation: ownProps.navigation,
 	};
