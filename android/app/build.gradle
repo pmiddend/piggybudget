@@ -99,7 +99,7 @@ android {
     buildToolsVersion "28.0.3"
 
     defaultConfig {
-        applicationId "com.dailybudget"
+        applicationId "de.php_tech.piggybudget"
         minSdkVersion 16
         targetSdkVersion 26
         versionCode 1

@@ -45,12 +45,12 @@ android_library(
 
 android_build_config(
     name = "build_config",
-    package = "com.dailybudget",
+    package = "de.php_tech.piggybudget",
 )
 
 android_resource(
     name = "res",
-    package = "com.dailybudget",
+    package = "de.php_tech.piggybudget",
     res = "src/main/res",
 )
 

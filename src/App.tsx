@@ -61,7 +61,7 @@ const StatsStack = createStackNavigator({
 		},
 	});
 
-const DailyBudgetRoot = createBottomTabNavigator({
+const PiggyBudgetRoot = createBottomTabNavigator({
 	Home: { screen: HomeStack },
 	History: { screen: HistoryStack },
 	Stats: { screen: StatsStack },
@@ -78,7 +78,7 @@ const DailyBudgetRoot = createBottomTabNavigator({
 		},
 	});
 
-const DailyBudgetAppContainer = createAppContainer(DailyBudgetRoot);
+const PiggyBudgetAppContainer = createAppContainer(PiggyBudgetRoot);
 
 const persistConfig = {
 	key: "v11",
@@ -94,7 +94,7 @@ const persistor = persistStore(store);
 export default () => (
 	<Provider store={store}>
 		<PersistGate loading={null} persistor={persistor}>
-			<DailyBudgetAppContainer />
+			<PiggyBudgetAppContainer />
 		</PersistGate>
 	</Provider>
 );

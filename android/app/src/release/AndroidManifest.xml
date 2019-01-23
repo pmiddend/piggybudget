@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dailybudget">
+    package="de.php_tech.piggybudget">
     <!-- thanks to https://medium.com/building-with-react-native/how-to-remove-unnecessary-android-permissions-from-react-native-apps-1x05-c5c98b6c93a8 -->
     <uses-permission tools:node="remove" android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission tools:node="remove" android:name="android.permission.READ_PHONE_STATE" />

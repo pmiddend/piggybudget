@@ -1,4 +1,4 @@
-package com.dailybudget;
+package de.php_tech.piggybudget;
 
 import android.app.Application;
 

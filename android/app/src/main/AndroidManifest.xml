@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dailybudget">
+    package="de.php_tech.piggybudget">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

@@ -1,4 +1,4 @@
-package com.dailybudget;
+package de.php_tech.piggybudget;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

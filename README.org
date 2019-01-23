@@ -1,0 +1,25 @@
+* [[./android/app/src/main/res/mipmap-mdpi/ic_launcher.png]] piggybudget - easily manage your pocket money
+** What is it, in bullet points?
+
+- It’s a tiny app that I wrote for myself to keep track of my expenses.
+- There’s *two buttons*
+  - You received some money (you got paid, somebody owed you some, …)
+  - You spent money
+- You can select one of 13 *categories* when receiving money
+- You can specify a daily or monthly amount – your “pocket money”. This will be added to your account automatically.
+- You can select a *currency*. Euro is the default currency.
+- There are *statistics* about how you spend your money.
+- There’s a *history* for viewing your expenses one by one.
+
+Happy saving!
+** Where do I find it?
+It’ll be on [[https://f-droid.org/][f-droid]] pretty soon and maybe on the Play Store soon after.
+** How do I build it from source?
+- Clone the repository
+- Download [[https://facebook.github.io/react-native/][react native]] and the CLI tool (=react-native-cli=)
+- Install yarn
+- Do =yarn install=
+- Do =react-native run-android=
+** Donations
+
+[[https://paypal.me/PhilippMiddendorf][PayPal.Me]]
