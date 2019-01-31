@@ -13,7 +13,9 @@
 
 Happy saving!
 ** Where do I find it?
-It’ll be on [[https://f-droid.org/][f-droid]] pretty soon and maybe on the Play Store soon after.
+#+CAPTION: Get it on F-Droid
+[[https://f-droid.org/app/de.php_tech.piggybudget/][https://f-droid.org/wiki/images/c/c4/F-Droid-button_available-on.png]]
+
 ** How do I build it from source?
 - Clone the repository
 - Download [[https://facebook.github.io/react-native/][react native]] and the CLI tool (=react-native-cli=)
