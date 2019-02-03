@@ -12,6 +12,11 @@ export interface ActionDeleteTransaction {
 	readonly index: number;
 }
 
+export interface ActionToggleTransaction {
+	readonly type: "TOGGLE_TRANSACTION";
+	readonly index: number;
+}
+
 export interface ActionStateChange {
 	readonly type: "STATE_CHANGE";
 	readonly newState: AppStateStatus;
@@ -47,6 +52,13 @@ export function actionDeleteTransaction(index: number): ActionDeleteTransaction 
 	return {
 		index,
 		type: "DELETE_TRANSACTION",
+	};
+}
+
+export function actionToggleTransaction(index: number): ActionToggleTransaction {
+	return {
+		index,
+		type: "TOGGLE_TRANSACTION",
 	};
 }
 
@@ -89,5 +101,6 @@ export type Action = ActionAddTransaction
 	| ActionClear
 	| ActionIncomeTypeChange
 	| ActionDeleteTransaction
+	| ActionToggleTransaction
 	| ActionCurrencyChange
 	| ActionIncomeChange;

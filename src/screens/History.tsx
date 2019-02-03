@@ -25,9 +25,9 @@ import {
 import AppState from "../AppState";
 import Transaction from "../Transaction";
 import moment from "moment";
-import { Collection, List } from "immutable";
+import { Collection } from "immutable";
 import { currencies, Currency } from "../Currencies";
-import { actionDeleteTransaction } from "../Actions";
+import { actionDeleteTransaction, actionToggleTransaction } from "../Actions";
 
 interface IndexedTransaction {
 	transaction: Transaction,
@@ -36,6 +36,7 @@ interface IndexedTransaction {
 
 interface Props {
 	readonly onDeleteTransaction: (index: number) => void;
+	readonly onToggleTransaction: (index: number) => void;
 	readonly navigation: any;
 	readonly transactions: TransactionList;
 	readonly currency: Currency;
@@ -50,6 +51,7 @@ interface HistoryItemProps {
 	readonly currency: Currency;
 	readonly onEdit: () => void;
 	readonly onDelete: () => void;
+	readonly onToggle: () => void;
 }
 
 const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
@@ -73,6 +75,9 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 			<MenuOption onSelect={props.onDelete}>
 				<Text style={{ fontSize: 20 }}>Delete</Text>
 			</MenuOption>
+			<MenuOption onSelect={props.onToggle}>
+				<Text style={{ fontSize: 20 }}>Make {props.transaction.amount.isPos ? "income" : "expense"}</Text>
+			</MenuOption>
 		</MenuOptions>
 	</Menu>);
 };
@@ -92,6 +97,7 @@ class History extends Component<Props, State> {
 			deleteId: null,
 		};
 		this.onDelete = this.onDelete.bind(this);
+		this.onToggle = this.onToggle.bind(this);
 		this.onEdit = this.onEdit.bind(this);
 		this.closeDeleteModal = this.closeDeleteModal.bind(this);
 		this.deleteSelected = this.deleteSelected.bind(this);
@@ -117,8 +123,10 @@ class History extends Component<Props, State> {
 				renderItem={(listEntry: ListRenderItemInfo<IndexedTransaction>) => <HistoryItem
 					transaction={listEntry.item.transaction}
 					currency={this.props.currency}
-					onEdit={() => this.onDelete(listEntry.item.index)}
-					onDelete={() => this.onDelete(listEntry.item.index)} />}
+					onEdit={() => this.onEdit(listEntry.item.index)}
+					onDelete={() => this.onDelete(listEntry.item.index)}
+					onToggle={() => this.onToggle(listEntry.item.index)}
+				/>}
 
 				keyExtractor={(item: IndexedTransaction, index: number) => item.transaction.date.toString() + index}
 				renderSectionHeader={this.renderHeader}
@@ -147,8 +155,11 @@ class History extends Component<Props, State> {
 		});
 	}
 
+	private onToggle(index: number) {
+		this.props.onToggleTransaction(index);
+	}
+
 	private onEdit(index: number) {
-		console.log("onedit " + index);
 	}
 
 	private renderHeader(section: any) {
@@ -172,6 +183,7 @@ class History extends Component<Props, State> {
 const mapDispatchToProps = (dispatch: any) => {
 	return {
 		onDeleteTransaction: (index: number) => dispatch(actionDeleteTransaction(index)),
+		onToggleTransaction: (index: number) => dispatch(actionToggleTransaction(index)),
 	};
 };
 

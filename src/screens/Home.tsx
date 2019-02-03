@@ -4,7 +4,6 @@ import MyAppState from "../AppState";
 import { connect } from "react-redux";
 import { Component } from "react";
 import {
-	StyleSheet,
 	View,
 	AppState,
 	AppStateStatus,
@@ -54,7 +53,12 @@ class Home extends Component<Props> {
 	public render() {
 		const iconSize = 40;
 		return (
-			<View style={styles.container}>
+			<View style={{
+				alignItems: "center",
+				flex: 1,
+				flexDirection: "column",
+				justifyContent: "space-between",
+			}}>
 				<Text h3>Total Budget</Text>
 				<Text h1 style={{ fontWeight: "bold" }}>{storeTotalBudget(this.props.transactions).toString()}
 					{this.props.currency.symbol}
@@ -82,16 +86,6 @@ class Home extends Component<Props> {
 		this.props.onStateChange(newState);
 	}
 }
-
-const styles = StyleSheet.create({
-	container: {
-		alignItems: "center",
-		backgroundColor: "#F5FCFF",
-		flex: 1,
-		flexDirection: "column",
-		justifyContent: "center",
-	},
-});
 
 const mapStateToProps = (state: MyAppState, ownProps: any) => {
 	return {

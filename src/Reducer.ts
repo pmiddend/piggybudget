@@ -63,6 +63,15 @@ export default (state: AppState | undefined, action: Action) => {
 				...state,
 				transactions: state.transactions.push(action.t),
 			};
+		case "TOGGLE_TRANSACTION":
+			ToastAndroid.show("Item toggled", ToastAndroid.SHORT);
+			// const prior = state.transactions.get(action.index) as Transaction;
+			// const newT = { ...prior, amount: prior.amount.negated() };
+			return {
+				...state,
+				transactions: state.transactions.update(action.index, (t: Transaction) => ({ ...t, amount: new Decimal(t.amount).negated() })),
+				// transactions: state.transactions.set(action.index, newT),
+			};
 		case "DELETE_TRANSACTION":
 			ToastAndroid.show("Item deleted", ToastAndroid.SHORT);
 			// Yes, this is highly convoluted. However, with just "delete"
