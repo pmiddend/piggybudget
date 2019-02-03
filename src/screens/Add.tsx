@@ -113,11 +113,13 @@ class Add extends Component<Props> {
 	private handlePress() {
 		const realAmount = this.state.amount.replace(/,/g, ".");
 		const d = new Decimal(realAmount);
-		this.props.onNewTransaction({
-			amount: this.props.isExpense ? d.negated() : d,
-			comment: (findCategory(this.state.commentName) as Category).name,
-			date: Date.now(),
-		});
+		if (!d.isZero()) {
+			this.props.onNewTransaction({
+				amount: this.props.isExpense ? d.negated() : d,
+				comment: (findCategory(this.state.commentName) as Category).name,
+				date: Date.now(),
+			});
+		}
 		this.props.navigation.goBack();
 	}
 
