@@ -9,7 +9,7 @@
 - You can specify a daily or monthly amount – your “pocket money”. This will be added to your account automatically.
 - You can select a *currency*. Euro is the default currency.
 - There are *statistics* about how you spend your money.
-- There’s a *history* for viewing your expenses one by one.
+- There’s a *history* for viewing your expenses one by one. From there, you can also edit and delete them.
 
 Happy saving!
 ** Where do I find it?
