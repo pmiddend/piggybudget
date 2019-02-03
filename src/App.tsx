@@ -16,6 +16,7 @@ import storage from "redux-persist/lib/storage";
 import { persistStore, persistReducer } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 import immutableTransform from "redux-persist-transform-immutable";
+import { MenuProvider } from "react-native-popup-menu";
 import {
 	Icon,
 } from "react-native-elements";
@@ -94,7 +95,9 @@ const persistor = persistStore(store);
 export default () => (
 	<Provider store={store}>
 		<PersistGate loading={null} persistor={persistor}>
-			<PiggyBudgetAppContainer />
+			<MenuProvider>
+				<PiggyBudgetAppContainer />
+			</MenuProvider>
 		</PersistGate>
 	</Provider>
 );

@@ -1,11 +1,9 @@
-import {
-	NavigationScreenProps,
-} from "react-navigation";
 import { Decimal } from "decimal.js";
 import React from "react";
 import MyAppState from "../AppState";
 import { connect } from "react-redux";
 import { Component } from "react";
+import { List } from "immutable";
 import {
 	StyleSheet,
 	View,
@@ -73,7 +71,9 @@ class Home extends Component<Props> {
 						})} />
 				</View>
 				<View>
-					<Text h4>Today's expenses: {storeTodaysExpenses(this.props.transactions).toString()}{this.props.currency.symbol}</Text>
+					<Text h4>
+						Today's expenses: {storeTodaysExpenses(this.props.transactions).toString()}{this.props.currency.symbol}
+					</Text>
 				</View>
 			</View>
 		);

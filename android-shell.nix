@@ -1,6 +1,7 @@
 { pkgs ? import <nixpkgs> {} }:
  
 let
+  
   # androidComposition = pkgs.androidenv.androidPkgs_9_0;
   androidComposition = pkgs.androidenv.composeAndroidPackages {
     toolsVersion = "25.2.5";
@@ -54,7 +55,7 @@ let
         yarn
         flex
         lzop
-        ];
+        ] ++ [pkgs.python3] ++ (with pkgs.python3Packages; [pyasn1 pyasn1-modules pyyaml pkgs.jdk ruamel_yaml requests]);
     multiPkgs = pkgs: with pkgs;
         [ zlib
         ];
@@ -63,6 +64,7 @@ let
         export USE_CCACHE=1
         export ANDROID_JAVA_HOME=${pkgs.jdk.home}
         export ANDROID_HOME=/home/philipp/Android/Sdk
+        export PATH="$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools:$PATH"
         export JAVA_HOME=${pkgs.jdk}
     '';
   };

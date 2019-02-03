@@ -12,9 +12,6 @@ import {
 	Icon,
 	Text,
 } from "react-native-elements";
-import {
-	NavigationScreenProps,
-} from "react-navigation";
 import { Decimal } from "decimal.js";
 import { connect } from "react-redux";
 import Transaction from "../Transaction";

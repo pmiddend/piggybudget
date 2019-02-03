@@ -63,6 +63,12 @@ export default (state: AppState | undefined, action: Action) => {
 				...state,
 				transactions: state.transactions.push(action.t),
 			};
+		case "DELETE_TRANSACTION":
+			ToastAndroid.show("Item deleted", ToastAndroid.SHORT);
+			return {
+				...state,
+				transactions: List(state.transactions).delete(action.index).toArray(),
+			};
 		case "CLEAR":
 			AsyncStorage.clear();
 			ToastAndroid.show("Cleared all caches", ToastAndroid.SHORT);
