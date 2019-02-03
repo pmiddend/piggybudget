@@ -27,7 +27,8 @@ interface State {
 
 interface Props {
 	readonly onNewTransaction: (t: Transaction) => void;
-	readonly amountModifier: (d: Decimal) => Decimal;
+	readonly isExpense: boolean;
+	readonly editTransaction: Transaction;
 	readonly navigation: any;
 	readonly currency: Currency;
 }
@@ -35,9 +36,10 @@ interface Props {
 
 class Add extends Component<Props> {
 	public static navigationOptions = ({ navigation }) => {
-		const { params } = navigation.state;
+		const suffix = navigation.state.params.isExpense ? "expense" : "income";
+		const prefix = navigation.state.params.editTransaction ? "Modify" : "Add";
 		return {
-			title: "Modify",
+			title: prefix + " " + suffix,
 		}
 	};
 
@@ -110,8 +112,9 @@ class Add extends Component<Props> {
 
 	private handlePress() {
 		const realAmount = this.state.amount.replace(/,/g, ".");
+		const d = new Decimal(realAmount);
 		this.props.onNewTransaction({
-			amount: this.props.amountModifier(new Decimal(realAmount)),
+			amount: this.props.isExpense ? d.negated() : d,
 			comment: (findCategory(this.state.commentName) as Category).name,
 			date: Date.now(),
 		});
@@ -146,7 +149,8 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state: AppState, ownProps: any) => {
 	return {
 		currency: currencies.get(state.settings.currency) as Currency,
-		amountModifier: ownProps.navigation.state.params.amountModifier,
+		isExpense: ownProps.navigation.state.params.isExpense,
+		editTransaction: ownProps.navigation.state.params.editTransaction,
 		navigation: ownProps.navigation,
 	};
 };

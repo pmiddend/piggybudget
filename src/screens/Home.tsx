@@ -66,11 +66,11 @@ class Home extends Component<Props> {
 				<View style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
 					<Icon raised size={iconSize} color="#89c440" reverse
 						name="plus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
-							amountModifier: (d: Decimal) => d,
+							isExpense: false,
 						})} />
 					<Icon raised size={iconSize} color="#ff5606" reverse
 						name="minus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
-							amountModifier: (d: Decimal) => d.negated(),
+							isExpense: true,
 						})} />
 				</View>
 				<View>
