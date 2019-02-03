@@ -3,7 +3,6 @@ import React from "react";
 import MyAppState from "../AppState";
 import { connect } from "react-redux";
 import { Component } from "react";
-import { List } from "immutable";
 import {
 	StyleSheet,
 	View,

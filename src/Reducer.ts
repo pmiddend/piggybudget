@@ -65,9 +65,13 @@ export default (state: AppState | undefined, action: Action) => {
 			};
 		case "DELETE_TRANSACTION":
 			ToastAndroid.show("Item deleted", ToastAndroid.SHORT);
+			// Yes, this is highly convoluted. However, with just "delete"
+			// from immutable.js, stuff didn't work. :( Have to re-evaluate that.
+			const asArray = state.transactions.toArray();
+			asArray.splice(action.index, 1);
 			return {
 				...state,
-				transactions: List(state.transactions).delete(action.index).toArray(),
+				transactions: List(asArray),
 			};
 		case "CLEAR":
 			AsyncStorage.clear();
