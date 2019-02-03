@@ -10,7 +10,8 @@ import Menu, {
 import {
 	ListItem,
 	Overlay,
-	Button
+	Button,
+	Icon
 } from "react-native-elements";
 import {
 	View,
@@ -63,17 +64,26 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 				title={props.transaction.amount.toString() + props.currency.symbol}
 				titleStyle={{ fontWeight: "bold", fontSize: 22 }}
 				subtitleStyle={{ fontSize: 14 }}
-				subtitle={moment(props.transaction.date).format("LT")} />
+				subtitle={"Added " + moment(props.transaction.date).format("LT")} />
 		</MenuTrigger>
 		<MenuOptions>
 			<MenuOption onSelect={props.onEdit}>
-				<Text style={{ fontSize: 20 }}>Edit</Text>
-			</MenuOption>
-			<MenuOption onSelect={props.onDelete}>
-				<Text style={{ fontSize: 20 }}>Delete</Text>
+				<View style={{ flex: 1, flexDirection: "row" }}>
+					<Icon name="edit" />
+					<Text style={{ fontSize: 20 }}> Edit</Text>
+				</View>
 			</MenuOption>
 			<MenuOption onSelect={props.onToggle}>
-				<Text style={{ fontSize: 20 }}>Make {props.transaction.amount.isPos ? "income" : "expense"}</Text>
+				<View style={{ flex: 1, flexDirection: "row" }}>
+					<Icon name="compare-arrows" />
+					<Text style={{ fontSize: 20 }}> Make {props.transaction.amount.isPos ? "income" : "expense"}</Text>
+				</View>
+			</MenuOption>
+			<MenuOption onSelect={props.onDelete}>
+				<View style={{ flex: 1, flexDirection: "row" }}>
+					<Icon name="delete" />
+					<Text style={{ fontSize: 20, color: "#8f0000", fontWeight: "bold" }}> Delete</Text>
+				</View>
 			</MenuOption>
 		</MenuOptions>
 	</Menu>);

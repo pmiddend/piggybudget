@@ -120,7 +120,7 @@ class Add extends Component<Props> {
 			if (this.props.editTransaction != null) {
 				this.props.onEditTransaction({
 					transaction: {
-						amount: this.props.isExpense ? d.negated() : d,
+						amount: d,
 						comment: (findCategory(this.state.commentName) as Category).name,
 						date: this.props.editTransaction.transaction.date
 					},
