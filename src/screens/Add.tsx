@@ -15,8 +15,9 @@ import {
 import { Decimal } from "decimal.js";
 import { connect } from "react-redux";
 import Transaction from "../Transaction";
+import IndexedTransaction from "../IndexedTransaction";
 import { Currency, currencies } from "../Currencies";
-import { actionAddTransaction } from "../Actions";
+import { actionAddTransaction, actionEditTransaction } from "../Actions";
 import AppState from "../AppState";
 import { findCategory, categories, Category } from "../Categories";
 
@@ -27,8 +28,9 @@ interface State {
 
 interface Props {
 	readonly onNewTransaction: (t: Transaction) => void;
+	readonly onEditTransaction: (t: IndexedTransaction) => void;
 	readonly isExpense: boolean;
-	readonly editTransaction: Transaction;
+	readonly editTransaction: IndexedTransaction | null;
 	readonly navigation: any;
 	readonly currency: Currency;
 }
@@ -48,8 +50,8 @@ class Add extends Component<Props> {
 	constructor(props: Props) {
 		super(props);
 		this.state = {
-			amount: "0",
-			commentName: "OTHER",
+			amount: this.props.editTransaction != null ? this.props.editTransaction.transaction.amount.toString() : "0",
+			commentName: this.props.editTransaction != null ? this.props.editTransaction.transaction.comment.toString() : "OTHER",
 		};
 		this.handleCommentChange = this.handleCommentChange.bind(this);
 		this.renderButtonRow = this.renderButtonRow.bind(this);
@@ -114,11 +116,22 @@ class Add extends Component<Props> {
 		const realAmount = this.state.amount.replace(/,/g, ".");
 		const d = new Decimal(realAmount);
 		if (!d.isZero()) {
-			this.props.onNewTransaction({
-				amount: this.props.isExpense ? d.negated() : d,
-				comment: (findCategory(this.state.commentName) as Category).name,
-				date: Date.now(),
-			});
+			if (this.props.editTransaction != null) {
+				this.props.onEditTransaction({
+					transaction: {
+						amount: this.props.isExpense ? d.negated() : d,
+						comment: (findCategory(this.state.commentName) as Category).name,
+						date: this.props.editTransaction.transaction.date
+					},
+					index: this.props.editTransaction.index
+				});
+			} else {
+				this.props.onNewTransaction({
+					amount: this.props.isExpense ? d.negated() : d,
+					comment: (findCategory(this.state.commentName) as Category).name,
+					date: Date.now(),
+				});
+			}
 		}
 		this.props.navigation.goBack();
 	}
@@ -159,6 +172,7 @@ const mapStateToProps = (state: AppState, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: any) => {
 	return {
+		onEditTransaction: (t: IndexedTransaction) => dispatch(actionEditTransaction(t)),
 		onNewTransaction: (t: Transaction) => dispatch(actionAddTransaction(t)),
 	};
 };

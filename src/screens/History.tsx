@@ -19,6 +19,7 @@ import {
 	SectionListData,
 	ListRenderItemInfo,
 } from "react-native";
+import { Decimal } from "decimal.js";
 import {
 	TransactionList,
 } from "../BudgetStore";
@@ -28,11 +29,7 @@ import moment from "moment";
 import { Collection } from "immutable";
 import { currencies, Currency } from "../Currencies";
 import { actionDeleteTransaction, actionToggleTransaction } from "../Actions";
-
-interface IndexedTransaction {
-	transaction: Transaction,
-	index: number,
-}
+import IndexedTransaction from "../IndexedTransaction";
 
 interface Props {
 	readonly onDeleteTransaction: (index: number) => void;
@@ -160,6 +157,14 @@ class History extends Component<Props, State> {
 	}
 
 	private onEdit(index: number) {
+		const t = (this.props.transactions.get(index) as Transaction);
+		this.props.navigation.navigate("Modify", {
+			isExpense: new Decimal(t.amount).isNegative(),
+			editTransaction: {
+				transaction: t,
+				index: index,
+			}
+		});
 	}
 
 	private renderHeader(section: any) {

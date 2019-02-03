@@ -63,14 +63,20 @@ export default (state: AppState | undefined, action: Action) => {
 				...state,
 				transactions: state.transactions.push(action.t),
 			};
-		case "TOGGLE_TRANSACTION":
-			ToastAndroid.show("Item toggled", ToastAndroid.SHORT);
-			// const prior = state.transactions.get(action.index) as Transaction;
-			// const newT = { ...prior, amount: prior.amount.negated() };
+		case "EDIT_TRANSACTION":
+			ToastAndroid.show("Item edited", ToastAndroid.SHORT);
 			return {
 				...state,
-				transactions: state.transactions.update(action.index, (t: Transaction) => ({ ...t, amount: new Decimal(t.amount).negated() })),
-				// transactions: state.transactions.set(action.index, newT),
+				transactions: state.transactions.update(
+					action.t.index,
+					(ignored: Transaction) => action.t.transaction),
+			};
+		case "TOGGLE_TRANSACTION":
+			ToastAndroid.show("Item toggled", ToastAndroid.SHORT);
+			const updater = (t: Transaction) => ({ ...t, amount: new Decimal(t.amount).negated() });
+			return {
+				...state,
+				transactions: state.transactions.update(action.index, updater),
 			};
 		case "DELETE_TRANSACTION":
 			ToastAndroid.show("Item deleted", ToastAndroid.SHORT);

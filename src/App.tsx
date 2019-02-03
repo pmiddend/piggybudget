@@ -37,6 +37,7 @@ const HomeStack = createStackNavigator({
 
 const HistoryStack = createStackNavigator({
 	History: { screen: History },
+	Modify: { screen: Add },
 }, {
 		navigationOptions: {
 			tabBarIcon: <Icon name="history" type="font-awesome" />,

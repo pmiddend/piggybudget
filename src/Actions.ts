@@ -1,10 +1,16 @@
 import Transaction from "./Transaction";
+import IndexedTransaction from "./IndexedTransaction";
 import { AppStateStatus } from "react-native";
 import { Decimal } from "decimal.js";
 
 export interface ActionAddTransaction {
 	readonly type: "ADD_TRANSACTION";
 	readonly t: Transaction;
+}
+
+export interface ActionEditTransaction {
+	readonly type: "EDIT_TRANSACTION";
+	readonly t: IndexedTransaction;
 }
 
 export interface ActionDeleteTransaction {
@@ -45,6 +51,13 @@ export function actionAddTransaction(t: Transaction): ActionAddTransaction {
 	return {
 		t,
 		type: "ADD_TRANSACTION",
+	};
+}
+
+export function actionEditTransaction(t: IndexedTransaction): ActionEditTransaction {
+	return {
+		t,
+		type: "EDIT_TRANSACTION",
 	};
 }
 
@@ -102,5 +115,6 @@ export type Action = ActionAddTransaction
 	| ActionIncomeTypeChange
 	| ActionDeleteTransaction
 	| ActionToggleTransaction
+	| ActionEditTransaction
 	| ActionCurrencyChange
 	| ActionIncomeChange;
