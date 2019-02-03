@@ -5,6 +5,7 @@ import {
 	View,
 	TextInput,
 	KeyboardAvoidingView,
+	ToastAndroid,
 } from "react-native";
 import { List } from "immutable";
 import { groupRows } from "../Util";
@@ -132,6 +133,8 @@ class Add extends Component<Props> {
 					date: Date.now(),
 				});
 			}
+		} else {
+			ToastAndroid.show("Amount is zero, nothing added", ToastAndroid.SHORT);
 		}
 		this.props.navigation.goBack();
 	}
