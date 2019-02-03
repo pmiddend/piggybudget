@@ -5,9 +5,6 @@ import {
 	Picker,
 } from "react-native";
 import moment from "moment";
-import {
-	NavigationScreenProps,
-} from "react-navigation";
 import { Decimal } from "decimal.js";
 import { connect } from "react-redux";
 import {
@@ -18,9 +15,9 @@ import {
 import AppState from "../AppState";
 import AppSettings from "../Settings";
 import {
-	FormLabel,
-	FormInput,
+	Input,
 	ButtonGroup,
+	Text,
 } from "react-native-elements";
 import { currencies, Currency } from "../Currencies";
 
@@ -57,25 +54,25 @@ class Settings extends Component<Props, State> {
 	public render() {
 		const selectedIndex = this.buttons.indexOf(this.props.settings.incomeType);
 		return (
-			<View>
-				<FormLabel>Currency</FormLabel>
+			<View style={{ padding: 10 }}>
+				<Text>Currency</Text>
 				<Picker selectedValue={this.props.settings.currency} onValueChange={this.props.onChangeCurrency}>
 					{currencies.valueSeq().map((c) => <Picker.Item key={c.code} label={c.name} value={c.code} />).toArray()}
 				</Picker>
-				<FormLabel>Income type</FormLabel>
+				<Text>Income type</Text>
 				<ButtonGroup
 					buttons={this.buttons}
 					selectedIndex={selectedIndex}
 					onPress={this.handlePress} />
-				<FormLabel>Income</FormLabel>
-				<FormInput value={this.state.income}
+				<Text>Income</Text>
+				<Input value={this.state.income}
 					keyboardType="numeric"
 					onChangeText={this.handleIncomeChange} />
-				<FormLabel>
+				<Text>
 					Daily income:
                 {this.dailyIncomeString()}
 					{(currencies.get(this.props.settings.currency) as Currency).symbol}
-				</FormLabel>
+				</Text>
 			</View>
 		);
 	}
