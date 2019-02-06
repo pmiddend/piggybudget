@@ -69,8 +69,10 @@ class Add extends Component<Props> {
 		const buttonRows = groupRows(nonAutomatic, 4).map(this.renderButtonRow).toArray();
 		return (
 			<KeyboardAvoidingView style={styles.container}>
-				{buttonRows}
-				<View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+				<View style={{ flex: 3, backgroundColor: "#d8f1ff", width: "100%" }}>
+					{buttonRows}
+				</View>
+				<View style={{ flex: 1, flexDirection: "row", alignItems: "center", width: "100%", justifyContent: "center" }}>
 					<TextInput value={this.state.amount.toString()}
 						keyboardType="numeric"
 						autoFocus={true}
