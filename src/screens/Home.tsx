@@ -32,14 +32,6 @@ interface Props {
 }
 
 class Home extends Component<Props> {
-	public static navigationOptions = {
-		headerStyle: {
-			backgroundColor: headerBackgroundColor,
-		},
-		headerTintColor,
-		title: "Home",
-	};
-
 	constructor(props: Props) {
 		super(props);
 		this.handleAppStateChange = this.handleAppStateChange.bind(this);
