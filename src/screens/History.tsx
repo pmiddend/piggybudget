@@ -76,7 +76,7 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 			<MenuOption onSelect={props.onToggle}>
 				<View style={{ flex: 1, flexDirection: "row" }}>
 					<Icon name="compare-arrows" />
-					<Text style={{ fontSize: 20 }}> Make {props.transaction.amount.isPos ? "income" : "expense"}</Text>
+					<Text style={{ fontSize: 20 }}> Make {new Decimal(props.transaction.amount).isPositive() ? "income" : "expense"}</Text>
 				</View>
 			</MenuOption>
 			<MenuOption onSelect={props.onDelete}>
