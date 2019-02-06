@@ -2,7 +2,7 @@ import React from "react";
 import MyAppState from "../AppState";
 import { connect } from "react-redux";
 import { Component } from "react";
-import { darkBackground, lightBackground, headerBackgroundColor, headerTintColor } from "../Colors";
+import { darkBackground, lightBackground } from "../Colors";
 import {
 	View,
 	AppState,
