@@ -1,4 +1,3 @@
-import { Decimal } from "decimal.js";
 import React from "react";
 import MyAppState from "../AppState";
 import { connect } from "react-redux";
