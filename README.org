@@ -14,8 +14,11 @@
 Happy saving!
 ** Screenshots
 
+#+ATTR_HTML: :style width: 20%
 [[./fastlane/metadata/android/en-US/phoneScreenshots/screen1.png]]
+#+ATTR_HTML: :style width: 20%
 [[./fastlane/metadata/android/en-US/phoneScreenshots/screen2.png]]
+#+ATTR_HTML: :style width: 20%
 [[./fastlane/metadata/android/en-US/phoneScreenshots/screen3.png]]
 
 ** Where do I find it?
