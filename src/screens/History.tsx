@@ -100,7 +100,7 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 };
 
 function getDayHeadline(date: number): string {
-	return moment(new Date(date)).format("LL");
+	return moment(new Date(date)).format("dddd, LL");
 }
 
 class History extends Component<Props, State> {
