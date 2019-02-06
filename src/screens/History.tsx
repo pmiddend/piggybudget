@@ -60,23 +60,7 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 	const expenseOrIncome = new Decimal(props.transaction.amount).isPositive() ? "income" : "expense";
 	const subtitleDate = moment(props.transaction.date).format("LT");
 	const subtitle = cat.name === "AUTOMATIC" ? "Automatically added " + subtitleDate : "Added " + subtitleDate;
-	return (<Menu>
-		<MenuTrigger>
-			<ListItem
-				key={props.transaction.date.toString()}
-				leftAvatar={{
-					icon: {
-						color: "white",
-						name: cat.icon,
-						type: cat.iconType,
-					},
-					overlayContainerStyle: { backgroundColor: "#" + cat.color },
-				}}
-				title={props.transaction.amount.toString() + props.currency.symbol}
-				titleStyle={{ fontWeight: "bold", fontSize: 22 }}
-				subtitleStyle={{ fontSize: 14 }}
-				subtitle={subtitle} />
-		</MenuTrigger>
+	const menu = (<Menu><MenuTrigger><Icon name="more-vert" /></MenuTrigger>
 		<MenuOptions>
 			<MenuOption onSelect={props.onEdit}>
 				<View style={{ flex: 1, flexDirection: "row" }}>
@@ -98,6 +82,21 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 			</MenuOption>
 		</MenuOptions>
 	</Menu>);
+	return (<ListItem
+		key={props.transaction.date.toString()}
+		leftAvatar={{
+			icon: {
+				color: "white",
+				name: cat.icon,
+				type: cat.iconType,
+			},
+			overlayContainerStyle: { backgroundColor: "#" + cat.color },
+		}}
+		chevron={menu}
+		title={props.transaction.amount.toString() + props.currency.symbol}
+		titleStyle={{ fontWeight: "bold", fontSize: 22 }}
+		subtitleStyle={{ fontSize: 14 }}
+		subtitle={subtitle} />);
 };
 
 function getDayHeadline(date: number): string {
