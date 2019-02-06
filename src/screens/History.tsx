@@ -2,16 +2,17 @@ import React from "react";
 import { Component } from "react";
 import { connect } from "react-redux";
 import { findCategory, otherCategory } from "../Categories";
-import Menu, {
+import {
 	MenuOptions,
 	MenuOption,
 	MenuTrigger,
+	Menu,
 } from "react-native-popup-menu";
 import {
 	ListItem,
 	Overlay,
 	Button,
-	Icon
+	Icon,
 } from "react-native-elements";
 import {
 	View,
@@ -55,6 +56,7 @@ interface HistoryItemProps {
 const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 	const catOpt = findCategory(props.transaction.comment);
 	const cat = catOpt === undefined ? otherCategory() : catOpt;
+	const expenseOrIncome = new Decimal(props.transaction.amount).isPositive() ? "income" : "expense";
 	return (<Menu>
 		<MenuTrigger>
 			<ListItem
@@ -76,7 +78,7 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 			<MenuOption onSelect={props.onToggle}>
 				<View style={{ flex: 1, flexDirection: "row" }}>
 					<Icon name="compare-arrows" />
-					<Text style={{ fontSize: 20 }}> Make {new Decimal(props.transaction.amount).isPositive() ? "income" : "expense"}</Text>
+					<Text style={{ fontSize: 20 }}> Make {expenseOrIncome}</Text>
 				</View>
 			</MenuOption>
 			<MenuOption onSelect={props.onDelete}>
@@ -115,11 +117,12 @@ class History extends Component<Props, State> {
 			<Overlay isVisible={this.state.deleteId !== null}
 				onRequestClose={this.closeDeleteModal}
 				width={300}
-				height={100}
+				height={90}
 				onBackdropPress={this.closeDeleteModal}>
 				<View style={{ flex: 1, justifyContent: "space-evenly" }}>
 					<Text style={{ fontSize: 16 }}>Really delete?</Text>
 					<View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
+						<View style={{ width: "50%" }} />
 						<Button title="CANCEL" type="clear" onPress={this.closeDeleteModal} />
 						<Button title="DELETE" type="clear" onPress={this.deleteSelected} />
 					</View>
@@ -145,7 +148,7 @@ class History extends Component<Props, State> {
 	private closeDeleteModal() {
 		this.setState({
 			...this.state,
-			deleteId: null
+			deleteId: null,
 		});
 	}
 
@@ -158,7 +161,7 @@ class History extends Component<Props, State> {
 	private onDelete(index: number) {
 		this.setState({
 			...this.state,
-			deleteId: index
+			deleteId: index,
 		});
 	}
 
@@ -169,11 +172,11 @@ class History extends Component<Props, State> {
 	private onEdit(index: number) {
 		const t = (this.props.transactions.get(index) as Transaction);
 		this.props.navigation.navigate("Modify", {
-			isExpense: new Decimal(t.amount).isNegative(),
 			editTransaction: {
+				index,
 				transaction: t,
-				index: index,
-			}
+			},
+			isExpense: new Decimal(t.amount).isNegative(),
 		});
 	}
 
@@ -184,7 +187,7 @@ class History extends Component<Props, State> {
 
 	private createSections(): Array<SectionListData<IndexedTransaction>> {
 		return this.props.transactions
-			.map((t: Transaction, index: number) => ({ transaction: t, index: index }))
+			.map((t: Transaction, index: number) => ({ transaction: t, index }))
 			.groupBy((value: IndexedTransaction) => getDayHeadline(value.transaction.date))
 			.sortBy((values: Collection<number, IndexedTransaction>) => -(values.first() as IndexedTransaction).transaction.date)
 			.map((values: Collection<number, IndexedTransaction>, header: string) => ({
