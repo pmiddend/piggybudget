@@ -90,7 +90,7 @@ class Stats extends Component<Props, State> {
 		const sumListDataNegative = lastNDays(ts, this.indexToDays(this.state.sumIndex), false).toJS();
 		const sumKeys = categories.map((c) => c.name).toArray();
 		const sumColors = categories.map((c) => "#" + c.color).toArray();
-		const pieData = groupedCats(filterLastDays(ts, this.indexToDays(this.state.distributionIndex)));
+		const pieData = groupedCats(filterLastDays(ts, this.indexToDays(this.state.distributionIndex), false));
 		const CoolLabels = ({ slices }) => {
 			return slices.map((slice, index) => {
 				const { labelCentroid, pieCentroid, data } = slice;
@@ -120,12 +120,13 @@ class Stats extends Component<Props, State> {
 				)
 			})
 		};
+		const timeButtonsShort = ["Week", "Month"];
 		const timeButtons = ["Week", "Month", "Year"];
 		return (
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
 					<Text h4>Daily Expenses</Text>
-					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtons} />
+					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtonsShort} />
 				</View>
 				<View style={{ height: 300, padding: 20, flexDirection: "row" }}>
 					<YAxis
@@ -145,7 +146,7 @@ class Stats extends Component<Props, State> {
 				</View>
 				<View style={{ paddingLeft: 10 }}>
 					<Text h4>Daily Income</Text>
-					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtons} />
+					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtonsShort} />
 				</View>
 				<View style={{ height: 300, padding: 20, flexDirection: "row" }}>
 					<YAxis
@@ -164,7 +165,7 @@ class Stats extends Component<Props, State> {
 					</StackedBarChart>
 				</View>
 				<View style={{ paddingLeft: 10 }}>
-					<Text h4>Distribution</Text>
+					<Text h4>Distribution Expenses</Text>
 					<ButtonGroup onPress={this.updateDistribution} selectedIndex={this.state.distributionIndex} buttons={timeButtons} />
 				</View>
 				<PieChart
