@@ -59,7 +59,7 @@ class Home extends Component<Props> {
 			}}>
 				<View style={{
 					alignItems: "center",
-					backgroundColor: "#A3BCF9",
+					backgroundColor: "#d8f1ff",
 					flex: 1,
 					justifyContent: "space-evenly",
 					width: "100%",
@@ -71,7 +71,7 @@ class Home extends Component<Props> {
 						</Text>
 					</View>
 				</View>
-				<View style={{ flex: 1, backgroundColor: "#7796CB", width: "100%", alignItems: "center" }}>
+				<View style={{ flex: 1, width: "100%", alignItems: "center" }}>
 					<View style={{
 						alignItems: "center",
 						flex: 1,
@@ -97,14 +97,14 @@ class Home extends Component<Props> {
 				</View>
 				<View style={{
 					alignItems: "center",
-					backgroundColor: "#576490",
+					backgroundColor: "#def7ff",
 					flex: 1,
 					justifyContent: "space-evenly",
 					width: "100%",
 				}}>
 					<View style={{ alignItems: "center" }}>
-						<Text h4 style={{ color: "#D1D2F9" }}>Today’s Expenses</Text>
-						<Text h3 style={{ color: "#D1D2F9", fontWeight: "bold" }}>
+						<Text h4>Today’s Expenses</Text>
+						<Text h3>
 							{storeTodaysExpenses(this.props.transactions).toString()}{this.props.currency.symbol}
 						</Text>
 					</View>
