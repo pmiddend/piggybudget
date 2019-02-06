@@ -57,16 +57,24 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 	const catOpt = findCategory(props.transaction.comment);
 	const cat = catOpt === undefined ? otherCategory() : catOpt;
 	const expenseOrIncome = new Decimal(props.transaction.amount).isPositive() ? "income" : "expense";
+	const subtitleDate = moment(props.transaction.date).format("LT");
+	const subtitle = cat.name === "AUTOMATIC" ? "Automatically added " + subtitleDate : "Added " + subtitleDate;
 	return (<Menu>
 		<MenuTrigger>
 			<ListItem
 				key={props.transaction.date.toString()}
-				topDivider={true}
-				leftIcon={{ name: cat.icon, type: cat.iconType, color: "#" + cat.color }}
+				leftAvatar={{
+					icon: {
+						color: "white",
+						name: cat.icon,
+						type: cat.iconType,
+					},
+					overlayContainerStyle: { backgroundColor: "#" + cat.color },
+				}}
 				title={props.transaction.amount.toString() + props.currency.symbol}
 				titleStyle={{ fontWeight: "bold", fontSize: 22 }}
 				subtitleStyle={{ fontSize: 14 }}
-				subtitle={"Added " + moment(props.transaction.date).format("LT")} />
+				subtitle={subtitle} />
 		</MenuTrigger>
 		<MenuOptions>
 			<MenuOption onSelect={props.onEdit}>
@@ -181,8 +189,12 @@ class History extends Component<Props, State> {
 	}
 
 	private renderHeader(section: any) {
-		return <View style={{ padding: 5 }}><Text
-			style={{ fontWeight: "bold", fontSize: 20 }}>{section.section.header}</Text></View>;
+		return (<View style={{ padding: 10 }}>
+			<Text
+				style={{ fontSize: 16 }}>
+				{section.section.header}
+			</Text>
+		</View>);
 	}
 
 	private createSections(): Array<SectionListData<IndexedTransaction>> {
