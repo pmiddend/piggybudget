@@ -55,27 +55,59 @@ class Home extends Component<Props> {
 			<View style={{
 				alignItems: "center",
 				flex: 1,
-				flexDirection: "column",
-				justifyContent: "space-between",
+				justifyContent: "space-evenly",
 			}}>
-				<Text h3>Total Budget</Text>
-				<Text h1 style={{ fontWeight: "bold" }}>{storeTotalBudget(this.props.transactions).toString()}
-					{this.props.currency.symbol}
-				</Text>
-				<View style={{ flex: 1, flexDirection: "row", alignItems: "center", justifyContent: "space-evenly" }}>
-					<Icon raised size={iconSize} color="#89c440" reverse
-						name="plus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
-							isExpense: false,
-						})} />
-					<Icon raised size={iconSize} color="#ff5606" reverse
-						name="minus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
-							isExpense: true,
-						})} />
+				<View style={{
+					alignItems: "center",
+					backgroundColor: "#A3BCF9",
+					flex: 1,
+					justifyContent: "space-evenly",
+					width: "100%",
+				}}>
+					<View style={{ alignItems: "center" }}>
+						<Text h3>Total Budget</Text>
+						<Text h1 style={{ fontWeight: "bold" }}>{storeTotalBudget(this.props.transactions).toString()}
+							{this.props.currency.symbol}
+						</Text>
+					</View>
 				</View>
-				<View>
-					<Text h4>
-						Today's expenses: {storeTodaysExpenses(this.props.transactions).toString()}{this.props.currency.symbol}
-					</Text>
+				<View style={{ flex: 1, backgroundColor: "#7796CB", width: "100%", alignItems: "center" }}>
+					<View style={{
+						alignItems: "center",
+						flex: 1,
+						flexDirection: "row",
+						justifyContent: "space-evenly",
+						width: "100%",
+					}}>
+						<View style={{ alignItems: "center" }}>
+							<Icon raised size={iconSize} color="#89c440" reverse
+								name="plus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
+									isExpense: false,
+								})} />
+							<Text>Add income</Text>
+						</View>
+						<View style={{ alignItems: "center" }}>
+							<Icon raised size={iconSize} color="#ff5606" reverse
+								name="minus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
+									isExpense: true,
+								})} />
+							<Text>Add expense</Text>
+						</View>
+					</View>
+				</View>
+				<View style={{
+					alignItems: "center",
+					backgroundColor: "#576490",
+					flex: 1,
+					justifyContent: "space-evenly",
+					width: "100%",
+				}}>
+					<View style={{ alignItems: "center" }}>
+						<Text h4 style={{ color: "#D1D2F9" }}>Today’s Expenses</Text>
+						<Text h3 style={{ color: "#D1D2F9", fontWeight: "bold" }}>
+							{storeTodaysExpenses(this.props.transactions).toString()}{this.props.currency.symbol}
+						</Text>
+					</View>
 				</View>
 			</View>
 		);
