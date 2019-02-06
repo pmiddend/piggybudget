@@ -94,11 +94,11 @@ const store = createStore(persistedReducer);
 const persistor = persistStore(store);
 
 export default () => (
-	<Provider store={store}>
-		<PersistGate loading={null} persistor={persistor}>
-			<MenuProvider>
+	<MenuProvider skipInstanceCheck={true}>
+		<Provider store={store}>
+			<PersistGate loading={null} persistor={persistor}>
 				<PiggyBudgetAppContainer />
-			</MenuProvider>
-		</PersistGate>
-	</Provider>
+			</PersistGate>
+		</Provider>
+	</MenuProvider>
 );
