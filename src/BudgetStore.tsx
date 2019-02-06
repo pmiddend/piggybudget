@@ -31,13 +31,16 @@ export function lastNDaysAsMoments(n: number): List<moment.Moment> {
 	return Range(0, n).map((d: number) => startOfDay.clone().subtract(d, "days")).toList().reverse();
 }
 
-export function lastNDays(s: TransactionList, n: number): List<any> {
+export function lastNDays(s: TransactionList, n: number, positive: boolean): List<any> {
 	return lastNDaysAsMoments(n)
 		.map((d: moment.Moment) => s.filter((t) => moment(t.date).startOf("day").isSame(d)))
 		.map((ts: List<Transaction>) =>
 			categories.reduce((priorMap: Map<string, number>, c: Category) => priorMap.set(c.name, 0), Map()).merge(
-				ts.groupBy((t) => t.comment)
-					.map((tsi) => tsi.reduce((sum: Decimal, x: Transaction) => sum.add(x.amount), new Decimal(0)).toNumber())
+				ts.filter((t) => positive === new Decimal(t.amount).isPositive())
+					.groupBy((t) => t.comment)
+					.map((tsi) => tsi.reduce(
+						(sum: Decimal, x: Transaction) => sum.add(new Decimal(x.amount)),
+						new Decimal(0)).toNumber())
 					.toObject()));
 }
 

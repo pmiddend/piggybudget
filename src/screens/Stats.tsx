@@ -85,17 +85,9 @@ class Stats extends Component<Props, State> {
 	public render() {
 		const axesSvg = { fontSize: 10, fill: "grey" };
 		const verticalContentInset = { top: 10, bottom: 10 };
-		/* const ts = this.props.transactions.push({
-			 amount: new Decimal(20),
-			 comment: "INSURANCE",
-			 date: moment().subtract(4, "days"),
-		   }).push({
-			 amount: new Decimal(20),
-			 comment: "PARTY",
-			 date: moment().subtract(4, "days"),
-		   });*/
 		const ts = this.props.transactions;
-		const sumListData = lastNDays(ts, this.indexToDays(this.state.sumIndex)).toJS();
+		const sumListDataPositive = lastNDays(ts, this.indexToDays(this.state.sumIndex), true).toJS();
+		const sumListDataNegative = lastNDays(ts, this.indexToDays(this.state.sumIndex), false).toJS();
 		const sumKeys = categories.map((c) => c.name).toArray();
 		const sumColors = categories.map((c) => "#" + c.color).toArray();
 		const pieData = groupedCats(filterLastDays(ts, this.indexToDays(this.state.distributionIndex)));
@@ -132,18 +124,38 @@ class Stats extends Component<Props, State> {
 		return (
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
-					<Text h4>Total of the day</Text>
+					<Text h4>Daily Expenses</Text>
 					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtons} />
 				</View>
 				<View style={{ height: 300, padding: 20, flexDirection: "row" }}>
 					<YAxis
-						data={StackedBarChart.extractDataPoints(sumListData, sumKeys)}
+						data={StackedBarChart.extractDataPoints(sumListDataNegative, sumKeys)}
 						svg={axesSvg}
 						contentInset={verticalContentInset}
 					/>
 					<StackedBarChart
 						style={{ flex: 1 }}
-						data={sumListData}
+						data={sumListDataNegative}
+						keys={sumKeys}
+						colors={sumColors}
+						contentInset={verticalContentInset}
+					>
+						<Grid />
+					</StackedBarChart>
+				</View>
+				<View style={{ paddingLeft: 10 }}>
+					<Text h4>Daily Income</Text>
+					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtons} />
+				</View>
+				<View style={{ height: 300, padding: 20, flexDirection: "row" }}>
+					<YAxis
+						data={StackedBarChart.extractDataPoints(sumListDataPositive, sumKeys)}
+						svg={axesSvg}
+						contentInset={verticalContentInset}
+					/>
+					<StackedBarChart
+						style={{ flex: 1 }}
+						data={sumListDataPositive}
 						keys={sumKeys}
 						colors={sumColors}
 						contentInset={verticalContentInset}
