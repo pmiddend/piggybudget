@@ -12,6 +12,12 @@
 - There’s a *history* for viewing your expenses one by one. From there, you can also edit and delete them.
 
 Happy saving!
+** Screenshots
+
+[[./fastlane/metadata/android/en-US/phoneScreenshots/screen1.png]]
+[[./fastlane/metadata/android/en-US/phoneScreenshots/screen2.png]]
+[[./fastlane/metadata/android/en-US/phoneScreenshots/screen3.png]]
+
 ** Where do I find it?
 #+CAPTION: Get it on F-Droid
 [[https://f-droid.org/app/de.php_tech.piggybudget/][https://f-droid.org/wiki/images/c/c4/F-Droid-button_available-on.png]]
