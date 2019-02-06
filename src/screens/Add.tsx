@@ -1,5 +1,6 @@
 import React from "react";
 import { Component } from "react";
+import { darkBackground } from "../Colors";
 import {
 	StyleSheet,
 	View,
@@ -69,7 +70,7 @@ class Add extends Component<Props> {
 		const buttonRows = groupRows(nonAutomatic, 4).map(this.renderButtonRow).toArray();
 		return (
 			<KeyboardAvoidingView style={styles.container}>
-				<View style={{ flex: 3, backgroundColor: "#d8f1ff", width: "100%" }}>
+				<View style={{ flex: 3, backgroundColor: darkBackground, width: "100%" }}>
 					{buttonRows}
 				</View>
 				<View style={{ flex: 1, flexDirection: "row", alignItems: "center", width: "100%", justifyContent: "center" }}>

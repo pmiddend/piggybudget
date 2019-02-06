@@ -2,6 +2,7 @@ import React from "react";
 import MyAppState from "../AppState";
 import { connect } from "react-redux";
 import { Component } from "react";
+import { darkBackground, lightBackground } from "../Colors";
 import {
 	View,
 	AppState,
@@ -59,7 +60,7 @@ class Home extends Component<Props> {
 			}}>
 				<View style={{
 					alignItems: "center",
-					backgroundColor: "#d8f1ff",
+					backgroundColor: darkBackground,
 					flex: 1,
 					justifyContent: "space-evenly",
 					width: "100%",
@@ -97,7 +98,7 @@ class Home extends Component<Props> {
 				</View>
 				<View style={{
 					alignItems: "center",
-					backgroundColor: "#def7ff",
+					backgroundColor: lightBackground,
 					flex: 1,
 					justifyContent: "space-evenly",
 					width: "100%",
