@@ -2,7 +2,7 @@ import React from "react";
 import MyAppState from "../AppState";
 import { connect } from "react-redux";
 import { Component } from "react";
-import { darkBackground, lightBackground } from "../Colors";
+import { darkBackground, lightBackground, headerBackgroundColor, headerTintColor } from "../Colors";
 import {
 	View,
 	AppState,
@@ -33,6 +33,10 @@ interface Props {
 
 class Home extends Component<Props> {
 	public static navigationOptions = {
+		headerStyle: {
+			backgroundColor: headerBackgroundColor,
+		},
+		headerTintColor,
 		title: "Home",
 	};
 

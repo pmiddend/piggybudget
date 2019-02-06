@@ -1,6 +1,5 @@
 import React from "react";
-import { Decimal } from "decimal.js";
-import moment from "moment";
+import { headerBackgroundColor, headerTintColor } from "../Colors";
 import { Component } from "react";
 import {
 	ScrollView,
@@ -36,6 +35,10 @@ interface State {
 
 class Stats extends Component<Props, State> {
 	public static navigationOptions = {
+		headerStyle: {
+			backgroundColor: headerBackgroundColor,
+		},
+		headerTintColor,
 		title: "Stats",
 	};
 

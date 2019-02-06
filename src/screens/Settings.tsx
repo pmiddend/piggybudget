@@ -1,5 +1,6 @@
 import React from "react";
 import { Component } from "react";
+import { headerBackgroundColor, headerTintColor } from "../Colors";
 import {
 	View,
 	Picker,
@@ -35,6 +36,10 @@ interface State {
 
 class Settings extends Component<Props, State> {
 	public static navigationOptions = {
+		headerStyle: {
+			backgroundColor: headerBackgroundColor,
+		},
+		headerTintColor,
 		title: "Settings",
 	};
 

@@ -2,6 +2,7 @@ import React from "react";
 import { Component } from "react";
 import { connect } from "react-redux";
 import { findCategory, otherCategory } from "../Categories";
+import { headerBackgroundColor, headerTintColor } from "../Colors";
 import {
 	MenuOptions,
 	MenuOption,
@@ -105,6 +106,10 @@ function getDayHeadline(date: number): string {
 
 class History extends Component<Props, State> {
 	public static navigationOptions = {
+		headerStyle: {
+			backgroundColor: headerBackgroundColor,
+		},
+		headerTintColor,
 		title: "History",
 	};
 

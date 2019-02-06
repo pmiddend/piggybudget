@@ -1,6 +1,6 @@
 import React from "react";
 import { Component } from "react";
-import { darkBackground } from "../Colors";
+import { darkBackground, headerTintColor, headerBackgroundColor } from "../Colors";
 import {
 	StyleSheet,
 	View,
@@ -43,6 +43,10 @@ class Add extends Component<Props> {
 		const suffix = navigation.state.params.isExpense ? "expense" : "income";
 		const prefix = navigation.state.params.editTransaction ? "Modify" : "Add";
 		return {
+			headerStyle: {
+				backgroundColor: headerBackgroundColor,
+			},
+			headerTintColor: headerTintColor,
 			title: prefix + " " + suffix,
 		}
 	};
