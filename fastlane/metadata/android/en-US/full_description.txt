@@ -1,6 +1,6 @@
 piggybudget is an application for tracking your pocket money.
 
-<p>What’s it, in bullet points?</p>
+<p>What the app does:</p>
 
 <ul>
 <li>It’s a tiny app that I wrote for myself to keep track of my expenses.</li>
