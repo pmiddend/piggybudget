@@ -110,9 +110,10 @@ class Stats extends Component<Props, State> {
 							fill={data.svg.fill}
 						/>
 						<Image
-							x={labelCentroid[0] - 8}
+							x={labelCentroid[0] - 9}
 							y={labelCentroid[1] - 9}
-							preserveAspectRatio="xMinYMin meet"
+							width={18}
+							height={18}
 							opacity="1"
 							href={this.getIcon(data.key)}
 						/>
