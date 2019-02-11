@@ -57,7 +57,7 @@ interface HistoryItemProps {
 const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 	const catOpt = findCategory(props.transaction.comment);
 	const cat = catOpt === undefined ? otherCategory() : catOpt;
-	const expenseOrIncome = new Decimal(props.transaction.amount).isPositive() ? "income" : "expense";
+	const expenseOrIncome = new Decimal(props.transaction.amount).isPositive() ? "expense" : "income";
 	const subtitleDate = moment(props.transaction.date).format("LT");
 	const subtitle = cat.name === "AUTOMATIC" ? "Automatically added " + subtitleDate : "Added " + subtitleDate;
 	const menu = (<Menu><MenuTrigger><Icon name="more-vert" /></MenuTrigger>
