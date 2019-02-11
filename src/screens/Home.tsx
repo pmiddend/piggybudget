@@ -48,6 +48,12 @@ class Home extends Component<Props> {
 
 	public render() {
 		const iconSize = 40;
+		const todaysTotal = storeTodaysExpenses(this.props.transactions);
+		const addColor = "#89c440";
+		const removeColor = "#ff5606";
+		const todaysTotalColor = todaysTotal.isPositive() ? addColor : removeColor;
+		const total = storeTotalBudget(this.props.transactions);
+		const totalColor = total.isPositive() ? addColor : removeColor;
 		return (
 			<View style={{
 				alignItems: "center",
@@ -63,7 +69,7 @@ class Home extends Component<Props> {
 				}}>
 					<View style={{ alignItems: "center" }}>
 						<Text h3>Total Budget</Text>
-						<Text h1 style={{ fontWeight: "bold" }}>{storeTotalBudget(this.props.transactions).toString()}
+						<Text h1 style={{ fontWeight: "bold", color: totalColor }}>{total.toString()}
 							{this.props.currency.symbol}
 						</Text>
 					</View>
@@ -77,14 +83,14 @@ class Home extends Component<Props> {
 						width: "100%",
 					}}>
 						<View style={{ alignItems: "center" }}>
-							<Icon raised size={iconSize} color="#89c440" reverse
+							<Icon raised size={iconSize} color={addColor} reverse
 								name="plus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
 									isExpense: false,
 								})} />
 							<Text>Add income</Text>
 						</View>
 						<View style={{ alignItems: "center" }}>
-							<Icon raised size={iconSize} color="#ff5606" reverse
+							<Icon raised size={iconSize} color={removeColor} reverse
 								name="minus" type="entypo" onPress={() => this.props.navigation.navigate("Add", {
 									isExpense: true,
 								})} />
@@ -100,9 +106,9 @@ class Home extends Component<Props> {
 					width: "100%",
 				}}>
 					<View style={{ alignItems: "center" }}>
-						<Text h4>Today’s Expenses</Text>
-						<Text h3>
-							{storeTodaysExpenses(this.props.transactions).toString()}{this.props.currency.symbol}
+						<Text h4>Today’s Total</Text>
+						<Text h3 style={{ color: todaysTotalColor }}>
+							{todaysTotal.toString()}{this.props.currency.symbol}
 						</Text>
 					</View>
 				</View>
