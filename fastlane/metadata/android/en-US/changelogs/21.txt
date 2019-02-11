@@ -1,0 +1,7 @@
+This release contains mostly bugfixes and is compatible with the previous one. The following things were fixed:
+
+- History: Fix "Make income" and "Make expense" in the history popup menu. Those were backwards.
+- Home: Add green/red text to the home screen's "Total" texts (for the day total and the...total total)
+- Home: Rename "Today's expenses" to "Today's total" because you might have gained money instead of spending it.
+- Statistics: Fix positioning of icons in the pie chart.
+- Statistics: Render icons in the pie chart screen in a higher resolution.
