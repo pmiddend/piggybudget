@@ -62,7 +62,7 @@ class Stats extends Component<Props, State> {
 	}
 
 	public componentDidMount() {
-		categories.forEach((c) => c.iconClass.getImageSource(c.icon, 7, "white").then((source: any) => {
+		categories.forEach((c) => c.iconClass.getImageSource(c.icon, 32, "white").then((source: any) => {
 			this.setState({ icons: this.state.icons.set(c.name, source) });
 		}
 		));
