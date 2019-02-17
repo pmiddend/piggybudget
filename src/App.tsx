@@ -73,7 +73,7 @@ const PiggyBudgetRoot = createStackNavigator({
 					<MenuOptions>
 						<MenuOption onSelect={() => store.dispatch(actionDoExport())}>
 							<View style={{ flex: 1, flexDirection: "row" }}>
-								<Text>Share CSV</Text>
+								<Text style={{ fontSize: 16, padding: 10, color: "black" }}>Share CSV</Text>
 							</View>
 						</MenuOption>
 					</MenuOptions>

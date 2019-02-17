@@ -64,20 +64,17 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 		<MenuOptions>
 			<MenuOption onSelect={props.onEdit}>
 				<View style={{ flex: 1, flexDirection: "row" }}>
-					<Icon name="edit" />
-					<Text style={{ fontSize: 20 }}> Edit</Text>
+					<Text style={{ fontSize: 18, color: "black", padding: 10 }}> Edit</Text>
 				</View>
 			</MenuOption>
 			<MenuOption onSelect={props.onToggle}>
 				<View style={{ flex: 1, flexDirection: "row" }}>
-					<Icon name="compare-arrows" />
-					<Text style={{ fontSize: 20 }}> Make {expenseOrIncome}</Text>
+					<Text style={{ fontSize: 18, color: "black", padding: 10 }}> Make {expenseOrIncome}</Text>
 				</View>
 			</MenuOption>
 			<MenuOption onSelect={props.onDelete}>
 				<View style={{ flex: 1, flexDirection: "row" }}>
-					<Icon name="delete" />
-					<Text style={{ fontSize: 20, color: "#8f0000", fontWeight: "bold" }}> Delete</Text>
+					<Text style={{ fontSize: 18, color: "#8f0000", fontWeight: "bold", padding: 10 }}> Delete</Text>
 				</View>
 			</MenuOption>
 		</MenuOptions>
