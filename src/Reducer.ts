@@ -1,11 +1,13 @@
 import AppState from "./AppState";
 import { List } from "immutable";
 import { AsyncStorage, ToastAndroid } from "react-native";
-import { Action } from "./Actions";
+import { Action, ActionDoImport, ActionDoExport } from "./Actions";
 import { Decimal } from "decimal.js";
 import { TransactionList } from "./BudgetStore";
+import { ImportData } from "./ImportData";
 import Transaction from "./Transaction";
 import moment from "moment";
+import { ExportIntent } from "./ExportIntentModule";
 import Settings from "./Settings";
 import { Currency, currencies } from "./Currencies";
 
@@ -44,6 +46,39 @@ function createDailyTransaction(
 	};
 }
 
+function convertImportData(e: ImportData): Transaction {
+	return {
+		amount: new Decimal(e.amount),
+		comment: e.comment,
+		date: parseInt(e.date, 10),
+	};
+}
+
+function doImport(action: ActionDoImport, state: AppState): AppState {
+	const stringArray: ImportData[] = action.result;
+	const stringList: List<ImportData> = List(stringArray);
+	const { importSuccess: firstSuccess, ...newState } = state;
+	return {
+		...newState,
+		transactions: stringList.map((e: ImportData) => convertImportData(e)),
+	};
+}
+
+function doExport(_: ActionDoExport, state: AppState): AppState {
+	const csv = state.transactions
+		.map((t: Transaction) => t.amount.toString() + "," + t.comment + "," + t.date)
+		.join("\n");
+	ExportIntent.exportCsv(
+		csv,
+		() => {
+			ToastAndroid.show("Export succeeded", ToastAndroid.LONG);
+		},
+		(message: string, technicalMessage: string) => {
+			ToastAndroid.show("Export failed", ToastAndroid.LONG);
+		});
+	return state;
+}
+
 export default (state: AppState | undefined, action: Action) => {
 	if (state === undefined) {
 		const initialSettings: Settings = {
@@ -58,6 +93,26 @@ export default (state: AppState | undefined, action: Action) => {
 		};
 	}
 	switch (action.type) {
+		case "DO_IMPORT":
+			return doImport(action, state);
+		case "DO_EXPORT":
+			return doExport(action, state);
+		case "IMPORT_FAILED":
+			return {
+				...state,
+				importError: action.error,
+			};
+		case "REMOVE_IMPORT_ERROR":
+			const { importError, ...newState } = state;
+			return newState;
+		case "REMOVE_IMPORT_SUCCESS":
+			const { importSuccess, ...newState2 } = state;
+			return newState2;
+		case "IMPORT_SUCCESS":
+			return {
+				...state,
+				importSuccess: action.result,
+			};
 		case "ADD_TRANSACTION":
 			return {
 				...state,

@@ -1,4 +1,5 @@
 import Transaction from "./Transaction";
+import { ImportData } from "./ImportData";
 import IndexedTransaction from "./IndexedTransaction";
 import { AppStateStatus } from "react-native";
 import { Decimal } from "decimal.js";
@@ -6,6 +7,33 @@ import { Decimal } from "decimal.js";
 export interface ActionAddTransaction {
 	readonly type: "ADD_TRANSACTION";
 	readonly t: Transaction;
+}
+
+export interface ActionImportFailed {
+	readonly type: "IMPORT_FAILED";
+	readonly error: string;
+}
+
+export interface ActionDoImport {
+	readonly type: "DO_IMPORT";
+	readonly result: ImportData[];
+}
+
+export interface ActionDoExport {
+	readonly type: "DO_EXPORT";
+}
+
+export interface ActionRemoveImportError {
+	readonly type: "REMOVE_IMPORT_ERROR";
+}
+
+export interface ActionRemoveImportSuccess {
+	readonly type: "REMOVE_IMPORT_SUCCESS";
+}
+
+export interface ActionImportSuccess {
+	readonly type: "IMPORT_SUCCESS";
+	readonly result: ImportData[];
 }
 
 export interface ActionEditTransaction {
@@ -109,6 +137,45 @@ export function actionIncomeTypeChange(newIncomeType: string): ActionIncomeTypeC
 	};
 }
 
+export function actionImportFailed(error: string): ActionImportFailed {
+	return {
+		error,
+		type: "IMPORT_FAILED",
+	};
+}
+
+export function actionImportSuccess(result: ImportData[]): ActionImportSuccess {
+	return {
+		result,
+		type: "IMPORT_SUCCESS",
+	};
+}
+
+export function actionDoImport(result: ImportData[]): ActionDoImport {
+	return {
+		result,
+		type: "DO_IMPORT",
+	};
+}
+
+export function actionDoExport(): ActionDoExport {
+	return {
+		type: "DO_EXPORT",
+	};
+}
+
+export function actionRemoveImportError(): ActionRemoveImportError {
+	return {
+		type: "REMOVE_IMPORT_ERROR",
+	};
+}
+
+export function actionRemoveImportSuccess(): ActionRemoveImportSuccess {
+	return {
+		type: "REMOVE_IMPORT_SUCCESS",
+	};
+}
+
 export type Action = ActionAddTransaction
 	| ActionStateChange
 	| ActionClear
@@ -117,4 +184,10 @@ export type Action = ActionAddTransaction
 	| ActionToggleTransaction
 	| ActionEditTransaction
 	| ActionCurrencyChange
+	| ActionImportFailed
+	| ActionImportSuccess
+	| ActionDoImport
+	| ActionDoExport
+	| ActionRemoveImportError
+	| ActionRemoveImportSuccess
 	| ActionIncomeChange;
