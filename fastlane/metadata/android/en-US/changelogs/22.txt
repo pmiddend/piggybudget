@@ -1,0 +1,4 @@
+- Share (export) CSV files
+- Send to (import) CSV files
+- History cosmetics improvements
+- Stats period selectors not linked anymore
