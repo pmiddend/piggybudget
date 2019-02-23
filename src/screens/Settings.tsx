@@ -35,14 +35,6 @@ interface State {
 }
 
 class Settings extends Component<Props, State> {
-	public static navigationOptions = {
-		headerStyle: {
-			backgroundColor: headerBackgroundColor,
-		},
-		headerTintColor,
-		title: "Settings",
-	};
-
 	private buttons: string[];
 
 	constructor(props: Props) {
