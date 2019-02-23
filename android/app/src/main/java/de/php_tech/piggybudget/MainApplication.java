@@ -2,6 +2,7 @@ package de.php_tech.piggybudget;
 
 import android.app.Application;
 
+import com.facebook.react.modules.storage.ReactDatabaseSupplier;
 import com.facebook.react.ReactApplication;
 import com.horcrux.svg.SvgPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
@@ -48,5 +49,8 @@ public class MainApplication extends Application implements ReactApplication {
   public void onCreate() {
     super.onCreate();
     SoLoader.init(this, /* native exopackage */ false);
+    
+    final long size = 50L * 1024L * 1024L;
+    com.facebook.react.modules.storage.ReactDatabaseSupplier.getInstance(getApplicationContext()).setMaximumSize(size);
   }
 }
