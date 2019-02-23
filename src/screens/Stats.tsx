@@ -30,7 +30,8 @@ interface Props {
 interface State {
 	icons: Map<string, any>;
 	distributionIndex: number;
-	sumIndex: number;
+	sumExpenseIndex: number;
+	sumIncomeIndex: number;
 }
 
 class Stats extends Component<Props, State> {
@@ -47,18 +48,24 @@ class Stats extends Component<Props, State> {
 		this.state = {
 			icons: Map(),
 			distributionIndex: 0,
-			sumIndex: 0
+			sumExpenseIndex: 0,
+			sumIncomeIndex: 0
 		};
 		this.updateDistribution = this.updateDistribution.bind(this);
-		this.updateSum = this.updateSum.bind(this);
+		this.updateExpenseSum = this.updateExpenseSum.bind(this);
+		this.updateIncomeSum = this.updateIncomeSum.bind(this);
 	}
 
 	private updateDistribution(newIndex: number) {
 		this.setState({ ...this.state, distributionIndex: newIndex, });
 	}
 
-	private updateSum(newIndex: number) {
-		this.setState({ ...this.state, sumIndex: newIndex, });
+	private updateExpenseSum(newIndex: number) {
+		this.setState({ ...this.state, sumExpenseIndex: newIndex, });
+	}
+
+	private updateIncomeSum(newIndex: number) {
+		this.setState({ ...this.state, sumIncomeIndex: newIndex, });
 	}
 
 	public componentDidMount() {
@@ -86,8 +93,8 @@ class Stats extends Component<Props, State> {
 		const axesSvg = { fontSize: 10, fill: "grey" };
 		const verticalContentInset = { top: 10, bottom: 10 };
 		const ts = this.props.transactions;
-		const sumListDataPositive = lastNDays(ts, this.indexToDays(this.state.sumIndex), true).toJS();
-		const sumListDataNegative = lastNDays(ts, this.indexToDays(this.state.sumIndex), false).toJS();
+		const sumListDataPositive = lastNDays(ts, this.indexToDays(this.state.sumIncomeIndex), true).toJS();
+		const sumListDataNegative = lastNDays(ts, this.indexToDays(this.state.sumExpenseIndex), false).toJS();
 		const sumKeys = categories.map((c) => c.name).toArray();
 		const sumColors = categories.map((c) => "#" + c.color).toArray();
 		const pieData = groupedCats(filterLastDays(ts, this.indexToDays(this.state.distributionIndex), false));
@@ -127,7 +134,7 @@ class Stats extends Component<Props, State> {
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
 					<Text h4>Daily Expenses</Text>
-					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtonsShort} />
+					<ButtonGroup onPress={this.updateExpenseSum} selectedIndex={this.state.sumExpenseIndex} buttons={timeButtonsShort} />
 				</View>
 				<View style={{ height: 300, padding: 20, flexDirection: "row" }}>
 					<YAxis
@@ -147,7 +154,10 @@ class Stats extends Component<Props, State> {
 				</View>
 				<View style={{ paddingLeft: 10 }}>
 					<Text h4>Daily Income</Text>
-					<ButtonGroup onPress={this.updateSum} selectedIndex={this.state.sumIndex} buttons={timeButtonsShort} />
+					<ButtonGroup
+						onPress={this.updateIncomeSum}
+						selectedIndex={this.state.sumIncomeIndex}
+						buttons={timeButtonsShort} />
 				</View>
 				<View style={{ height: 300, padding: 20, flexDirection: "row" }}>
 					<YAxis
