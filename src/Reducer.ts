@@ -70,9 +70,7 @@ function doExport(_: ActionDoExport, state: AppState): AppState {
 		.join("\n");
 	ExportIntent.exportCsv(
 		csv,
-		() => {
-			ToastAndroid.show("Export succeeded", ToastAndroid.LONG);
-		},
+		() => { },
 		(message: string, technicalMessage: string) => {
 			ToastAndroid.show("Export failed", ToastAndroid.LONG);
 		});
