@@ -14,6 +14,7 @@ piggybudget is an application for tracking your pocket money.
 <li>You can select a <b>currency</b>. Euro is the default currency.</li>
 <li>There are <b>statistics</b> about how you spend your money.</li>
 <li>There’s a <b>history</b> for viewing your expenses one by one. From there, you can also edit and delete them.</li>
+<li>You can <b>export and import</b> your entire history to CSV files.</li>
 </ul>
 
 Happy saving!
