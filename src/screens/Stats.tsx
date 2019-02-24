@@ -6,7 +6,12 @@ import {
 	View,
 } from "react-native";
 import { connect } from "react-redux";
-import { categories } from "../Categories";
+import {
+	Category,
+	findCategory,
+	categories,
+	iconClass
+} from "../Categories";
 import AppState from "../AppState";
 import {
 	TransactionList,
@@ -21,10 +26,12 @@ import {
 import { Map } from "immutable";
 import { StackedBarChart, Grid, YAxis, PieChart } from "react-native-svg-charts";
 import { G, Circle, Image, Line } from "react-native-svg";
+import { categoryDataEquals, CategoryData } from "../CategoryData";
 
 interface Props {
 	readonly navigation: any;
 	readonly transactions: TransactionList;
+	readonly assocs: Map<string, CategoryData>;
 }
 
 interface State {
@@ -69,10 +76,37 @@ class Stats extends Component<Props, State> {
 	}
 
 	public componentDidMount() {
-		categories.forEach((c) => c.iconClass.getImageSource(c.icon, 32, "white").then((source: any) => {
-			this.setState({ icons: this.state.icons.set(c.name, source) });
+		this.calculateIcons();
+	}
+
+	public componentDidUpdate(prevProps: Props) {
+		const pa = prevProps.assocs;
+		const a = this.props.assocs;
+
+		let recalculate = false;
+		const ak = a.keySeq();
+		if (!ak.equals(pa.keySeq())) {
+			recalculate = true;
+		} else {
+			recalculate = ak.some((k: string) => !categoryDataEquals(a.get(k), pa.get(k)));
 		}
-		));
+		if (recalculate) {
+			this.calculateIcons();
+		}
+	}
+
+	private calculateIcons() {
+		categories
+			.forEach((c) => {
+				const assoc = this.props.assocs.get(
+					c.name,
+					c.data);
+				const ic = iconClass(assoc.icon.type);
+				const icp = ic.getImageSource(assoc.icon.name, 32, "white");
+				icp.then((source: any) => {
+					this.setState({ icons: this.state.icons.set(c.name, source) });
+				});
+			});
 	}
 
 	private getIcon(s: string): any {
@@ -96,10 +130,10 @@ class Stats extends Component<Props, State> {
 		const sumListDataPositive = lastNDays(ts, this.indexToDays(this.state.sumIncomeIndex), true).toJS();
 		const sumListDataNegative = lastNDays(ts, this.indexToDays(this.state.sumExpenseIndex), false).toJS();
 		const sumKeys = categories.map((c) => c.name).toArray();
-		const sumColors = categories.map((c) => "#" + c.color).toArray();
+		const sumColors = categories.map((c) => "#" + c.data.color).toArray();
 		const pieData = groupedCats(filterLastDays(ts, this.indexToDays(this.state.distributionIndex), false));
-		const CoolLabels = ({ slices }) => {
-			return slices.map((slice, index) => {
+		const CoolLabels = ({ slices }: { slices: any }) => {
+			return slices.map((slice: any, index: any) => {
 				const { labelCentroid, pieCentroid, data } = slice;
 				return (
 					<G key={index}>
@@ -177,7 +211,10 @@ class Stats extends Component<Props, State> {
 				</View>
 				<View style={{ paddingLeft: 10 }}>
 					<Text h4>Distribution Expenses</Text>
-					<ButtonGroup onPress={this.updateDistribution} selectedIndex={this.state.distributionIndex} buttons={timeButtons} />
+					<ButtonGroup
+						onPress={this.updateDistribution}
+						selectedIndex={this.state.distributionIndex}
+						buttons={timeButtons} />
 				</View>
 				<PieChart
 					style={{ height: 400 }}
@@ -197,6 +234,7 @@ class Stats extends Component<Props, State> {
 
 const mapStateToProps = (state: AppState, ownProps: any) => {
 	return {
+		assocs: state.associations === undefined ? Map<string, CategoryData>() : state.associations,
 		navigation: ownProps.navigation,
 		transactions: state.transactions,
 	};

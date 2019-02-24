@@ -8,7 +8,7 @@ import {
 	KeyboardAvoidingView,
 	ToastAndroid,
 } from "react-native";
-import { List } from "immutable";
+import { Map, List } from "immutable";
 import { groupRows } from "../Util";
 import {
 	Icon,
@@ -19,6 +19,7 @@ import { connect } from "react-redux";
 import Transaction from "../Transaction";
 import IndexedTransaction from "../IndexedTransaction";
 import { Currency, currencies } from "../Currencies";
+import { CategoryData } from "../CategoryData";
 import { actionAddTransaction, actionEditTransaction } from "../Actions";
 import AppState from "../AppState";
 import { findCategory, categories, Category } from "../Categories";
@@ -35,24 +36,24 @@ interface Props {
 	readonly editTransaction: IndexedTransaction | null;
 	readonly navigation: any;
 	readonly currency: Currency;
+	readonly assocs: Map<string, CategoryData>;
 }
 
-
 class Add extends Component<Props> {
-	public static navigationOptions = ({ navigation }) => {
+	public static navigationOptions = ({ navigation }: { navigation: any }) => {
 		const suffix = navigation.state.params.isExpense ? "expense" : "income";
 		const prefix = navigation.state.params.editTransaction ? "Modify" : "Add";
 		return {
-			title: prefix + " " + suffix,
 			headerStyle: {
 				backgroundColor: headerBackgroundColor,
 			},
-			headerTitleStyle: {
-				fontWeight: 'bold',
-			},
 			headerTintColor,
-		}
-	};
+			headerTitleStyle: {
+				fontWeight: "bold",
+			},
+			title: prefix + " " + suffix,
+		};
+	}
 
 	public state: State;
 
@@ -60,13 +61,14 @@ class Add extends Component<Props> {
 		super(props);
 		this.state = {
 			amount: this.props.editTransaction != null ? this.props.editTransaction.transaction.amount.toString() : "0",
-			commentName: this.props.editTransaction != null ? this.props.editTransaction.transaction.comment.toString() : "OTHER",
+			commentName: this.props.editTransaction != null ?
+				this.props.editTransaction.transaction.comment.toString() :
+				"OTHER",
 		};
 		this.handleCommentChange = this.handleCommentChange.bind(this);
 		this.renderButtonRow = this.renderButtonRow.bind(this);
 		this.handlePress = this.handlePress.bind(this);
 	}
-
 
 	public componentDidMount() {
 		this.props.navigation.setParams({ handlePress: this.handlePress });
@@ -85,7 +87,7 @@ class Add extends Component<Props> {
 						keyboardType="numeric"
 						autoFocus={true}
 						style={{ fontSize: 40 }}
-						onSubmitEditing={(e) => this.handlePress()}
+						onSubmitEditing={() => this.handlePress()}
 						onChangeText={(text) => this.handleAmountChange(text)} />
 					<Text style={{ fontSize: 40 }}>{this.props.currency.symbol}</Text>
 				</View>
@@ -109,18 +111,32 @@ class Add extends Component<Props> {
 		}
 	}
 
+	private renderIcon(c: Category) {
+		const assoc: CategoryData = this.props.assocs.get(
+			c.name,
+			c.data);
+		return (<Icon
+			reverse
+			key={c.name}
+			size={24}
+			onPress={() => this.handleCommentChange(c.name)}
+			color={this.buttonBackgroundColor(c.name, assoc.color)}
+			reverseColor={this.buttonIconColor(c.name)}
+			name={assoc.icon.name}
+			type={assoc.icon.type} />);
+	}
+
 	private renderButtonRow(buttonRow: List<Category>, key: number) {
-		return (<View key={key} style={{ flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>{buttonRow.map((c) =>
-			(<Icon
-				reverse
-				key={c.name}
-				size={24}
-				onPress={() => this.handleCommentChange(c.name)}
-				color={this.buttonBackgroundColor(c.name, c.color)}
-				reverseColor={this.buttonIconColor(c.name)}
-				name={c.icon}
-				type={c.iconType} />))
-			.toArray()}</View>);
+		return (<View
+			key={key}
+			style={{
+				alignItems: "center",
+				flex: 1,
+				flexDirection: "row",
+				justifyContent: "center",
+			}}>
+			{buttonRow.map((c) => this.renderIcon(c)).toArray()}
+		</View>);
 	}
 
 	private handlePress() {
@@ -129,12 +145,12 @@ class Add extends Component<Props> {
 		if (!d.isZero()) {
 			if (this.props.editTransaction != null) {
 				this.props.onEditTransaction({
+					index: this.props.editTransaction.index,
 					transaction: {
 						amount: d,
 						comment: (findCategory(this.state.commentName) as Category).name,
-						date: this.props.editTransaction.transaction.date
+						date: this.props.editTransaction.transaction.date,
 					},
-					index: this.props.editTransaction.index
 				});
 			} else {
 				this.props.onNewTransaction({
@@ -176,9 +192,10 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state: AppState, ownProps: any) => {
 	return {
+		assocs: state.associations === undefined ? Map<string, CategoryData>() : state.associations,
 		currency: currencies.get(state.settings.currency) as Currency,
-		isExpense: ownProps.navigation.state.params.isExpense,
 		editTransaction: ownProps.navigation.state.params.editTransaction,
+		isExpense: ownProps.navigation.state.params.isExpense,
 		navigation: ownProps.navigation,
 	};
 };

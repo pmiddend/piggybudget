@@ -26,6 +26,8 @@ import { Decimal } from "decimal.js";
 import {
 	TransactionList,
 } from "../BudgetStore";
+import { Map } from "immutable";
+import { CategoryData } from "../CategoryData";
 import AppState from "../AppState";
 import Transaction from "../Transaction";
 import moment from "moment";
@@ -40,6 +42,7 @@ interface Props {
 	readonly navigation: any;
 	readonly transactions: TransactionList;
 	readonly currency: Currency;
+	readonly assocs: Map<string, CategoryData>;
 }
 
 interface State {
@@ -52,6 +55,7 @@ interface HistoryItemProps {
 	readonly onEdit: () => void;
 	readonly onDelete: () => void;
 	readonly onToggle: () => void;
+	readonly assocs: Map<string, CategoryData>;
 }
 
 const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
@@ -79,15 +83,18 @@ const HistoryItem: React.SFC<HistoryItemProps> = (props) => {
 			</MenuOption>
 		</MenuOptions>
 	</Menu>);
+	const assoc: CategoryData = props.assocs.get(
+		cat.name,
+		cat.data);
 	return (<ListItem
 		key={props.transaction.date.toString()}
 		leftAvatar={{
 			icon: {
 				color: "white",
-				name: cat.icon,
-				type: cat.iconType,
+				name: assoc.icon.name,
+				type: assoc.icon.type,
 			},
-			overlayContainerStyle: { backgroundColor: "#" + cat.color },
+			overlayContainerStyle: { backgroundColor: "#" + assoc.color },
 		}}
 		chevron={menu}
 		title={props.transaction.amount.toString() + props.currency.symbol}
@@ -141,6 +148,7 @@ class History extends Component<Props, State> {
 				sections={this.createSections()}
 				renderItem={(listEntry: ListRenderItemInfo<IndexedTransaction>) => <HistoryItem
 					transaction={listEntry.item.transaction}
+					assocs={this.props.assocs}
 					currency={this.props.currency}
 					onEdit={() => this.onEdit(listEntry.item.index)}
 					onDelete={() => this.onDelete(listEntry.item.index)}
@@ -220,6 +228,7 @@ const mapDispatchToProps = (dispatch: any) => {
 
 const mapStateToProps = (state: AppState, ownProps: any) => {
 	return {
+		assocs: state.associations === undefined ? Map<string, CategoryData>() : state.associations,
 		currency: currencies.get(state.settings.currency) as Currency,
 		navigation: ownProps.navigation,
 		transactions: state.transactions,

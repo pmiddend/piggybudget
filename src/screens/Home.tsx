@@ -58,11 +58,9 @@ class Home extends Component<Props> {
 
 	public componentWillMount() {
 		DeviceEventEmitter.addListener("piggyImportFailed", (e) => {
-			console.log("import failed " + e);
 			this.props.onImportFailed(e);
 		});
 		DeviceEventEmitter.addListener("piggyCsvImportSuccess", (result) => {
-			console.log("import success");
 			this.props.onImportSuccess(result);
 		});
 	}

@@ -1,11 +1,12 @@
 import AppState from "./AppState";
-import { List } from "immutable";
+import { List, Map } from "immutable";
 import { AsyncStorage, ToastAndroid } from "react-native";
 import { Action, ActionDoImport, ActionDoExport } from "./Actions";
 import { Decimal } from "decimal.js";
 import { TransactionList } from "./BudgetStore";
 import { ImportData } from "./ImportData";
 import Transaction from "./Transaction";
+import { CategoryData } from "./CategoryData";
 import moment from "moment";
 import { ExportIntent } from "./ExportIntentModule";
 import Settings from "./Settings";
@@ -85,12 +86,21 @@ export default (state: AppState | undefined, action: Action) => {
 			incomeType: "daily",
 		};
 		return {
+			associations: Map(),
 			firstStart: Date.now(),
 			settings: initialSettings,
 			transactions: List(),
 		};
 	}
 	switch (action.type) {
+		case "CHANGE_ASSOCIATION":
+			const newAssocs: Map<string, CategoryData> = state.associations === undefined
+				? Map({ [action.originalName]: action.newIcon })
+				: state.associations.set(action.originalName, action.newIcon);
+			return {
+				...state,
+				associations: newAssocs,
+			};
 		case "DO_IMPORT":
 			return doImport(action, state);
 		case "DO_EXPORT":

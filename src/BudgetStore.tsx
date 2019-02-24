@@ -49,5 +49,5 @@ export function groupedCats(s: TransactionList): PieChartData[] {
 		.map((vs) => vs.map((t) => new Decimal(t.amount).abs())
 			.reduce((sum: Decimal, x: Decimal) => sum.add(x), new Decimal(0)).toNumber())
 		.toArray()
-		.map((t) => ({ key: t[0], amount: t[1], svg: { fill: "#" + (findCategory(t[0]) as Category).color } }));
+		.map((t) => ({ key: t[0], amount: t[1], svg: { fill: "#" + (findCategory(t[0]) as Category).data.color } }));
 }

@@ -3,10 +3,17 @@ import { ImportData } from "./ImportData";
 import IndexedTransaction from "./IndexedTransaction";
 import { AppStateStatus } from "react-native";
 import { Decimal } from "decimal.js";
+import { CategoryData } from "./CategoryData";
 
 export interface ActionAddTransaction {
 	readonly type: "ADD_TRANSACTION";
 	readonly t: Transaction;
+}
+
+export interface ActionChangeAssociation {
+	readonly type: "CHANGE_ASSOCIATION";
+	readonly originalName: string;
+	readonly newIcon: CategoryData;
 }
 
 export interface ActionImportFailed {
@@ -130,6 +137,14 @@ export function actionIncomeChange(newIncome: Decimal): ActionIncomeChange {
 	};
 }
 
+export function actionChangeAssociation(originalName: string, newIcon: CategoryData): ActionChangeAssociation {
+	return {
+		newIcon,
+		originalName,
+		type: "CHANGE_ASSOCIATION",
+	};
+}
+
 export function actionIncomeTypeChange(newIncomeType: string): ActionIncomeTypeChange {
 	return {
 		newIncomeType,
@@ -189,5 +204,6 @@ export type Action = ActionAddTransaction
 	| ActionDoImport
 	| ActionDoExport
 	| ActionRemoveImportError
+	| ActionChangeAssociation
 	| ActionRemoveImportSuccess
 	| ActionIncomeChange;

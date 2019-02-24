@@ -16,6 +16,7 @@ import {
 	Menu,
 } from "react-native-popup-menu";
 import Add from "./screens/Add";
+import Association from "./screens/Association";
 import Stats from "./screens/Stats";
 import Settings from "./screens/Settings";
 import History from "./screens/History";
@@ -91,6 +92,7 @@ const PiggyBudgetRoot = createStackNavigator({
 	},
 	Add: { screen: Add },
 	Modify: { screen: Add },
+	Association: { screen: Association },
 });
 
 const PiggyBudgetAppContainer = createAppContainer(PiggyBudgetRoot);
