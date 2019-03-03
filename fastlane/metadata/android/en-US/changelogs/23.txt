@@ -1,0 +1,2 @@
+- Category icons can be configured in the Settings tab
+- Fixed a database size issue
