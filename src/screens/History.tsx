@@ -1,5 +1,5 @@
 import React from "react";
-import { Component } from "react";
+import { PureComponent } from "react";
 import { connect } from "react-redux";
 import { findCategory, otherCategory } from "../Categories";
 import { headerBackgroundColor, headerTintColor } from "../Colors";
@@ -107,7 +107,7 @@ function getDayHeadline(date: number): string {
 	return moment(new Date(date)).format("dddd, LL");
 }
 
-class History extends Component<Props, State> {
+class History extends PureComponent<Props, State> {
 	public static navigationOptions = {
 		headerStyle: {
 			backgroundColor: headerBackgroundColor,
