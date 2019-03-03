@@ -102,8 +102,8 @@ android {
         applicationId "de.php_tech.piggybudget"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 22
-        versionName "2.2"
+        versionCode 23
+        versionName "2.3"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
