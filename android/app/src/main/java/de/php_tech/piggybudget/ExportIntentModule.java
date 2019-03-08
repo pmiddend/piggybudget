@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.widget.Toast;
 import java.nio.file.Files;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
@@ -39,7 +40,7 @@ public class ExportIntentModule extends ReactContextBaseJavaModule {
             "piggybudget",
             ".csv",
             context.getFilesDir());
-        w = Files.newBufferedWriter(tempFile.toPath());
+        w = new BufferedWriter(new FileWriter(tempFile));
         w.write(csv);
         sharingIntent.putExtra(
           Intent.EXTRA_STREAM,
