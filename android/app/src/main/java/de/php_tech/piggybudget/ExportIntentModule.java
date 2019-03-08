@@ -6,6 +6,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.facebook.react.module.annotations.ReactModule;
 import android.support.v4.content.FileProvider;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 
+@ReactModule(name="ExportIntent")
 public class ExportIntentModule extends ReactContextBaseJavaModule {
   public ExportIntentModule(ReactApplicationContext reactContext) {
     super(reactContext);
