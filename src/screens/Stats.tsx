@@ -2,7 +2,6 @@ import React from "react";
 import { headerBackgroundColor, headerTintColor } from "../Colors";
 import { Component } from "react";
 import { Decimal } from "decimal.js";
-import { amountColor } from "../Util";
 import {
 	ScrollView,
 	View,
@@ -14,18 +13,28 @@ import {
 	findCategory,
 	iconClass
 } from "../Categories";
+import {
+	amountColor,
+	ClampedMonth,
+	clampedMonthBoundaries,
+	currentClampedMonth,
+	isCurrent,
+	localizeClamped,
+	nextClampedMonth,
+	priorClampedMonth,
+} from "../Util";
 import AppState from "../AppState";
 import {
-	TransactionList,
-	lastNDays,
 	filterLastDays,
 	groupedCats,
-	storeLastMonthsExpenses,
-	storeThisMonthsExpenses,
+	lastNDays,
+	storePastExpenses,
+	TransactionList,
 } from "../BudgetStore";
 import {
 	Text,
 	ButtonGroup,
+	Button,
 	Icon,
 } from "react-native-elements";
 import { Map } from "immutable";
@@ -48,7 +57,7 @@ interface State {
 	distributionIndex: number;
 	sumExpenseIndex: number;
 	sumIncomeIndex: number;
-	valueTableType: number;
+	selectedMonth: ClampedMonth;
 }
 
 class Stats extends Component<Props, State> {
@@ -67,11 +76,14 @@ class Stats extends Component<Props, State> {
 			distributionIndex: 0,
 			sumExpenseIndex: 0,
 			sumIncomeIndex: 0,
-			valueTableType: 0
+			selectedMonth: currentClampedMonth(),
 		};
+
+		console.log("--------------------++++++++++ " + JSON.stringify(currentClampedMonth()));
 		this.updateDistribution = this.updateDistribution.bind(this);
 		this.updateExpenseSum = this.updateExpenseSum.bind(this);
-		this.updateValueTableType = this.updateValueTableType.bind(this);
+		this.previousMonth = this.previousMonth.bind(this);
+		this.nextMonth = this.nextMonth.bind(this);
 		this.updateIncomeSum = this.updateIncomeSum.bind(this);
 	}
 
@@ -79,8 +91,12 @@ class Stats extends Component<Props, State> {
 		this.setState({ ...this.state, distributionIndex: newIndex, });
 	}
 
-	private updateValueTableType(newIndex: number) {
-		this.setState({ ...this.state, valueTableType: newIndex, });
+	private previousMonth() {
+		this.setState({ ...this.state, selectedMonth: priorClampedMonth(this.state.selectedMonth), });
+	}
+
+	private nextMonth() {
+		this.setState({ ...this.state, selectedMonth: nextClampedMonth(this.state.selectedMonth), });
 	}
 
 	private updateExpenseSum(newIndex: number) {
@@ -180,11 +196,9 @@ class Stats extends Component<Props, State> {
 		};
 		const timeButtonsShort = ["Week", "Month"];
 		const timeButtons = ["Week", "Month", "Year"];
-		const valueTableTypeButtons = ["last month", "this month"];
+		const monthBoundaries = clampedMonthBoundaries(this.state.selectedMonth);
 		const tableRows =
-			(this.state.valueTableType == 0
-				? storeLastMonthsExpenses(this.props.transactions)
-				: storeThisMonthsExpenses(this.props.transactions))
+			(storePastExpenses(this.props.transactions, monthBoundaries))
 				.entrySeq()
 				.sortBy(
 					(keyValue: [string, Decimal]) => keyValue[1],
@@ -210,6 +224,13 @@ class Stats extends Component<Props, State> {
 							{amount.toString()}
 						</Text>];
 				});
+		const table = (<Table borderStyle={{ borderColor: "transparent" }}>
+			<Rows flexArr={[1, 3, 2]} data={tableRows} textStyle={{ textAlign: "center" }} />
+		</Table>);
+		const empty = (<View>
+			<Text style={{ textAlign: "center" }}>No entries</Text>
+		</View>)
+		const tableOrEmpty = tableRows.isEmpty() ? empty : table;
 		return (
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
@@ -274,15 +295,14 @@ class Stats extends Component<Props, State> {
 				</PieChart>
 				<View style={{ paddingLeft: 10 }}>
 					<Text h4>Value table</Text>
-					<ButtonGroup
-						onPress={this.updateValueTableType}
-						selectedIndex={this.state.valueTableType}
-						buttons={valueTableTypeButtons} />
+					<View style={{ flex: 1, flexDirection: "row", width: "100%", justifyContent: "space-evenly", alignItems: "center" }}>
+						<Button type="outline" title="  <  " onPress={this.previousMonth} titleStyle={{ fontSize: 17 }} />
+						<Text style={{ fontSize: 18 }}>{localizeClamped(this.state.selectedMonth)}</Text>
+						<Button type="outline" title="  >  " onPress={this.nextMonth} disabled={isCurrent(this.state.selectedMonth)} titleStyle={{ fontSize: 17 }} />
+					</View>
 				</View>
 				<View style={{ paddingLeft: 10, paddingRight: 10 }}>
-					<Table borderStyle={{ borderColor: "transparent" }}>
-						<Rows flexArr={[1, 3, 2]} data={tableRows} textStyle={{ textAlign: "center" }} />
-					</Table>
+					{tableOrEmpty}
 				</View>
 			</ScrollView >
 		);

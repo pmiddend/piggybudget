@@ -1,5 +1,6 @@
 import { Decimal } from "decimal.js";
 import Transaction from "./Transaction";
+import { inBounds, MonthBoundaries } from "./Util";
 import { Map, List, Range } from "immutable";
 import moment from "moment";
 import { PieChartData } from "react-native-svg-charts";
@@ -15,21 +16,12 @@ export function storeTotalBudget(s: TransactionList): Decimal {
 
 export function storePastExpenses(
 	s: TransactionList,
-	startDate: moment.Moment,
-	endDate: moment.Moment | null): Map<string, Decimal> {
-	return s.filter((t) => moment(t.date).isAfter(startDate) && (endDate === null || moment(t.date).isBefore(endDate)))
+	bounds: MonthBoundaries): Map<string, Decimal> {
+	return s.filter((t) => inBounds(moment(t.date), bounds))
 		.groupBy((t) => t.comment)
 		.toMap()
 		.map((ts) => ts.reduce((sum: Decimal, x: Transaction) => sum.add(x.amount), new Decimal(0)))
 		.filter((value) => !value.isZero());
-}
-
-export function storeThisMonthsExpenses(s: TransactionList): Map<string, Decimal> {
-	return storePastExpenses(s, moment().startOf("month"), null);
-}
-
-export function storeLastMonthsExpenses(s: TransactionList): Map<string, Decimal> {
-	return storePastExpenses(s, moment().startOf("month").subtract(1, "month"), moment().startOf("month"));
 }
 
 export function storeTodaysExpenses(s: TransactionList): Decimal {
