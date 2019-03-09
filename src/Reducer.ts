@@ -4,7 +4,6 @@ import { AsyncStorage, ToastAndroid } from "react-native";
 import { Action, ActionDoImport, ActionDoExport } from "./Actions";
 import { Decimal } from "decimal.js";
 import { TransactionList } from "./BudgetStore";
-import { ImportData } from "./ImportData";
 import Transaction from "./Transaction";
 import { CategoryData } from "./CategoryData";
 import moment from "moment";
@@ -47,27 +46,33 @@ function createDailyTransaction(
 	};
 }
 
-function convertImportData(e: ImportData): Transaction {
+function convertImportLine(e: string): Transaction {
+	const parts = e.split(",");
+	const iso = parts[0] + "T" + parts[1] + ":00.000Z";
 	return {
-		amount: new Decimal(e.amount),
-		comment: e.comment,
-		date: parseInt(e.date, 10),
+		amount: new Decimal(parts[2]),
+		comment: parts[3],
+		date: moment(iso).valueOf(),
 	};
 }
 
 function doImport(action: ActionDoImport, state: AppState): AppState {
-	const stringArray: ImportData[] = action.result;
-	const stringList: List<ImportData> = List(stringArray);
+	const lines: List<string> = List(action.result.split("\n"));
 	const { importSuccess: firstSuccess, ...newState } = state;
 	return {
 		...newState,
-		transactions: stringList.map((e: ImportData) => convertImportData(e)),
+		transactions: lines.map((e) => convertImportLine(e)),
 	};
+}
+
+function exportSingle(t: Transaction): string {
+	const d = moment(t.date).utc();
+	return d.format("YYYY-MM-DD") + "," + d.format("HH:MM") + "," + t.amount.toString() + "," + t.comment;
 }
 
 function doExport(_: ActionDoExport, state: AppState): AppState {
 	const csv = state.transactions
-		.map((t: Transaction) => t.amount.toString() + "," + t.comment + "," + t.date)
+		.map((t: Transaction) => exportSingle(t))
 		.join("\n");
 	ExportIntent.exportCsv(
 		csv,

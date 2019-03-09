@@ -81,7 +81,6 @@ class Stats extends Component<Props, State> {
 			selectedMonth: currentClampedMonth(),
 		};
 
-		console.log("--------------------++++++++++ " + JSON.stringify(currentClampedMonth()));
 		this.updateDistribution = this.updateDistribution.bind(this);
 		this.updateExpenseSum = this.updateExpenseSum.bind(this);
 		this.previousMonth = this.previousMonth.bind(this);

@@ -1,5 +1,4 @@
 import Transaction from "./Transaction";
-import { ImportData } from "./ImportData";
 import IndexedTransaction from "./IndexedTransaction";
 import { AppStateStatus } from "react-native";
 import { Decimal } from "decimal.js";
@@ -23,7 +22,7 @@ export interface ActionImportFailed {
 
 export interface ActionDoImport {
 	readonly type: "DO_IMPORT";
-	readonly result: ImportData[];
+	readonly result: string;
 }
 
 export interface ActionDoExport {
@@ -40,7 +39,7 @@ export interface ActionRemoveImportSuccess {
 
 export interface ActionImportSuccess {
 	readonly type: "IMPORT_SUCCESS";
-	readonly result: ImportData[];
+	readonly result: string;
 }
 
 export interface ActionEditTransaction {
@@ -159,14 +158,14 @@ export function actionImportFailed(error: string): ActionImportFailed {
 	};
 }
 
-export function actionImportSuccess(result: ImportData[]): ActionImportSuccess {
+export function actionImportSuccess(result: string): ActionImportSuccess {
 	return {
 		result,
 		type: "IMPORT_SUCCESS",
 	};
 }
 
-export function actionDoImport(result: ImportData[]): ActionDoImport {
+export function actionDoImport(result: string): ActionDoImport {
 	return {
 		result,
 		type: "DO_IMPORT",

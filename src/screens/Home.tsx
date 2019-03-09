@@ -1,7 +1,6 @@
 import React from "react";
 import MyAppState from "../AppState";
 import { amountColor, addColor, removeColor } from "../Util";
-import { ImportData } from "../ImportData";
 import { connect } from "react-redux";
 import { Component } from "react";
 import { darkBackground, lightBackground } from "../Colors";
@@ -37,13 +36,13 @@ interface Props {
 	readonly navigation: any;
 	readonly transactions: TransactionList;
 	readonly importError?: string;
-	readonly importSuccess?: any;
+	readonly importSuccess?: string;
 	readonly currency: Currency;
 	readonly onStateChange: (newState: AppStateStatus) => void;
 	readonly onClear: () => void;
 	readonly onImportFailed: (error: string) => void;
-	readonly onDoImport: (result: ImportData[]) => void;
-	readonly onImportSuccess: (result: ImportData[]) => void;
+	readonly onDoImport: (result: string) => void;
+	readonly onImportSuccess: (result: string) => void;
 	readonly onRemoveImportError: () => void;
 	readonly onRemoveImportSuccess: () => void;
 }
@@ -178,7 +177,7 @@ class Home extends Component<Props> {
 	}
 
 	private doImport() {
-		this.props.onDoImport(this.props.importSuccess);
+		this.props.onDoImport(this.props.importSuccess as string);
 	}
 
 	private handleAppStateChange(newState: AppStateStatus) {
@@ -198,7 +197,7 @@ const mapStateToProps = (state: MyAppState, ownProps: any) => {
 const mapDispatchToProps = (dispatch: any) => {
 	return {
 		onClear: () => dispatch(actionClear()),
-		onDoImport: (r: any) => dispatch(actionDoImport(r)),
+		onDoImport: (r: string) => dispatch(actionDoImport(r)),
 		onImportFailed: (error: string) => dispatch(actionImportFailed(error)),
 		onImportSuccess: (r: any) => dispatch(actionImportSuccess(r)),
 		onRemoveImportError: () => dispatch(actionRemoveImportError()),

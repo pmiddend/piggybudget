@@ -3,8 +3,10 @@ package de.php_tech.piggybudget;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.BufferedReader;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.util.List;
@@ -51,30 +53,23 @@ public class MainActivity extends ReactActivity {
         getReactInstanceManager().getCurrentReactContext().getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(name, content);
     }
 
+    private String inputStreamToString(final InputStream s) throws IOException {
+        final ByteArrayOutputStream result = new ByteArrayOutputStream();
+        final byte[] buffer = new byte[1024];
+        int length;
+        while ((length = s.read(buffer)) != -1) {
+            result.write(buffer, 0, length);
+        }
+        try {
+            return result.toString("UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     private void doCsvImport(final Uri csvUri) {
-        Log.i("PiggyBudget", "=============== starting import");
-        try (final BufferedReader reader = new BufferedReader(new InputStreamReader(getApplicationContext().getContentResolver().openInputStream(csvUri), StandardCharsets.UTF_8))) {
-            final WritableArray result = Arguments.createArray();
-            while (true) {
-                Log.i("PiggyBudget", "=============== reading line");
-                final String nextLine = reader.readLine();
-                if (nextLine == null)
-                    break;
-                final String[] parts = nextLine.split(",");
-                if (parts.length != 3) {
-                    emitEvent("piggyImportFailed", "Invalid CSV file");
-                    return;
-                }
-                final String amount = parts[0];
-                final String comment = parts[1];
-                final String date = parts[2];
-                final Map<String, Object> transaction = new HashMap<>();
-                transaction.put("amount", parts[0]);
-                transaction.put("comment", parts[1]);
-                transaction.put("date", parts[2]);
-                result.pushMap(Arguments.makeNativeMap(transaction));
-            }
-            emitEvent("piggyCsvImportSuccess", result);
+        try (final InputStream input = getApplicationContext().getContentResolver().openInputStream(csvUri)) {
+            emitEvent("piggyCsvImportSuccess", inputStreamToString(input));
         } catch (IOException e) {
             emitEvent("piggyImportFailed", e.getClass().getSimpleName());
         }
