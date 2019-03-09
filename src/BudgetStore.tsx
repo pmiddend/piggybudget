@@ -13,6 +13,25 @@ export function storeTotalBudget(s: TransactionList): Decimal {
 		.reduce((sum: Decimal, x: Decimal) => sum.add(x), new Decimal(0));
 }
 
+export function storePastExpenses(
+	s: TransactionList,
+	startDate: moment.Moment,
+	endDate: moment.Moment | null): Map<string, Decimal> {
+	return s.filter((t) => moment(t.date).isAfter(startDate) && (endDate === null || moment(t.date).isBefore(endDate)))
+		.groupBy((t) => t.comment)
+		.toMap()
+		.map((ts) => ts.reduce((sum: Decimal, x: Transaction) => sum.add(x.amount), new Decimal(0)))
+		.filter((value) => !value.isZero());
+}
+
+export function storeThisMonthsExpenses(s: TransactionList): Map<string, Decimal> {
+	return storePastExpenses(s, moment().startOf("month"), null);
+}
+
+export function storeLastMonthsExpenses(s: TransactionList): Map<string, Decimal> {
+	return storePastExpenses(s, moment().startOf("month").subtract(1, "month"), moment().startOf("month"));
+}
+
 export function storeTodaysExpenses(s: TransactionList): Decimal {
 	const startOfDay = moment().startOf("day");
 	return s

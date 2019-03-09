@@ -1,5 +1,6 @@
 import React from "react";
 import MyAppState from "../AppState";
+import { amountColor, addColor, removeColor } from "../Util";
 import { ImportData } from "../ImportData";
 import { connect } from "react-redux";
 import { Component } from "react";
@@ -77,11 +78,9 @@ class Home extends Component<Props> {
 	public render() {
 		const iconSize = 40;
 		const todaysTotal = storeTodaysExpenses(this.props.transactions);
-		const addColor = "#89c440";
-		const removeColor = "#ff5606";
-		const todaysTotalColor = todaysTotal.isPositive() ? addColor : removeColor;
+		const todaysTotalColor = amountColor(todaysTotal);
 		const total = storeTotalBudget(this.props.transactions);
-		const totalColor = total.isPositive() ? addColor : removeColor;
+		const totalColor = amountColor(total);
 		return (
 			<View style={{ flex: 1 }}>
 				<Overlay isVisible={this.props.importError !== undefined}

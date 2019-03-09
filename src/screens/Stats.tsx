@@ -1,15 +1,17 @@
 import React from "react";
 import { headerBackgroundColor, headerTintColor } from "../Colors";
 import { Component } from "react";
+import { Decimal } from "decimal.js";
+import { amountColor } from "../Util";
 import {
 	ScrollView,
 	View,
 } from "react-native";
 import { connect } from "react-redux";
 import {
+	categories,
 	Category,
 	findCategory,
-	categories,
 	iconClass
 } from "../Categories";
 import AppState from "../AppState";
@@ -18,15 +20,22 @@ import {
 	lastNDays,
 	filterLastDays,
 	groupedCats,
+	storeLastMonthsExpenses,
+	storeThisMonthsExpenses,
 } from "../BudgetStore";
 import {
 	Text,
 	ButtonGroup,
+	Icon,
 } from "react-native-elements";
 import { Map } from "immutable";
 import { StackedBarChart, Grid, YAxis, PieChart } from "react-native-svg-charts";
 import { G, Circle, Image, Line } from "react-native-svg";
 import { categoryDataEquals, CategoryData } from "../CategoryData";
+import {
+	Table,
+	Rows,
+} from "react-native-table-component";
 
 interface Props {
 	readonly navigation: any;
@@ -39,6 +48,7 @@ interface State {
 	distributionIndex: number;
 	sumExpenseIndex: number;
 	sumIncomeIndex: number;
+	valueTableType: number;
 }
 
 class Stats extends Component<Props, State> {
@@ -56,15 +66,21 @@ class Stats extends Component<Props, State> {
 			icons: Map(),
 			distributionIndex: 0,
 			sumExpenseIndex: 0,
-			sumIncomeIndex: 0
+			sumIncomeIndex: 0,
+			valueTableType: 0
 		};
 		this.updateDistribution = this.updateDistribution.bind(this);
 		this.updateExpenseSum = this.updateExpenseSum.bind(this);
+		this.updateValueTableType = this.updateValueTableType.bind(this);
 		this.updateIncomeSum = this.updateIncomeSum.bind(this);
 	}
 
 	private updateDistribution(newIndex: number) {
 		this.setState({ ...this.state, distributionIndex: newIndex, });
+	}
+
+	private updateValueTableType(newIndex: number) {
+		this.setState({ ...this.state, valueTableType: newIndex, });
 	}
 
 	private updateExpenseSum(newIndex: number) {
@@ -88,7 +104,7 @@ class Stats extends Component<Props, State> {
 		if (!ak.equals(pa.keySeq())) {
 			recalculate = true;
 		} else {
-			recalculate = ak.some((k: string) => !categoryDataEquals(a.get(k), pa.get(k)));
+			recalculate = ak.some((k: string) => !categoryDataEquals(a.get(k) as CategoryData, pa.get(k) as CategoryData));
 		}
 		if (recalculate) {
 			this.calculateIcons();
@@ -164,6 +180,36 @@ class Stats extends Component<Props, State> {
 		};
 		const timeButtonsShort = ["Week", "Month"];
 		const timeButtons = ["Week", "Month", "Year"];
+		const valueTableTypeButtons = ["last month", "this month"];
+		const tableRows =
+			(this.state.valueTableType == 0
+				? storeLastMonthsExpenses(this.props.transactions)
+				: storeThisMonthsExpenses(this.props.transactions))
+				.entrySeq()
+				.sortBy(
+					(keyValue: [string, Decimal]) => keyValue[1],
+					(a: Decimal, b: Decimal) => a.comparedTo(b))
+				.map((keyValue: [string, Decimal]) => {
+					const catName = keyValue[0];
+					const catData = findCategory(catName) as Category;
+					const amount = keyValue[1];
+					const amountC = amountColor(amount);
+					const assoc: CategoryData = this.props.assocs.get(
+						catName,
+						catData.data);
+					const icon = (<Icon
+						reverse
+						color={"#" + assoc.color}
+						name={assoc.icon.name}
+						size={18}
+						type={assoc.icon.type} />);
+					return [
+						<Text />,
+						<View style={{ paddingLeft: 30 }}>{icon}</View>,
+						<Text style={{ color: amountC, textAlign: "left", fontSize: 20 }}>
+							{amount.toString()}
+						</Text>];
+				});
 		return (
 			<ScrollView>
 				<View style={{ paddingLeft: 10 }}>
@@ -226,7 +272,18 @@ class Stats extends Component<Props, State> {
 				>
 					<CoolLabels />
 				</PieChart>
-
+				<View style={{ paddingLeft: 10 }}>
+					<Text h4>Value table</Text>
+					<ButtonGroup
+						onPress={this.updateValueTableType}
+						selectedIndex={this.state.valueTableType}
+						buttons={valueTableTypeButtons} />
+				</View>
+				<View style={{ paddingLeft: 10, paddingRight: 10 }}>
+					<Table borderStyle={{ borderColor: "transparent" }}>
+						<Rows flexArr={[1, 3, 2]} data={tableRows} textStyle={{ textAlign: "center" }} />
+					</Table>
+				</View>
 			</ScrollView >
 		);
 	}
