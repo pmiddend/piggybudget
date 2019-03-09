@@ -11,8 +11,6 @@ import {
 } from "react-native-popup-menu";
 import {
 	ListItem,
-	Overlay,
-	Button,
 	Icon,
 } from "react-native-elements";
 import {
@@ -21,6 +19,7 @@ import {
 	Text,
 	SectionListData,
 	ListRenderItemInfo,
+	Alert,
 } from "react-native";
 import { Decimal } from "decimal.js";
 import {
@@ -43,10 +42,6 @@ interface Props {
 	readonly transactions: TransactionList;
 	readonly currency: Currency;
 	readonly assocs: Map<string, CategoryData>;
-}
-
-interface State {
-	readonly deleteId: number | null;
 }
 
 interface HistoryItemProps {
@@ -107,7 +102,7 @@ function getDayHeadline(date: number): string {
 	return moment(new Date(date)).format("dddd, LL");
 }
 
-class History extends PureComponent<Props, State> {
+class History extends PureComponent<Props> {
 	public static navigationOptions = {
 		headerStyle: {
 			backgroundColor: headerBackgroundColor,
@@ -118,32 +113,13 @@ class History extends PureComponent<Props, State> {
 
 	constructor(props: Props) {
 		super(props);
-		this.state = {
-			deleteId: null,
-		};
 		this.onDelete = this.onDelete.bind(this);
 		this.onToggle = this.onToggle.bind(this);
 		this.onEdit = this.onEdit.bind(this);
-		this.closeDeleteModal = this.closeDeleteModal.bind(this);
-		this.deleteSelected = this.deleteSelected.bind(this);
 	}
 
 	public render() {
 		return (<View>
-			<Overlay isVisible={this.state.deleteId !== null}
-				onRequestClose={this.closeDeleteModal}
-				width={300}
-				height={90}
-				onBackdropPress={this.closeDeleteModal}>
-				<View style={{ flex: 1, justifyContent: "space-evenly" }}>
-					<Text style={{ fontSize: 16 }}>Really delete?</Text>
-					<View style={{ flex: 1, flexDirection: "row", justifyContent: "space-evenly" }}>
-						<View style={{ width: "50%" }} />
-						<Button title="CANCEL" type="clear" onPress={this.closeDeleteModal} />
-						<Button title="DELETE" type="clear" onPress={this.deleteSelected} />
-					</View>
-				</View>
-			</Overlay>
 			<SectionList
 				sections={this.createSections()}
 				renderItem={(listEntry: ListRenderItemInfo<IndexedTransaction>) => <HistoryItem
@@ -162,24 +138,23 @@ class History extends PureComponent<Props, State> {
 		);
 	}
 
-	private closeDeleteModal() {
-		this.setState({
-			...this.state,
-			deleteId: null,
-		});
-	}
-
-	private deleteSelected() {
-		if (this.state.deleteId !== null)
-			this.props.onDeleteTransaction(this.state.deleteId);
-		this.closeDeleteModal();
-	}
-
 	private onDelete(index: number) {
-		this.setState({
-			...this.state,
-			deleteId: index,
-		});
+		Alert.alert(
+			"Really delete?",
+			"This cannot be undone.",
+			[
+				{
+					onPress: () => { },
+					style: "cancel",
+					text: "Cancel",
+				},
+				{
+					onPress: () => this.props.onDeleteTransaction(index),
+					style: "destructive",
+					text: "Delete",
+				},
+			],
+		);
 	}
 
 	private onToggle(index: number) {
