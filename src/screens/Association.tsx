@@ -9,8 +9,7 @@ import {
 import {
 	ListItem,
 	Icon,
-	Input,
-	Text,
+	SearchBar,
 } from "react-native-elements";
 import { connect } from "react-redux";
 import AppState from "../AppState";
@@ -68,11 +67,13 @@ class Association extends PureComponent<Props, State> {
 		const pressed = (newIcon: string) => this.onIconSelectPressed({ name: newIcon, type: "material-community" });
 		return (
 			<View style={{ padding: 10 }}>
-				<Input value={this.state.searchString}
+				<SearchBar value={this.state.searchString}
 					placeholder="Search"
+					lightTheme={true}
+					platform="android"
 					onChangeText={this.handleSearchTextChange} />
 				<FlatList
-					data={materialIcons.filter((i: string) => i.indexOf(this.state.searchString) !== -1)}
+					data={materialIcons.filter((i: string) => i.toLowerCase().indexOf(this.state.searchString.toLowerCase()) !== -1)}
 					renderItem={(i) => <AssociationItem listItem={i} onPress={pressed} />}
 					keyExtractor={(item: string) => item} />
 			</View>
