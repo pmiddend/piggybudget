@@ -1,6 +1,7 @@
 import React from "react";
 import { headerBackgroundColor, headerTintColor } from "../Colors";
 import { Component } from "react";
+import { Currency, currencies } from "../Currencies";
 import { Decimal } from "decimal.js";
 import {
 	ScrollView,
@@ -47,6 +48,7 @@ import {
 } from "react-native-table-component";
 
 interface Props {
+	readonly currency: Currency;
 	readonly navigation: any;
 	readonly transactions: TransactionList;
 	readonly assocs: Map<string, CategoryData>;
@@ -197,6 +199,8 @@ class Stats extends Component<Props, State> {
 		const timeButtonsShort = ["Week", "Month"];
 		const timeButtons = ["Week", "Month", "Year"];
 		const monthBoundaries = clampedMonthBoundaries(this.state.selectedMonth);
+		const priorMonthBoundaries = clampedMonthBoundaries(priorClampedMonth(this.state.selectedMonth));
+		const priorExpenses = storePastExpenses(this.props.transactions, priorMonthBoundaries);
 		const tableRows =
 			(storePastExpenses(this.props.transactions, monthBoundaries))
 				.entrySeq()
@@ -217,15 +221,17 @@ class Stats extends Component<Props, State> {
 						name={assoc.icon.name}
 						size={18}
 						type={assoc.icon.type} />);
+					const prior = priorExpenses.get(keyValue[0], new Decimal("0"));
+					const difference = amount.minus(prior);
 					return [
 						<Text />,
 						<View style={{ paddingLeft: 30 }}>{icon}</View>,
 						<Text style={{ color: amountC, textAlign: "left", fontSize: 20 }}>
-							{amount.toString()}
+							{amount.toString()}{this.props.currency.symbol} ({difference.isPositive() ? "+" : ""}{difference.toString()})
 						</Text>];
 				});
 		const table = (<Table borderStyle={{ borderColor: "transparent" }}>
-			<Rows flexArr={[1, 3, 2]} data={tableRows} textStyle={{ textAlign: "center" }} />
+			<Rows flexArr={[1, 4, 3]} data={tableRows} textStyle={{ textAlign: "center" }} />
 		</Table>);
 		const empty = (<View>
 			<Text style={{ textAlign: "center" }}>No entries</Text>
@@ -312,6 +318,7 @@ class Stats extends Component<Props, State> {
 const mapStateToProps = (state: AppState, ownProps: any) => {
 	return {
 		assocs: state.associations === undefined ? Map<string, CategoryData>() : state.associations,
+		currency: currencies.get(state.settings.currency) as Currency,
 		navigation: ownProps.navigation,
 		transactions: state.transactions,
 	};
