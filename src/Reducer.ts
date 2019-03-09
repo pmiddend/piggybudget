@@ -61,19 +61,30 @@ function doImport(action: ActionDoImport, state: AppState): AppState {
 	const { importSuccess: firstSuccess, ...newState } = state;
 	return {
 		...newState,
-		transactions: lines.map((e) => convertImportLine(e)),
+		transactions: lines.shift().map((e) => convertImportLine(e)),
 	};
 }
 
-function exportSingle(t: Transaction): string {
+function exportSingle(t: Transaction, associations: Map<string, CategoryData>): string {
 	const d = moment(t.date).utc();
-	return d.format("YYYY-MM-DD") + "," + d.format("HH:MM") + "," + t.amount.toString() + "," + t.comment;
+	const assoc = associations.get(t.comment);
+	const realComment = (assoc === undefined ? t.comment : assoc.icon.name);
+	return d.format("YYYY-MM-DD") +
+		"," +
+		d.format("HH:MM") +
+		"," +
+		t.amount.toString() +
+		"," +
+		t.comment +
+		"," +
+		realComment.toUpperCase();
 }
 
 function doExport(_: ActionDoExport, state: AppState): AppState {
-	const csv = state.transactions
-		.map((t: Transaction) => exportSingle(t))
+	const transactionCsv = state.transactions
+		.map((t: Transaction) => exportSingle(t, state.associations === undefined ? Map() : state.associations))
 		.join("\n");
+	const csv = "date,time,amount,original category,category\n" + transactionCsv;
 	ExportIntent.exportCsv(
 		csv,
 		() => { },
