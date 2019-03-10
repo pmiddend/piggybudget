@@ -1,4 +1,5 @@
 import React from "react";
+import { headerTintColor, headerBackgroundColor } from "../Colors";
 import { List, Map } from "immutable";
 import { groupRows } from "../Util";
 import { Component } from "react";
@@ -41,6 +42,17 @@ interface State {
 }
 
 class Settings extends Component<Props, State> {
+	public static navigationOptions = {
+		headerStyle: {
+			backgroundColor: headerBackgroundColor,
+		},
+		headerTintColor,
+		headerTitleStyle: {
+			fontWeight: "bold",
+		},
+		title: "Settings",
+	};
+
 	private buttons: string[];
 
 	constructor(props: Props) {

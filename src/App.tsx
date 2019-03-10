@@ -40,7 +40,6 @@ const TopTabNavigator = createMaterialTopTabNavigator({
 	Home: { screen: Home },
 	History: { screen: History },
 	Stats: { screen: Stats },
-	Settings: { screen: Settings },
 },
 	{
 		tabBarOptions: {
@@ -66,31 +65,39 @@ const persistor = persistStore(store);
 const PiggyBudgetRoot = createStackNavigator({
 	TopTabs: {
 		screen: TopTabNavigator,
-		navigationOptions: {
-			headerRight: (
-				<Menu><MenuTrigger>
-					<Icon name="more-vert" color="white" iconStyle={{ paddingRight: 10 }} />
-				</MenuTrigger>
-					<MenuOptions>
-						<MenuOption onSelect={() => store.dispatch(actionDoExport())}>
-							<View style={{ flex: 1, flexDirection: "row" }}>
-								<Text style={{ fontSize: 16, padding: 10, color: "black" }}>Share CSV</Text>
-							</View>
-						</MenuOption>
-					</MenuOptions>
-				</Menu>
-			),
-			headerStyle: {
-				backgroundColor: headerBackgroundColor,
-			},
-			headerTitleStyle: {
-				fontWeight: 'bold',
-			},
-			headerTintColor,
-			title: "piggybudget",
+		navigationOptions: ({ navigation }: { navigation: any }) => {
+			return {
+				headerRight: (
+					<Menu><MenuTrigger>
+						<Icon name="more-vert" color="white" iconStyle={{ paddingRight: 10 }} />
+					</MenuTrigger>
+						<MenuOptions>
+							<MenuOption onSelect={() => store.dispatch(actionDoExport())}>
+								<View style={{ flex: 1, flexDirection: "row" }}>
+									<Text style={{ fontSize: 16, padding: 10, color: "black" }}>Share CSV</Text>
+								</View>
+							</MenuOption>
+							<MenuOption onSelect={() => navigation.navigate("Settings")}>
+								<View style={{ flex: 1, flexDirection: "row" }}>
+									<Text style={{ fontSize: 16, padding: 10, color: "black" }}>Settings</Text>
+								</View>
+							</MenuOption>
+						</MenuOptions>
+					</Menu>
+				),
+				headerStyle: {
+					backgroundColor: headerBackgroundColor,
+				},
+				headerTitleStyle: {
+					fontWeight: 'bold',
+				},
+				headerTintColor,
+				title: "piggybudget",
+			};
 		},
 	},
 	Add: { screen: Add },
+	Settings: { screen: Settings },
 	Modify: { screen: Add },
 	Association: { screen: Association },
 });
