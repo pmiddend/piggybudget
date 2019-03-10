@@ -159,7 +159,8 @@ class Settings extends Component<Props, State> {
 		this.setState({
 			income: newIncome,
 		});
-		this.props.onIncomeChange(new Decimal(newIncome));
+		const incomeDecimal = newIncome === "" ? new Decimal(0) : new Decimal(newIncome);
+		this.props.onIncomeChange(incomeDecimal);
 	}
 
 }
