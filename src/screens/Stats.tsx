@@ -71,6 +71,8 @@ class Stats extends Component<Props, State> {
 		title: "Stats",
 	};
 
+	private scrollViewRef: any | undefined;
+
 	constructor(props: Props) {
 		super(props);
 		this.state = {
@@ -85,6 +87,7 @@ class Stats extends Component<Props, State> {
 		this.updateExpenseSum = this.updateExpenseSum.bind(this);
 		this.previousMonth = this.previousMonth.bind(this);
 		this.nextMonth = this.nextMonth.bind(this);
+		this.contentSizeChange = this.contentSizeChange.bind(this);
 		this.updateIncomeSum = this.updateIncomeSum.bind(this);
 	}
 
@@ -94,6 +97,12 @@ class Stats extends Component<Props, State> {
 
 	private previousMonth() {
 		this.setState({ ...this.state, selectedMonth: priorClampedMonth(this.state.selectedMonth), });
+	}
+
+	private contentSizeChange() {
+		if (this.scrollViewRef !== undefined) {
+			this.scrollViewRef.scrollToEnd();
+		}
 	}
 
 	private nextMonth() {
@@ -197,47 +206,69 @@ class Stats extends Component<Props, State> {
 		};
 		const timeButtonsShort = ["Week", "Month"];
 		const timeButtons = ["Week", "Month", "Year"];
+
 		const monthBoundaries = clampedMonthBoundaries(this.state.selectedMonth);
 		const priorMonthBoundaries = clampedMonthBoundaries(priorClampedMonth(this.state.selectedMonth));
+		const currentExpenses = storePastExpenses(this.props.transactions, monthBoundaries);
 		const priorExpenses = storePastExpenses(this.props.transactions, priorMonthBoundaries);
-		const tableRows =
-			(storePastExpenses(this.props.transactions, monthBoundaries))
-				.entrySeq()
-				.sortBy(
-					(keyValue: [string, Decimal]) => keyValue[1],
-					(a: Decimal, b: Decimal) => a.comparedTo(b))
-				.map((keyValue: [string, Decimal]) => {
-					const catName = keyValue[0];
-					const catData = findCategory(catName) as Category;
-					const amount = keyValue[1];
-					const amountC = amountColor(amount);
-					const assoc: CategoryData = this.props.assocs.get(
-						catName,
-						catData.data);
-					const icon = (<Icon
-						reverse
-						color={"#" + assoc.color}
-						name={assoc.icon.name}
-						size={18}
-						type={assoc.icon.type} />);
-					const prior = priorExpenses.get(keyValue[0], new Decimal("0"));
-					const difference = amount.minus(prior);
-					return [
-						<Text />,
-						<View style={{ paddingLeft: 30 }}>{icon}</View>,
-						<Text style={{ color: amountC, textAlign: "left", fontSize: 20 }}>
-							{amount.toString()}{this.props.currency.symbol} ({difference.isPositive() ? "+" : ""}{difference.toString()})
+		const expenseCategories = currentExpenses.keySeq().toSet().union(priorExpenses.keySeq().toSet());
+
+		const currentSum = currentExpenses.valueSeq().reduce((sum: Decimal, x: Decimal) => sum.add(x), new Decimal(0));
+		const priorSum = priorExpenses.valueSeq().reduce((sum: Decimal, x: Decimal) => sum.add(x), new Decimal(0));
+
+		const tableRows = expenseCategories.valueSeq().map((category: string) => {
+			const prior = priorExpenses.get(category);
+			const current = currentExpenses.get(category);
+
+			if (prior !== undefined && current !== undefined) {
+				return [category, [current, (current.minus(prior))]];
+			}
+			if (prior !== undefined) {
+				return [category, [new Decimal("0"), prior.negated()]];
+			}
+
+			return [category, [current, current]];
+		}
+		).sortBy((r: [string, [Decimal, Decimal]]) => r[1][0])
+			.map((r: [string, [Decimal, Decimal]]) => {
+				const catName = r[0];
+				const catData = findCategory(catName) as Category;
+				const amount = r[1][0];
+				const amountC = amountColor(amount);
+				const assoc: CategoryData = this.props.assocs.get(
+					catName,
+					catData.data);
+				const icon = (<Icon
+					reverse
+					color={"#" + assoc.color}
+					name={assoc.icon.name}
+					size={18}
+					type={assoc.icon.type} />);
+				return [
+					<Text />,
+					<View style={{ paddingLeft: 30 }}>{icon}</View>,
+					<Text style={{ color: amountC, textAlign: "left", fontSize: 20 }}>
+						{amount.toString()}{this.props.currency.symbol} ({r[1][1].isPositive() ? "+" : ""}{r[1][1].toString()})
 						</Text>];
-				});
+			}
+			).toList().push([
+				<Text />,
+				<View style={{ paddingLeft: 30 }}><Icon
+					reverse
+					color="black"
+					name="sigma"
+					size={18}
+					type="material-community" /></View>,
+				<Text style={{ color: amountColor(currentSum), textAlign: "left", fontSize: 20 }}>
+					{currentSum.toString()}
+					{this.props.currency.symbol} ({currentSum.minus(priorSum).isPositive() ? "+" : ""}{currentSum.minus(priorSum).toString()})
+				</Text>]);
+
 		const table = (<Table borderStyle={{ borderColor: "transparent" }}>
 			<Rows flexArr={[1, 4, 3]} data={tableRows} textStyle={{ textAlign: "center" }} />
 		</Table>);
-		const empty = (<View>
-			<Text style={{ textAlign: "center" }}>No entries</Text>
-		</View>)
-		const tableOrEmpty = tableRows.isEmpty() ? empty : table;
 		return (
-			<ScrollView>
+			<ScrollView ref={(component) => { this.scrollViewRef = component; }} onContentSizeChange={this.contentSizeChange}>
 				<View style={{ paddingLeft: 10 }}>
 					<Text h4>Daily Expenses</Text>
 					<ButtonGroup onPress={this.updateExpenseSum} selectedIndex={this.state.sumExpenseIndex} buttons={timeButtonsShort} />
@@ -299,7 +330,7 @@ class Stats extends Component<Props, State> {
 					<CoolLabels />
 				</PieChart>
 				<View style={{ paddingLeft: 10 }}>
-					<Text h4>Value table</Text>
+					<Text h4>Monthly numbers</Text>
 					<View style={{ flex: 1, flexDirection: "row", width: "100%", justifyContent: "space-evenly", alignItems: "center" }}>
 						<Button type="outline" title="  <  " onPress={this.previousMonth} titleStyle={{ fontSize: 17 }} />
 						<Text style={{ fontSize: 18 }}>{localizeClamped(this.state.selectedMonth)}</Text>
@@ -307,7 +338,7 @@ class Stats extends Component<Props, State> {
 					</View>
 				</View>
 				<View style={{ paddingLeft: 10, paddingRight: 10 }}>
-					{tableOrEmpty}
+					{table}
 				</View>
 			</ScrollView >
 		);
