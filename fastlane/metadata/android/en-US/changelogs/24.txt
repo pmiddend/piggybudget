@@ -1,0 +1,3 @@
+- Stats now contain monthly sums
+- Settings tab moved to header menu
+- Fix CSV export bug on older Android versions
