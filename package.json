@@ -25,6 +25,7 @@
     "decimal.js": "^10.1.1",
     "immutable": "^4.0.0-rc.12",
     "jest": "23.6.0",
+    "metro-react-native-babel-preset": "^0.53.0",
     "moment": "^2.24.0",
     "react-native-elements": "^1.1.0",
     "react-native-popup-menu": "^0.15.4",
