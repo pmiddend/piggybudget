@@ -100,9 +100,10 @@ class Stats extends Component<Props, State> {
 	}
 
 	private contentSizeChange() {
-		if (this.scrollViewRef !== undefined) {
-			this.scrollViewRef.scrollToEnd();
-		}
+		// This behavior is a bit strange
+		/* if (this.scrollViewRef !== undefined) {
+			 this.scrollViewRef.scrollToEnd();
+		   } */
 	}
 
 	private nextMonth() {
