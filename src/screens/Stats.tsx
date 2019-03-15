@@ -245,27 +245,32 @@ class Stats extends Component<Props, State> {
 					size={18}
 					type={assoc.icon.type} />);
 				return [
-					<Text />,
-					<View style={{ paddingLeft: 30 }}>{icon}</View>,
+					<View style={{ paddingLeft: 10, paddingRight: 10 }}>{icon}</View>,
 					<Text style={{ color: amountC, textAlign: "left", fontSize: 20 }}>
-						{amount.toString()}{this.props.currency.symbol} ({r[1][1].isPositive() ? "+" : ""}{r[1][1].toString()})
-						</Text>];
+						{amount.toString()}{this.props.currency.symbol}
+					</Text>,
+					<Text style={{ color: amountC, textAlign: "left", fontSize: 20 }}>
+						({r[1][1].isPositive() ? "+" : ""}{r[1][1].toString()})
+					    </Text>,
+				];
 			}
 			).toList().push([
-				<Text />,
-				<View style={{ paddingLeft: 30 }}><Icon
+				<View style={{ paddingLeft: 10, paddingRight: 10 }}><Icon
 					reverse
 					color="black"
 					name="sigma"
 					size={18}
 					type="material-community" /></View>,
 				<Text style={{ color: amountColor(currentSum), textAlign: "left", fontSize: 20 }}>
-					{currentSum.toString()}
-					{this.props.currency.symbol} ({currentSum.minus(priorSum).isPositive() ? "+" : ""}{currentSum.minus(priorSum).toString()})
-				</Text>]);
+					{currentSum.toString()}{this.props.currency.symbol}
+				</Text>,
+				<Text style={{ color: amountColor(currentSum), textAlign: "left", fontSize: 20 }}>
+					({currentSum.minus(priorSum).isPositive() ? "+" : ""}{currentSum.minus(priorSum).toString()})
+				</Text>,
+			]);
 
 		const table = (<Table borderStyle={{ borderColor: "transparent" }}>
-			<Rows flexArr={[1, 4, 3]} data={tableRows} textStyle={{ textAlign: "center" }} />
+			<Rows flexArr={[1, 3, 1]} data={tableRows} textStyle={{ textAlign: "center" }} />
 		</Table>);
 		return (
 			<ScrollView ref={(component) => { this.scrollViewRef = component; }} onContentSizeChange={this.contentSizeChange}>
