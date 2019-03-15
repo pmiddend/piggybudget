@@ -40,7 +40,7 @@ import {
 } from "react-native-elements";
 import { Map } from "immutable";
 import { StackedBarChart, Grid, YAxis, PieChart } from "react-native-svg-charts";
-import { G, Circle, Image, Line } from "react-native-svg";
+import { G, Circle, Image, Line, Text as SvgText } from "react-native-svg";
 import { categoryDataEquals, CategoryData } from "../CategoryData";
 import {
 	Table,
@@ -200,6 +200,9 @@ class Stats extends Component<Props, State> {
 							opacity="1"
 							href={this.getIcon(data.key)}
 						/>
+						<SvgText fill="black" fontSize={16} x={labelCentroid[0]} y={labelCentroid[1] + 35} textAnchor="middle">
+							{data.amount.toString() + this.props.currency.symbol}
+						</SvgText>
 					</G>
 				)
 			})
@@ -245,8 +248,8 @@ class Stats extends Component<Props, State> {
 					size={18}
 					type={assoc.icon.type} />);
 				return [
-					<View style={{ paddingLeft: 10, paddingRight: 10 }}>{icon}</View>,
-					<Text style={{ color: amountC, textAlign: "left", fontSize: 20 }}>
+					<View style={{ paddingLeft: 0, paddingRight: 10 }}>{icon}</View>,
+					<Text style={{ color: amountC, textAlign: "left", fontSize: 20, fontWeight: "bold" }}>
 						{amount.toString()}{this.props.currency.symbol}
 					</Text>,
 					<Text style={{ color: amountC, textAlign: "left", fontSize: 20 }}>
@@ -255,13 +258,13 @@ class Stats extends Component<Props, State> {
 				];
 			}
 			).toList().push([
-				<View style={{ paddingLeft: 10, paddingRight: 10 }}><Icon
+				<View style={{ paddingLeft: 0, paddingRight: 10 }}><Icon
 					reverse
 					color="black"
 					name="sigma"
 					size={18}
 					type="material-community" /></View>,
-				<Text style={{ color: amountColor(currentSum), textAlign: "left", fontSize: 20 }}>
+				<Text style={{ color: amountColor(currentSum), textAlign: "left", fontSize: 20, fontWeight: "bold" }}>
 					{currentSum.toString()}{this.props.currency.symbol}
 				</Text>,
 				<Text style={{ color: amountColor(currentSum), textAlign: "left", fontSize: 20 }}>
@@ -270,7 +273,7 @@ class Stats extends Component<Props, State> {
 			]);
 
 		const table = (<Table borderStyle={{ borderColor: "transparent" }}>
-			<Rows flexArr={[1, 3, 1]} data={tableRows} textStyle={{ textAlign: "center" }} />
+			<Rows flexArr={[1, 3, 2]} data={tableRows} textStyle={{ textAlign: "center" }} />
 		</Table>);
 		return (
 			<ScrollView ref={(component) => { this.scrollViewRef = component; }} onContentSizeChange={this.contentSizeChange}>
