@@ -102,8 +102,8 @@ android {
         applicationId "de.php_tech.piggybudget"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 24
-        versionName "2.4"
+        versionCode 25
+        versionName "2.5"
     }
     splits {
         abi {

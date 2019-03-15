@@ -1,0 +1,3 @@
+- Cleanup for cluttered monthly expense table
+- Add numbers in pie chart
+- Remove spurious scrolling down in stats view
