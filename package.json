@@ -7,8 +7,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "react": "16.8.4",
-    "react-native": "0.58.6",
+    "react": "16.8.3",
+    "react-native": "0.59.1",
     "react-native-gesture-handler": "^1.0.12",
     "react-native-table-component": "^1.2.0"
   },
@@ -20,12 +20,11 @@
     "@types/react-native-vector-icons": "^4.6.4",
     "@types/react-navigation": "^3.0.4",
     "@types/react-redux": "^7.0.2",
-    "babel-jest": "23.6.0",
+    "babel-jest": "24.5.0",
     "babel-preset-react-native": "5.0.2",
     "decimal.js": "^10.1.1",
     "immutable": "^4.0.0-rc.12",
-    "jest": "23.6.0",
-    "metro-react-native-babel-preset": "^0.53.0",
+    "jest": "^24.4.0",
     "moment": "^2.24.0",
     "react-native-elements": "^1.1.0",
     "react-native-popup-menu": "^0.15.4",
@@ -33,15 +32,18 @@
     "react-native-svg-charts": "^5.2.0",
     "react-native-typescript-transformer": "^1.2.12",
     "react-native-vector-icons": "^6.3.0",
-    "react-navigation": "^3.3.2",
+    "react-navigation": "^3.4.1",
     "react-redux": "^6.0.1",
-    "react-test-renderer": "^16.8.4",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
     "redux-persist-transform-immutable": "^5.0.0",
     "ts-jest": "^23.10.5",
     "typescript": "^3.3.3333",
-    "v": "^0.3.0"
+    "v": "^0.3.0",
+    "@babel/core": "^7.3.4",
+    "@babel/runtime": "^7.3.4",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react-test-renderer": "16.8.3"
   },
   "jest": {
     "preset": "react-native"
