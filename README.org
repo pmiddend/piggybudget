@@ -23,7 +23,7 @@ Happy saving!
 
 ** Where do I find it?
 #+CAPTION: Get it on F-Droid
-[[https://f-droid.org/app/de.php_tech.piggybudget/][https://f-droid.org/wiki/images/c/c4/F-Droid-button_available-on.png]]
+[[https://f-droid.org/en/packages/de.php_tech.piggybudget/][https://f-droid.org/wiki/images/c/c4/F-Droid-button_available-on.png]]
 
 ** How do I build it from source?
 - Clone the repository
