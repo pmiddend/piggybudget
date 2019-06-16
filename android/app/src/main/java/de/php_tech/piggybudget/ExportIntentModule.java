@@ -51,7 +51,9 @@ public class ExportIntentModule extends ReactContextBaseJavaModule {
             "de.php_tech.fileprovider",
             tempFile));
         sharingIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        context.startActivity(Intent.createChooser(sharingIntent, "Send to"));
+        Intent i = Intent.createChooser(sharingIntent, "Send to");
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
         onSuccess.invoke();
       } catch (IOException e) {
         onError.invoke("File system error, permissions?", e.getMessage());
